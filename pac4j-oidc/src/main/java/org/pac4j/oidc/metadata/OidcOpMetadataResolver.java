@@ -10,12 +10,11 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.core.resource.SpringResourceHelper;
 import org.pac4j.core.resource.SpringResourceLoader;
 import org.pac4j.core.util.CommonHelper;
 import org.pac4j.oidc.config.OidcConfiguration;
-import org.pac4j.oidc.exceptions.OidcException;
-import org.pac4j.oidc.exceptions.OidcUnsupportedClientAuthMethodException;
 import org.pac4j.oidc.profile.creator.TokenValidator;
 import org.springframework.core.io.Resource;
 
@@ -79,7 +78,7 @@ public class OidcOpMetadataResolver extends SpringResourceLoader<OIDCProviderMet
         try {
             sslSocketFactory = sslFactoryName == null ? null : (SSLSocketFactory) CommonHelper.getConstructor(sslFactoryName).newInstance();
         } catch (final Exception e) {
-            throw new OidcException(e);
+            throw new TechnicalException(e);
         }
         try (val in = SpringResourceHelper.getResourceInputStream(
             resource,
@@ -92,7 +91,7 @@ public class OidcOpMetadataResolver extends SpringResourceLoader<OIDCProviderMet
             val metadata = IOUtils.readInputStreamToString(in);
             return OIDCProviderMetadata.parse(metadata);
         } catch (final IOException | ParseException e) {
-            throw new OidcException("Error getting OP metadata", e);
+            throw new TechnicalException("Error getting OP metadata", e);
         }
     }
 
@@ -110,7 +109,7 @@ public class OidcOpMetadataResolver extends SpringResourceLoader<OIDCProviderMet
                     if (serverSupportedAuthMethods.contains(preferredMethod)) {
                         chosenMethod = preferredMethod;
                     } else {
-                        throw new OidcUnsupportedClientAuthMethodException(
+                        throw new TechnicalException(
                             "Preferred authentication method (" + preferredMethod + ") not supported "
                                 + "by provider according to provider metadata (" + serverSupportedAuthMethods + ").");
                     }
@@ -141,10 +140,10 @@ public class OidcOpMetadataResolver extends SpringResourceLoader<OIDCProviderMet
                 try {
                     return new PrivateKeyJWT(_clientID, this.loaded.getTokenEndpointURI(), jwsAlgo, privateKey, keyID, null);
                 } catch (final JOSEException e) {
-                    throw new OidcException("Cannot instantiate private key JWT client authentication method", e);
+                    throw new TechnicalException("Cannot instantiate private key JWT client authentication method", e);
                 }
             } else {
-                throw new OidcUnsupportedClientAuthMethodException("Unsupported client authentication method: " + chosenMethod);
+                throw new TechnicalException("Unsupported client authentication method: " + chosenMethod);
             }
         }
         return null;
@@ -157,8 +156,7 @@ public class OidcOpMetadataResolver extends SpringResourceLoader<OIDCProviderMet
         }
 
         if (!SUPPORTED_METHODS.contains(configurationMethod)) {
-            throw new OidcUnsupportedClientAuthMethodException("Configured authentication method (" + configurationMethod +
-                ") is not supported.");
+            throw new TechnicalException("Configured authentication method (" + configurationMethod + ") is not supported.");
         }
 
         return configurationMethod;
@@ -174,8 +172,8 @@ public class OidcOpMetadataResolver extends SpringResourceLoader<OIDCProviderMet
         if (firstSupported.isPresent()) {
             return firstSupported.get();
         } else {
-            throw new OidcUnsupportedClientAuthMethodException("None of the Token endpoint provider metadata authentication methods are "
-                + "supported: " + serverSupportedAuthMethods);
+            throw new TechnicalException("None of the Token endpoint provider metadata authentication methods are supported: " +
+                serverSupportedAuthMethods);
         }
     }
 }

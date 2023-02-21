@@ -10,6 +10,7 @@ import lombok.val;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.credentials.Credentials;
 import org.pac4j.core.credentials.authenticator.Authenticator;
+import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.oidc.client.OidcClient;
 import org.pac4j.oidc.config.OidcConfiguration;
 import org.pac4j.oidc.credentials.OidcCredentials;
@@ -18,8 +19,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
-import org.pac4j.oidc.exceptions.OidcException;
-import org.pac4j.oidc.exceptions.OidcTokenException;
 
 import static org.pac4j.core.util.CommonHelper.assertNotNull;
 
@@ -57,7 +56,7 @@ public class OidcAuthenticator implements Authenticator {
                     val request = createTokenRequest(new AuthorizationCodeGrant(code, new URI(computedCallbackUrl), verifier));
                     executeTokenRequest(request, credentials);
                 } catch (final URISyntaxException | IOException | ParseException e) {
-                    throw new OidcException(e);
+                    throw new TechnicalException(e);
                 }
             }
         }
@@ -71,7 +70,7 @@ public class OidcAuthenticator implements Authenticator {
                 val request = createTokenRequest(new RefreshTokenGrant(refreshToken));
                 executeTokenRequest(request, credentials);
             } catch (final IOException | ParseException e) {
-                throw new OidcException(e);
+                throw new TechnicalException(e);
             }
         }
     }
@@ -98,7 +97,7 @@ public class OidcAuthenticator implements Authenticator {
         val response = OIDCTokenResponseParser.parse(httpResponse);
         if (response instanceof TokenErrorResponse tokenErrorResponse) {
             val errorObject = tokenErrorResponse.getErrorObject();
-            throw new OidcTokenException("Bad token response, error=" + errorObject.getCode() + "," +
+            throw new TechnicalException("Bad token response, error=" + errorObject.getCode() + "," +
                 " description=" + errorObject.getDescription() + ", status=" + errorObject.getHTTPStatusCode());
         }
         LOGGER.debug("Token response successful");
