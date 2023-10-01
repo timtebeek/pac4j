@@ -4,7 +4,7 @@ import com.nimbusds.jose.EncryptionMethod;
 import com.nimbusds.jose.JWEAlgorithm;
 import com.nimbusds.jose.JWSAlgorithm;
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.cas.profile.CasRestProfile;
 import org.pac4j.core.util.CommonHelper;
 import org.pac4j.core.util.TestsConstants;
@@ -16,8 +16,8 @@ import org.pac4j.jwt.profile.JwtGenerator;
 import java.time.Instant;
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests the CasRestProfile in JWT generation/authentication.
@@ -25,12 +25,12 @@ import static org.junit.Assert.assertNotNull;
  * @author Jerome LELEU
  * @since 3.7.0
  */
-public class CasRestProfileJwtTest implements TestsConstants {
+class CasRestProfileJwtTest implements TestsConstants {
 
     private static final String TGT_ID = "TGT-123";
 
     @Test
-    public void testGenerateAuthenticate() {
+    void testGenerateAuthenticate() {
         val signingSecret = CommonHelper.randomString(32);
         val encryptionSecret = CommonHelper.randomString(32);
         val generator = new JwtGenerator(new SecretSignatureConfiguration(signingSecret, JWSAlgorithm.HS256),

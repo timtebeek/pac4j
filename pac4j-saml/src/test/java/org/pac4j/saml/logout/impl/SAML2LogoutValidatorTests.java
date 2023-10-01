@@ -1,7 +1,7 @@
 package org.pac4j.saml.logout.impl;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.messaging.context.MessageContext;
 import org.opensaml.saml.saml2.core.LogoutResponse;
 import org.opensaml.saml.saml2.encryption.Decrypter;
@@ -28,8 +28,7 @@ import org.springframework.core.io.FileSystemResource;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -38,7 +37,7 @@ import static org.mockito.Mockito.mock;
  * @author Misagh Moayyed
  * @since 5.0.0
  */
-public class SAML2LogoutValidatorTests {
+class SAML2LogoutValidatorTests {
     private static ExplicitSignatureTrustEngineProvider getTrustEngine() {
         var config = getSaml2Configuration();
 
@@ -85,7 +84,7 @@ public class SAML2LogoutValidatorTests {
     }
 
     @Test
-    public void verifyHostComparison() {
+    void verifyHostComparison() {
         val xml = "<samlp:LogoutResponse xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\" " +
             "xmlns:saml=\"urn:oasis:names:tc:SAML:2.0:assertion\" " +
             "ID=\"_6c3737282f007720e736f0f4028feed8cb9b40291c\" Version=\"2.0\" " +
@@ -98,7 +97,7 @@ public class SAML2LogoutValidatorTests {
             "  </samlp:Status>" +
             "</samlp:LogoutResponse>";
 
-        try {
+        assertDoesNotThrow(() -> {
             val webContext = getMockWebContext();
             val context = getSaml2MessageContext(webContext, xml);
             SAML2ResponseValidator validator = new SAML2LogoutValidator(
@@ -109,13 +108,11 @@ public class SAML2LogoutValidatorTests {
                 new ExcludingParametersURIComparator()
             );
             validator.validate(context);
-        } catch (final Exception e) {
-            fail(e.getMessage());
-        }
+        });
     }
 
     @Test
-    public void verifyThatPartialLogoutAsSecondLevelStatusCodeIsAcceptedAsSuccess() throws Exception {
+    void verifyThatPartialLogoutAsSecondLevelStatusCodeIsAcceptedAsSuccess() throws Exception {
 
         val xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<samlp:LogoutResponse xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\" "+
@@ -134,7 +131,7 @@ public class SAML2LogoutValidatorTests {
     }
 
     @Test
-    public void verifyThatPartialLogoutAsTopLevelStatusCodeIsAcceptedAsSuccess() throws Exception {
+    void verifyThatPartialLogoutAsTopLevelStatusCodeIsAcceptedAsSuccess() throws Exception {
 
         val xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<samlp:LogoutResponse xmlns:samlp=\"urn:oasis:names:tc:SAML:2.0:protocol\" "+

@@ -1,13 +1,13 @@
 package org.pac4j.oidc.config;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.MockWebContext;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class OidcConfigurationContextTest {
+class OidcConfigurationContextTest {
     @Test
-    public void shouldResolveScopeWhenOverriddenFromRequest() {
+    void shouldResolveScopeWhenOverriddenFromRequest() {
         var webContext = MockWebContext.create();
         webContext.setRequestAttribute(OidcConfiguration.SCOPE, "openid profile email phone");
 
@@ -21,7 +21,7 @@ public class OidcConfigurationContextTest {
     }
 
     @Test
-    public void shouldResolveScopeWhenConfiguredProgrammatically() {
+    void shouldResolveScopeWhenConfiguredProgrammatically() {
         var webContext = MockWebContext.create();
 
         var oidcConfiguration = new OidcConfiguration();
@@ -35,7 +35,7 @@ public class OidcConfigurationContextTest {
     }
 
     @Test
-    public void shouldResolveScopeFromDefaultValues() {
+    void shouldResolveScopeFromDefaultValues() {
         var webContext = MockWebContext.create();
 
         var oidcConfiguration = new OidcConfiguration();

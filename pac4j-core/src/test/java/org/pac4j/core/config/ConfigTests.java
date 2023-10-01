@@ -1,7 +1,7 @@
 package org.pac4j.core.config;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.authorization.authorizer.Authorizer;
 import org.pac4j.core.authorization.authorizer.RequireAnyRoleAuthorizer;
 import org.pac4j.core.client.Client;
@@ -16,7 +16,7 @@ import org.pac4j.core.util.TestsConstants;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests the {@link Config}.
@@ -24,21 +24,25 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class ConfigTests implements TestsConstants {
+final class ConfigTests implements TestsConstants {
 
-    @Test(expected = TechnicalException.class)
-    public void testNullAuthorizersSetter() {
-        val config = new Config();
-        config.setAuthorizers(null);
-    }
-
-    @Test(expected = TechnicalException.class)
-    public void testNullAuthorizersConstructor() {
-        new Config((Map<String, Authorizer >) null);
+    @Test
+    void testNullAuthorizersSetter() {
+        assertThrows(TechnicalException.class, () -> {
+            val config = new Config();
+            config.setAuthorizers(null);
+        });
     }
 
     @Test
-    public void testAddAuthorizer() {
+    void testNullAuthorizersConstructor() {
+        assertThrows(TechnicalException.class, () -> {
+            new Config((Map<String, Authorizer>) null);
+        });
+    }
+
+    @Test
+    void testAddAuthorizer() {
         val config = new Config();
         Authorizer authorizer = new RequireAnyRoleAuthorizer();
         config.addAuthorizer(NAME, authorizer);
@@ -46,7 +50,7 @@ public final class ConfigTests implements TestsConstants {
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         val client =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val config = new Config(CALLBACK_URL, client);
@@ -55,7 +59,7 @@ public final class ConfigTests implements TestsConstants {
     }
 
     @Test
-    public void testFluent() {
+    void testFluent() {
         Client client = new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         Authorizer authorizer = new RequireAnyRoleAuthorizer();
         Matcher matcher = new CacheControlMatcher();

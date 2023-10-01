@@ -1,13 +1,13 @@
 package org.pac4j.core.authorization.authorizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
 import org.pac4j.core.exception.http.HttpAction;
 import org.pac4j.core.profile.AnonymousProfile;
 import org.pac4j.core.util.TestsHelper;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Tests {@link IsRememberedAuthorizer}.
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertFalse;
  * @author Jerome Leleu
  * @since 1.9.0
  */
-public final class IsRememberedAuthorizerTests extends IsAuthenticatedAuthorizerTests {
+final class IsRememberedAuthorizerTests extends IsAuthenticatedAuthorizerTests {
 
     @Override
     protected Authorizer newAuthorizer() {
@@ -37,7 +37,7 @@ public final class IsRememberedAuthorizerTests extends IsAuthenticatedAuthorizer
     }
 
     @Test
-    public void testCommonRmeProfile() {
+    void testCommonRmeProfile() {
         profile.setRemembered(false);
         profiles.add(profile);
         assertFalse(authorizer.isAuthorized(null, new MockSessionStore(), profiles));

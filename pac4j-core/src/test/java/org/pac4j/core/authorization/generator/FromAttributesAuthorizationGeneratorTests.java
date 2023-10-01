@@ -1,15 +1,14 @@
 package org.pac4j.core.authorization.generator;
 
 import lombok.val;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.profile.CommonProfile;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests {@link FromAttributesAuthorizationGenerator}.
@@ -17,7 +16,7 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome Leleu
  * @since 1.5.0
  */
-public final class FromAttributesAuthorizationGeneratorTests {
+final class FromAttributesAuthorizationGeneratorTests {
 
     private static final String ATTRIB1 = "attrib1";
     private static final String VALUE1 = "info11,info12";
@@ -37,8 +36,8 @@ public final class FromAttributesAuthorizationGeneratorTests {
 
     private CommonProfile profile;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.profile = new CommonProfile();
         this.profile.addAttribute(ATTRIB1, VALUE1);
         this.profile.addAttribute(ATTRIB2, VALUE2);
@@ -47,14 +46,14 @@ public final class FromAttributesAuthorizationGeneratorTests {
     }
 
     @Test
-    public void testNoConfigWithCollections() {
+    void testNoConfigWithCollections() {
         AuthorizationGenerator generator = new FromAttributesAuthorizationGenerator(new ArrayList<>());
         generator.generate(null, this.profile);
         assertEquals(0, this.profile.getRoles().size());
     }
 
     @Test
-    public void testNoConfig() {
+    void testNoConfig() {
         AuthorizationGenerator generator =
                 new FromAttributesAuthorizationGenerator((String[]) null);
         generator.generate(null, this.profile);
@@ -62,7 +61,7 @@ public final class FromAttributesAuthorizationGeneratorTests {
     }
 
     @Test
-    public void testRole() {
+    void testRole() {
         val roleAttributes = new String[] {
             ATTRIB1
         };
@@ -75,7 +74,7 @@ public final class FromAttributesAuthorizationGeneratorTests {
     }
 
     @Test
-    public void testNoRole() {
+    void testNoRole() {
         val roleAttributes = new String[] {
             ATTRIB5
         };
@@ -85,7 +84,7 @@ public final class FromAttributesAuthorizationGeneratorTests {
     }
 
     @Test
-    public void testRoleChangeSplit() {
+    void testRoleChangeSplit() {
         val roleAttributes = new String[] {
             ATTRIB1
         };
@@ -98,7 +97,7 @@ public final class FromAttributesAuthorizationGeneratorTests {
     }
 
     @Test
-    public void testListRoles() {
+    void testListRoles() {
         val roleAttributes = new String[] {
                 ATTRIB3, ATTRIB4
         };

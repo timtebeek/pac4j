@@ -2,7 +2,7 @@ package org.pac4j.cas.client.direct;
 
 import lombok.val;
 import org.apereo.cas.client.validation.AssertionImpl;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.cas.config.CasConfiguration;
 import org.pac4j.cas.config.CasProtocol;
 import org.pac4j.cas.profile.CasProfile;
@@ -15,7 +15,7 @@ import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.core.util.TestsConstants;
 import org.pac4j.core.util.TestsHelper;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the {@link DirectCasProxyClient}.
@@ -23,10 +23,10 @@ import static org.junit.Assert.*;
  * @author Jerome Leleu
  * @since 1.9.2
  */
-public final class DirectCasProxyClientTests implements TestsConstants {
+final class DirectCasProxyClientTests implements TestsConstants {
 
     @Test
-    public void testInitOk() {
+    void testInitOk() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         configuration.setProtocol(CasProtocol.CAS20_PROXY);
@@ -35,14 +35,14 @@ public final class DirectCasProxyClientTests implements TestsConstants {
     }
 
     @Test
-    public void testInitMissingConfiguration() {
+    void testInitMissingConfiguration() {
         val client = new DirectCasProxyClient();
         client.setServiceUrl(CALLBACK_URL);
         TestsHelper.expectException(client::init, TechnicalException.class, "configuration cannot be null");
     }
 
     @Test
-    public void testInitMissingServiceUrl() {
+    void testInitMissingServiceUrl() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val client = new DirectCasProxyClient();
@@ -51,7 +51,7 @@ public final class DirectCasProxyClientTests implements TestsConstants {
     }
 
     @Test
-    public void testInitFailsBadProtocol() {
+    void testInitFailsBadProtocol() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val client = new DirectCasProxyClient(configuration, CALLBACK_URL);
@@ -60,7 +60,7 @@ public final class DirectCasProxyClientTests implements TestsConstants {
     }
 
     @Test
-    public void testNoTicket() {
+    void testNoTicket() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         configuration.setProtocol(CasProtocol.CAS20_PROXY);
@@ -69,7 +69,7 @@ public final class DirectCasProxyClientTests implements TestsConstants {
     }
 
     @Test
-    public void testTokenExistsValidationOccurs() {
+    void testTokenExistsValidationOccurs() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         configuration.setProtocol(CasProtocol.CAS30_PROXY);

@@ -5,7 +5,7 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWEAlgorithm;
 import com.nimbusds.jwt.*;
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.core.util.TestsHelper;
 import org.pac4j.jwt.config.AbstractKeyEncryptionConfigurationTests;
@@ -14,7 +14,7 @@ import org.pac4j.jwt.config.signature.SignatureConfiguration;
 
 import java.text.ParseException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@link ECEncryptionConfiguration}.
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 1.9.2
  */
-public final class ECEncryptionConfigurationTests extends AbstractKeyEncryptionConfigurationTests {
+final class ECEncryptionConfigurationTests extends AbstractKeyEncryptionConfigurationTests {
 
     @Override
     protected String getAlgorithm() {
@@ -34,19 +34,19 @@ public final class ECEncryptionConfigurationTests extends AbstractKeyEncryptionC
     }
 
     @Test
-    public void testMissingAlgorithm() {
+    void testMissingAlgorithm() {
         val config = new ECEncryptionConfiguration(buildKeyPair(), null, EncryptionMethod.A128CBC_HS256);
         TestsHelper.expectException(config::init, TechnicalException.class, "algorithm cannot be null");
     }
 
     @Test
-    public void testMissingMethod() {
+    void testMissingMethod() {
         val config = new ECEncryptionConfiguration(buildKeyPair(), JWEAlgorithm.ECDH_ES, null);
         TestsHelper.expectException(config::init, TechnicalException.class, "method cannot be null");
     }
 
     @Test
-    public void testUnsupportedAlgorithm() {
+    void testUnsupportedAlgorithm() {
         val config =
             new ECEncryptionConfiguration(buildKeyPair(), JWEAlgorithm.RSA_OAEP_256, EncryptionMethod.A128CBC_HS256);
         TestsHelper.expectException(config::init, TechnicalException.class,
@@ -54,7 +54,7 @@ public final class ECEncryptionConfigurationTests extends AbstractKeyEncryptionC
     }
 
     @Test
-    public void testEncryptDecryptSignedJWT() throws ParseException, JOSEException {
+    void testEncryptDecryptSignedJWT() throws ParseException, JOSEException {
         SignatureConfiguration macConfig = new SecretSignatureConfiguration(MAC_SECRET);
         val signedJWT = macConfig.sign(buildClaims());
 
@@ -69,7 +69,7 @@ public final class ECEncryptionConfigurationTests extends AbstractKeyEncryptionC
     }
 
     @Test
-    public void testEncryptDecryptPlainJWT() throws ParseException, JOSEException {
+    void testEncryptDecryptPlainJWT() throws ParseException, JOSEException {
         val config = new ECEncryptionConfiguration(buildKeyPair());
         config.setAlgorithm(JWEAlgorithm.ECDH_ES_A256KW);
         config.setMethod(EncryptionMethod.A128GCM);
@@ -83,7 +83,7 @@ public final class ECEncryptionConfigurationTests extends AbstractKeyEncryptionC
     }
 
     @Test
-    public void testEncryptMissingKey() {
+    void testEncryptMissingKey() {
         val config = new ECEncryptionConfiguration();
         config.setAlgorithm(JWEAlgorithm.ECDH_ES_A256KW);
         config.setMethod(EncryptionMethod.A128GCM);
@@ -93,7 +93,7 @@ public final class ECEncryptionConfigurationTests extends AbstractKeyEncryptionC
     }
 
     @Test
-    public void testDecryptMissingKey() throws ParseException {
+    void testDecryptMissingKey() throws ParseException {
         val config = new ECEncryptionConfiguration(buildKeyPair());
         config.setAlgorithm(JWEAlgorithm.ECDH_ES_A192KW);
         config.setMethod(EncryptionMethod.A128GCM);

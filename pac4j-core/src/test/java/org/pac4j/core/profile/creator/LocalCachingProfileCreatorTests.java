@@ -1,7 +1,7 @@
 package org.pac4j.core.profile.creator;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
@@ -14,7 +14,8 @@ import org.pac4j.core.util.TestsHelper;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Tests {@link LocalCachingProfileCreator}.
@@ -22,7 +23,7 @@ import static org.junit.Assert.*;
  * @author Jerome LELEU
  * @since 5.7.0
  */
-public class LocalCachingProfileCreatorTests {
+class LocalCachingProfileCreatorTests {
 
     private static class SimpleProfileCreator implements ProfileCreator {
 
@@ -49,7 +50,7 @@ public class LocalCachingProfileCreatorTests {
     }
 
     @Test
-    public void testCachingNoProfile() {
+    void testCachingNoProfile() {
         val c1 = new TokenCredentials("T1");
         val pc = new LocalCachingProfileCreator(NoProfileCreator.INSTANCE, 10, 10, TimeUnit.SECONDS);
         val optProfile = pc.create(new CallContext(MockWebContext.create(), new MockSessionStore()), c1);
@@ -58,7 +59,7 @@ public class LocalCachingProfileCreatorTests {
     }
 
     @Test
-    public void testCachingProfile() {
+    void testCachingProfile() {
         val c1 = new TokenCredentials("T1");
         val pc = new LocalCachingProfileCreator(SimpleProfileCreator.INSTANCE, 10, 1, TimeUnit.SECONDS);
         val optProfile = pc.create(new CallContext(MockWebContext.create(), new MockSessionStore()), c1);

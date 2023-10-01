@@ -10,9 +10,9 @@ import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
 import lombok.val;
 import net.shibboleth.shared.resolver.CriteriaSet;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.pac4j.core.util.TestsConstants;
 import org.pac4j.saml.config.SAML2Configuration;
@@ -23,8 +23,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * This is {@link SAML2MongoMetadataGeneratorIT}.
@@ -32,7 +31,7 @@ import static org.junit.Assert.assertTrue;
  * @author Misagh Moayyed
  * @since 5.7.0
  */
-public class SAML2MongoMetadataGeneratorIT implements TestsConstants {
+class SAML2MongoMetadataGeneratorIT implements TestsConstants {
     private static final int PORT = 37018;
     private static final String ENTITY_ID = "org:pac4j:example";
 
@@ -40,14 +39,14 @@ public class SAML2MongoMetadataGeneratorIT implements TestsConstants {
 
     private SAML2MetadataGenerator mongoMetadataGenerator;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         mongoServer.start(PORT);
         mongoMetadataGenerator = new SAML2MongoMetadataGenerator(getClient(), ENTITY_ID);
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         mongoServer.stop();
     }
 
@@ -56,7 +55,7 @@ public class SAML2MongoMetadataGeneratorIT implements TestsConstants {
     }
 
     @Test
-    public void testMetadata() throws Exception {
+    void testMetadata() throws Exception {
         ConfigurationManager mgr = new DefaultConfigurationManager();
         mgr.configure();
 

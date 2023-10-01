@@ -1,7 +1,7 @@
 package org.pac4j.cas.redirect;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.cas.client.CasClient;
 import org.pac4j.cas.config.CasConfiguration;
 import org.pac4j.cas.config.CasProtocol;
@@ -12,8 +12,8 @@ import org.pac4j.core.exception.http.FoundAction;
 import org.pac4j.core.redirect.RedirectionActionBuilder;
 import org.pac4j.core.util.TestsConstants;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link CasRedirectionActionBuilder}.
@@ -21,10 +21,10 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome LELEU
  * @since 3.7.0
  */
-public final class CasRedirectionActionBuilderTest implements TestsConstants {
+final class CasRedirectionActionBuilderTest implements TestsConstants {
 
     @Test
-    public void testRedirect() {
+    void testRedirect() {
         val builder = newBuilder(new CasConfiguration());
         val action = builder.getRedirectionAction(new CallContext(MockWebContext.create(), new MockSessionStore())).get();
         assertTrue(action instanceof FoundAction);
@@ -33,7 +33,7 @@ public final class CasRedirectionActionBuilderTest implements TestsConstants {
     }
 
     @Test
-    public void testRedirectGatewayAttribute() {
+    void testRedirectGatewayAttribute() {
         val builder = newBuilder(new CasConfiguration());
         val context = MockWebContext.create();
         context.setRequestAttribute(RedirectionActionBuilder.ATTRIBUTE_PASSIVE, true);
@@ -43,7 +43,7 @@ public final class CasRedirectionActionBuilderTest implements TestsConstants {
     }
 
     @Test
-    public void testRedirectRenewAttribute() {
+    void testRedirectRenewAttribute() {
         val builder = newBuilder(new CasConfiguration());
         val context = MockWebContext.create();
         context.setRequestAttribute(RedirectionActionBuilder.ATTRIBUTE_FORCE_AUTHN, true);
@@ -53,7 +53,7 @@ public final class CasRedirectionActionBuilderTest implements TestsConstants {
     }
 
     @Test
-    public void testRedirectWithMethod() {
+    void testRedirectWithMethod() {
         val config = new CasConfiguration();
         config.setMethod("post");
         val builder = newBuilder(config);
@@ -64,7 +64,7 @@ public final class CasRedirectionActionBuilderTest implements TestsConstants {
     }
 
     @Test
-    public void testRedirectForSAMLProtocol() {
+    void testRedirectForSAMLProtocol() {
         val config = new CasConfiguration();
         config.setProtocol(CasProtocol.SAML);
         val builder = newBuilder(config);

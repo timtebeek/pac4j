@@ -3,14 +3,14 @@ package org.pac4j.oidc.authorization.generator;
 import com.nimbusds.oauth2.sdk.token.AccessToken;
 import com.nimbusds.oauth2.sdk.token.BearerAccessToken;
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.authorization.generator.AuthorizationGenerator;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
 import org.pac4j.oidc.profile.keycloak.KeycloakOidcProfile;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests the {@link KeycloakRolesAuthorizationGenerator}.
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 3.4.0
  */
-public class KeycloakRolesAuthorizationGeneratorTests {
+class KeycloakRolesAuthorizationGeneratorTests {
 
     private static final String ACCESS_TOKEN =
         "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ6NTRlSnJINEZyY0dYMjNzcDFGdU95UV9HOHJyeWY0MWd1RXBHZkJpTmhzIn0.eyJqdGki"
@@ -38,7 +38,7 @@ public class KeycloakRolesAuthorizationGeneratorTests {
     private AuthorizationGenerator generator = new KeycloakRolesAuthorizationGenerator("keycloakid");
 
     @Test
-    public void test() {
+    void test() {
         val profile = new KeycloakOidcProfile();
         final AccessToken accessToken = new BearerAccessToken(ACCESS_TOKEN);
         profile.setAccessToken(accessToken);

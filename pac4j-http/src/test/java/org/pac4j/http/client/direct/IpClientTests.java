@@ -1,7 +1,7 @@
 package org.pac4j.http.client.direct;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
@@ -14,7 +14,7 @@ import org.pac4j.core.util.TestsConstants;
 import org.pac4j.core.util.TestsHelper;
 import org.pac4j.http.credentials.authenticator.test.SimpleTestTokenAuthenticator;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests the {@link IpClient} class.
@@ -22,19 +22,19 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class IpClientTests implements TestsConstants {
+final class IpClientTests implements TestsConstants {
 
     private final static String IP = "goodIp";
 
     @Test
-    public void testMissingTokendAuthenticator() {
+    void testMissingTokendAuthenticator() {
         val client = new IpClient(null);
         TestsHelper.expectException(() -> client.getCredentials(new CallContext(MockWebContext.create(), new MockSessionStore())),
             TechnicalException.class, "authenticator cannot be null");
     }
 
     @Test
-    public void testMissingProfileCreator() {
+    void testMissingProfileCreator() {
         val client = new IpClient(new SimpleTestTokenAuthenticator());
         client.setProfileCreator(null);
         TestsHelper.expectException(() -> client.getUserProfile(new CallContext(MockWebContext.create(), new MockSessionStore()),
@@ -42,13 +42,13 @@ public final class IpClientTests implements TestsConstants {
     }
 
     @Test
-    public void testHasDefaultProfileCreator() {
+    void testHasDefaultProfileCreator() {
         val client = new IpClient(new SimpleTestTokenAuthenticator());
         client.init();
     }
 
     @Test
-    public void testAuthentication() {
+    void testAuthentication() {
         Client client = new IpClient(new SimpleTestTokenAuthenticator());
         val context = MockWebContext.create();
         context.setRemoteAddress(IP);

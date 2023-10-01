@@ -3,7 +3,7 @@ package org.pac4j.saml.metadata.keystore;
 import lombok.val;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.saml.config.SAML2Configuration;
 import org.pac4j.saml.crypto.CredentialProvider;
 import org.pac4j.saml.crypto.KeyStoreCredentialProvider;
@@ -12,18 +12,17 @@ import org.pac4j.saml.util.DefaultConfigurationManager;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * This is {@link SAML2FileSystemKeystoreGeneratorTests}.
  *
  * @author Misagh Moayyed
  */
-public class SAML2FileSystemKeystoreGeneratorTests {
+class SAML2FileSystemKeystoreGeneratorTests {
 
     @Test
-    public void verifyKeystoreGenForNewDirectory() throws Exception {
+    void verifyKeystoreGenForNewDirectory() throws Exception {
         final ConfigurationManager mgr = new DefaultConfigurationManager();
         mgr.configure();
 
@@ -47,7 +46,7 @@ public class SAML2FileSystemKeystoreGeneratorTests {
     }
 
     @Test
-    public void verifyKeystoreGeneration() throws Exception {
+    void verifyKeystoreGeneration() throws Exception {
         final ConfigurationManager mgr = new DefaultConfigurationManager();
         mgr.configure();
 

@@ -1,6 +1,6 @@
 package org.pac4j.core.authorization.authorizer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.session.MockSessionStore;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.UserProfile;
@@ -9,8 +9,8 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link CheckProfileTypeAuthorizer}.
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome Leleu
  * @since 1.8.1
  */
-public final class CheckProfileTypeAuthorizerTests {
+final class CheckProfileTypeAuthorizerTests {
 
     private static class FakeProfile1 extends CommonProfile {
         @Serial
@@ -26,6 +26,7 @@ public final class CheckProfileTypeAuthorizerTests {
 
         public FakeProfile1() {}
     }
+
     private static class FakeProfile2 extends CommonProfile {
         @Serial
         private static final long serialVersionUID = -7923087937494697612L;
@@ -34,7 +35,7 @@ public final class CheckProfileTypeAuthorizerTests {
     }
 
     @Test
-    public void testGoodProfile() {
+    void testGoodProfile() {
         Authorizer authorizer = new CheckProfileTypeAuthorizer(FakeProfile1.class, FakeProfile2.class);
         final List<UserProfile> profiles = new ArrayList<>();
         profiles.add(new FakeProfile1());
@@ -42,7 +43,7 @@ public final class CheckProfileTypeAuthorizerTests {
     }
 
     @Test
-    public void testBadProfileType() {
+    void testBadProfileType() {
         Authorizer authorizer = new CheckProfileTypeAuthorizer(FakeProfile1.class);
         final List<UserProfile> profiles = new ArrayList<>();
         profiles.add(new FakeProfile2());

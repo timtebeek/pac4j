@@ -7,8 +7,8 @@ import com.nimbusds.oauth2.sdk.token.AccessToken;
 import com.nimbusds.oauth2.sdk.token.BearerAccessToken;
 import com.nimbusds.oauth2.sdk.token.RefreshToken;
 import lombok.val;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.util.TestsConstants;
 import org.pac4j.core.util.serializer.JavaSerializer;
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
@@ -20,7 +20,7 @@ import org.pac4j.oidc.profile.google.GoogleOidcProfile;
 import java.time.Instant;
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * General test cases for {@link OidcProfile}.
@@ -43,13 +43,13 @@ public final class OidcProfileTests implements TestsConstants {
 
     private BearerAccessToken populatedAccessToken;
 
-    @Before
-    public void before() {
+    @BeforeEach
+    void before() {
         populatedAccessToken = new BearerAccessToken(32, 128, Scope.parse("oidc email"));
     }
 
     @Test
-    public void testRemoveLoginData() {
+    void testRemoveLoginData() {
         var profile = new OidcProfile();
         profile.setAccessToken(new BearerAccessToken());
         profile.setIdTokenString(ID);
@@ -60,7 +60,7 @@ public final class OidcProfileTests implements TestsConstants {
     }
 
     @Test
-    public void testReadWriteObject() {
+    void testReadWriteObject() {
         var profile = new OidcProfile();
         profile.setAccessToken(populatedAccessToken);
         profile.setIdTokenString(ID_TOKEN);
@@ -69,44 +69,44 @@ public final class OidcProfileTests implements TestsConstants {
         var result = JAVA_SERIALIZER.serializeToBytes(profile);
         profile = (OidcProfile) JAVA_SERIALIZER.deserializeFromBytes(result);
 
-        assertNotNull("accessToken", profile.getAccessToken());
-        assertNotNull("value", profile.getAccessToken().getValue());
+        assertNotNull(profile.getAccessToken(), "accessToken");
+        assertNotNull(profile.getAccessToken().getValue(), "value");
         assertEquals(profile.getAccessToken().getLifetime(), populatedAccessToken.getLifetime());
         assertEquals(profile.getAccessToken().getScope(), populatedAccessToken.getScope());
-        assertEquals(profile.getIdTokenString(), ID_TOKEN);
-        assertEquals(profile.getRefreshToken().getValue(), REFRESH_TOKEN);
+        assertEquals(ID_TOKEN, profile.getIdTokenString());
+        assertEquals(REFRESH_TOKEN, profile.getRefreshToken().getValue());
     }
 
     /**
      * Test that serialization and deserialization of the OidcProfile work when the BearerAccessToken is null.
      */
     @Test
-    public void testReadWriteObjectNullAccessToken() {
+    void testReadWriteObjectNullAccessToken() {
         var profile = new OidcProfile();
         profile.setIdTokenString(ID_TOKEN);
         profile.setRefreshToken(new RefreshToken(REFRESH_TOKEN));
         var result = JAVA_SERIALIZER.serializeToBytes(profile);
         profile = (OidcProfile) JAVA_SERIALIZER.deserializeFromBytes(result);
         assertNull(profile.getAccessToken());
-        assertEquals(profile.getIdTokenString(), ID_TOKEN);
-        assertEquals(profile.getRefreshToken().getValue(), REFRESH_TOKEN);
+        assertEquals(ID_TOKEN, profile.getIdTokenString());
+        assertEquals(REFRESH_TOKEN, profile.getRefreshToken().getValue());
     }
 
     /**
      * Test that serialization and deserialization of the OidcProfile work when the Id token is null.
      */
     @Test
-    public void testReadWriteObjectNullIdToken() {
+    void testReadWriteObjectNullIdToken() {
         var profile = new OidcProfile();
         profile.setAccessToken(populatedAccessToken);
         profile.setRefreshToken(new RefreshToken(REFRESH_TOKEN));
         var result = JAVA_SERIALIZER.serializeToBytes(profile);
         profile = (OidcProfile) JAVA_SERIALIZER.deserializeFromBytes(result);
-        assertNotNull("accessToken", profile.getAccessToken());
-        assertNotNull("value", profile.getAccessToken().getValue());
+        assertNotNull(profile.getAccessToken(), "accessToken");
+        assertNotNull(profile.getAccessToken().getValue(), "value");
         assertEquals(profile.getAccessToken().getLifetime(), populatedAccessToken.getLifetime());
         assertEquals(profile.getAccessToken().getScope(), populatedAccessToken.getScope());
-        assertEquals(profile.getRefreshToken().getValue(), REFRESH_TOKEN);
+        assertEquals(REFRESH_TOKEN, profile.getRefreshToken().getValue());
         assertNull(profile.getIdTokenString());
     }
 
@@ -114,17 +114,17 @@ public final class OidcProfileTests implements TestsConstants {
      * Test that serialization and deserialization of the OidcProfile work when the Refresh token is null.
      */
     @Test
-    public void testReadWriteObjectNullRefreshToken() {
+    void testReadWriteObjectNullRefreshToken() {
         var profile = new OidcProfile();
         profile.setAccessToken(populatedAccessToken);
         profile.setIdTokenString(ID_TOKEN);
         var result = JAVA_SERIALIZER.serializeToBytes(profile);
         profile = (OidcProfile) JAVA_SERIALIZER.deserializeFromBytes(result);
-        assertNotNull("accessToken", profile.getAccessToken());
-        assertNotNull("value", profile.getAccessToken().getValue());
+        assertNotNull(profile.getAccessToken(), "accessToken");
+        assertNotNull(profile.getAccessToken().getValue(), "value");
         assertEquals(profile.getAccessToken().getLifetime(), populatedAccessToken.getLifetime());
         assertEquals(profile.getAccessToken().getScope(), populatedAccessToken.getScope());
-        assertEquals(profile.getIdTokenString(), ID_TOKEN);
+        assertEquals(ID_TOKEN, profile.getIdTokenString());
         assertNull(profile.getRefreshToken());
     }
 
@@ -133,7 +133,7 @@ public final class OidcProfileTests implements TestsConstants {
      * to clearSensitiveData().
      */
     @Test
-    public void testReadWriteObjectNullTokens() {
+    void testReadWriteObjectNullTokens() {
         var profile = new OidcProfile();
         profile.setAccessToken(populatedAccessToken);
         profile.removeLoginData();
@@ -149,7 +149,7 @@ public final class OidcProfileTests implements TestsConstants {
      * Default behavior. No expiration info.
      */
     @Test
-    public void testNullTokenExpiration() {
+    void testNullTokenExpiration() {
         var profile = new OidcProfile();
         assertFalse(profile.isExpired());
     }
@@ -158,7 +158,7 @@ public final class OidcProfileTests implements TestsConstants {
      * If the token is not expired, then the session is not considered expired.
      */
     @Test
-    public void testNoExpirationWithNoExpiredToken() {
+    void testNoExpirationWithNoExpiredToken() {
         final AccessToken token = new BearerAccessToken("token_value", 3600, new Scope("scope"));
         val profile = new OidcProfile();
         profile.setAccessToken(token);
@@ -170,7 +170,7 @@ public final class OidcProfileTests implements TestsConstants {
      * If the token is expired, then the session is considered expired.
      */
     @Test
-    public void testExpirationWithExpiredToken() {
+    void testExpirationWithExpiredToken() {
         final AccessToken token = new BearerAccessToken("token_value", -1, new Scope("scope"));
         val profile = new OidcProfile();
         profile.setAccessToken(token);
@@ -183,7 +183,7 @@ public final class OidcProfileTests implements TestsConstants {
      * a long enough token expiration advance is established.
      */
     @Test
-    public void testAdvancedExpirationWithNoExpiredToken() {
+    void testAdvancedExpirationWithNoExpiredToken() {
         final AccessToken token = new BearerAccessToken("token_value", 3600, new Scope("scope"));
         val profile = new OidcProfile();
         profile.setAccessToken(token);
@@ -195,7 +195,7 @@ public final class OidcProfileTests implements TestsConstants {
      * Test experation based on access token exp date.
      */
     @Test
-    public void testAccessTokenExpiration(){
+    void testAccessTokenExpiration(){
 
         val profile = new OidcProfile();
         profile.setAccessToken(new BearerAccessToken(ID_TOKEN));
@@ -210,7 +210,7 @@ public final class OidcProfileTests implements TestsConstants {
     }
 
     @Test
-    public void testGoogleProfile() {
+    void testGoogleProfile() {
         final GoogleOidcProfile googleOidcProfile = new GoogleOidcProfile();
         googleOidcProfile.setTokenExpirationAdvance(-1);
 

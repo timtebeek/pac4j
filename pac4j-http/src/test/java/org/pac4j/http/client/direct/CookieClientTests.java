@@ -1,7 +1,7 @@
 package org.pac4j.http.client.direct;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.Cookie;
@@ -18,7 +18,7 @@ import org.pac4j.http.credentials.authenticator.test.SimpleTestTokenAuthenticato
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * This class tests the {@link CookieClient} class.
@@ -26,17 +26,17 @@ import static org.junit.Assert.assertEquals;
  * @author Misagh Moayyed
  * @since 1.8.0
  */
-public final class CookieClientTests implements TestsConstants {
+final class CookieClientTests implements TestsConstants {
 
     @Test
-    public void testMissingUsernamePasswordAuthenticator() {
+    void testMissingUsernamePasswordAuthenticator() {
         val cookieClient = new CookieClient("testcookie", null);
         TestsHelper.expectException(() -> cookieClient.getCredentials(new CallContext(MockWebContext.create(), new MockSessionStore())),
                 TechnicalException.class, "authenticator cannot be null");
     }
 
     @Test
-    public void testMissingProfileCreator() {
+    void testMissingProfileCreator() {
         val cookieClient = new CookieClient("testcookie", new SimpleTestTokenAuthenticator());
         cookieClient.setProfileCreator(null);
         TestsHelper.expectException(() -> cookieClient.getUserProfile(new CallContext(MockWebContext.create(), new MockSessionStore()),
@@ -44,19 +44,21 @@ public final class CookieClientTests implements TestsConstants {
     }
 
     @Test
-    public void testHasDefaultProfileCreator() {
+    void testHasDefaultProfileCreator() {
         val cookieClient = new CookieClient("testcookie", new SimpleTestTokenAuthenticator());
         cookieClient.init();
     }
 
-    @Test(expected=Exception.class)
-    public void testMissingCookieName() {
-        val cookieClient = new CookieClient(null, new SimpleTestTokenAuthenticator());
-        cookieClient.init();
+    @Test
+    void testMissingCookieName() {
+        assertThrows(Exception.class, () -> {
+            val cookieClient = new CookieClient(null, new SimpleTestTokenAuthenticator());
+            cookieClient.init();
+        });
     }
 
     @Test
-    public void testAuthentication() {
+    void testAuthentication() {
         Client client = new CookieClient(USERNAME, new SimpleTestTokenAuthenticator());
         val context = MockWebContext.create();
 

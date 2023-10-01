@@ -1,7 +1,7 @@
 package org.pac4j.core.authorization.generator;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.UserProfile;
 import org.pac4j.core.util.Pac4jConstants;
@@ -10,8 +10,8 @@ import org.pac4j.core.util.TestsConstants;
 import java.util.Properties;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * This class tests {@link SpringSecurityPropertiesAuthorizationGenerator}.
@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome Leleu
  * @since 1.8.1
  */
-public final class SpringSecurityPropertiesAuthorizationGeneratorTests implements TestsConstants {
+final class SpringSecurityPropertiesAuthorizationGeneratorTests implements TestsConstants {
 
     private final static String SEPARATOR = ",";
     private final static String ROLE2 = "role2";
@@ -35,45 +35,45 @@ public final class SpringSecurityPropertiesAuthorizationGeneratorTests implement
     }
 
     @Test
-    public void testOnlyPassword() {
+    void testOnlyPassword() {
         val roles = test(Pac4jConstants.EMPTY_STRING);
         assertEquals(0, roles.size());
     }
 
     @Test
-    public void testEnabled() {
+    void testEnabled() {
         val roles = test(SEPARATOR + SpringSecurityPropertiesAuthorizationGenerator.ENABLED);
         assertEquals(0, roles.size());
     }
 
     @Test
-    public void testDisabled() {
+    void testDisabled() {
         val roles = test(SEPARATOR + SpringSecurityPropertiesAuthorizationGenerator.DISABLED);
         assertEquals(0, roles.size());
     }
 
     @Test
-    public void testOneRole() {
+    void testOneRole() {
         val roles = test(SEPARATOR + ROLE);
         assertEquals(1, roles.size());
         assertTrue(roles.contains(ROLE));
     }
 
     @Test
-    public void testOneRoleEnabled() {
+    void testOneRoleEnabled() {
         val roles = test(SEPARATOR + ROLE + SEPARATOR + SpringSecurityPropertiesAuthorizationGenerator.ENABLED);
         assertEquals(1, roles.size());
         assertTrue(roles.contains(ROLE));
     }
 
     @Test
-    public void testOneRoleDisabled() {
+    void testOneRoleDisabled() {
         val roles = test(SEPARATOR + ROLE + SEPARATOR + SpringSecurityPropertiesAuthorizationGenerator.DISABLED);
         assertEquals(0, roles.size());
     }
 
     @Test
-    public void testTwoRoles() {
+    void testTwoRoles() {
         val roles = test(SEPARATOR + ROLE + SEPARATOR + ROLE2);
         assertEquals(2, roles.size());
         assertTrue(roles.contains(ROLE));
@@ -81,7 +81,7 @@ public final class SpringSecurityPropertiesAuthorizationGeneratorTests implement
     }
 
     @Test
-    public void testTwoRolesEnabled() {
+    void testTwoRolesEnabled() {
         val roles = test(SEPARATOR + ROLE + SEPARATOR + ROLE2 + SEPARATOR
             + SpringSecurityPropertiesAuthorizationGenerator.ENABLED);
         assertEquals(2, roles.size());
@@ -90,7 +90,7 @@ public final class SpringSecurityPropertiesAuthorizationGeneratorTests implement
     }
 
     @Test
-    public void testTwoRolesDisabled() {
+    void testTwoRolesDisabled() {
         val roles = test(SEPARATOR + ROLE + SEPARATOR + ROLE2 + SEPARATOR
             + SpringSecurityPropertiesAuthorizationGenerator.DISABLED);
         assertEquals(0, roles.size());

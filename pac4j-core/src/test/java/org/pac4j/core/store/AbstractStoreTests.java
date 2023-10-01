@@ -1,13 +1,13 @@
 package org.pac4j.core.store;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.core.util.TestsConstants;
 import org.pac4j.core.util.TestsHelper;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Test a store.
@@ -20,7 +20,7 @@ public abstract class AbstractStoreTests<S extends Store> implements TestsConsta
     protected abstract S buildStore();
 
     @Test
-    public void testSetRemoveGet() {
+    void testSetRemoveGet() {
         val store = buildStore();
         store.set(KEY, VALUE);
         assertEquals(VALUE, store.get(KEY).get());
@@ -29,7 +29,7 @@ public abstract class AbstractStoreTests<S extends Store> implements TestsConsta
     }
 
     @Test
-    public void testSetExpiredGet() {
+    void testSetExpiredGet() {
         val store = buildStore();
         store.set(KEY, VALUE);
         assertEquals(VALUE, store.get(KEY).get());
@@ -42,7 +42,7 @@ public abstract class AbstractStoreTests<S extends Store> implements TestsConsta
     }
 
     @Test
-    public void testSetNullValue() {
+    void testSetNullValue() {
         val store = buildStore();
         store.set(KEY, VALUE);
         assertEquals(VALUE, store.get(KEY).get());
@@ -51,25 +51,25 @@ public abstract class AbstractStoreTests<S extends Store> implements TestsConsta
     }
 
     @Test
-    public void testMissingObject() {
+    void testMissingObject() {
         val store = buildStore();
         assertFalse(store.get(KEY).isPresent());
     }
 
     @Test
-    public void testNullKeyGet() {
+    void testNullKeyGet() {
         val store = buildStore();
         TestsHelper.expectException(() -> store.get(null), TechnicalException.class, "key cannot be null");
     }
 
     @Test
-    public void testNullKeySet() {
+    void testNullKeySet() {
         val store = buildStore();
         TestsHelper.expectException(() -> store.set(null, VALUE), TechnicalException.class, "key cannot be null");
     }
 
     @Test
-    public void testNullKeyRemove() {
+    void testNullKeyRemove() {
         val store = buildStore();
         TestsHelper.expectException(() -> store.remove(null), TechnicalException.class, "key cannot be null");
     }

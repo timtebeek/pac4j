@@ -1,8 +1,8 @@
 package org.pac4j.core.engine;
 
 import lombok.val;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.adapter.FrameworkAdapter;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.client.IndirectClient;
@@ -29,7 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.mock;
  * @author Jerome Leleu
  * @since 1.9.0
  */
-public final class DefaultCallbackLogicTests implements TestsConstants {
+final class DefaultCallbackLogicTests implements TestsConstants {
 
     private DefaultCallbackLogic logic;
 
@@ -56,8 +56,8 @@ public final class DefaultCallbackLogicTests implements TestsConstants {
 
     private HttpAction action;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         logic = new DefaultCallbackLogic();
         config = new Config();
         context = MockWebContext.create();
@@ -79,37 +79,37 @@ public final class DefaultCallbackLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testNullConfig() {
+    void testNullConfig() {
         config = null;
         TestsHelper.expectException(this::call, TechnicalException.class, "config cannot be null");
     }
 
     @Test
-    public void testNullContext() {
+    void testNullContext() {
         context = null;
         TestsHelper.expectException(this::call, TechnicalException.class, "context cannot be null");
     }
 
     @Test
-    public void testNullHttpActionAdapter() {
+    void testNullHttpActionAdapter() {
         config.setHttpActionAdapter(null);
         TestsHelper.expectException(this::call, TechnicalException.class, "httpActionAdapter cannot be null");
     }
 
     @Test
-    public void testBlankDefaultUrl() {
+    void testBlankDefaultUrl() {
         defaultUrl = Pac4jConstants.EMPTY_STRING;
         TestsHelper.expectException(this::call, TechnicalException.class, "defaultUrl cannot be blank");
     }
 
     @Test
-    public void testNullClients() {
+    void testNullClients() {
         config.setClients(null);
         TestsHelper.expectException(this::call, TechnicalException.class, "clients cannot be null");
     }
 
     @Test
-    public void testDirectClient() {
+    void testDirectClient() {
         context.addRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER, NAME);
         val directClient = new MockDirectClient(NAME, Optional.of(new MockCredentials()), new CommonProfile());
         config.setClients(new Clients(directClient));
@@ -119,7 +119,7 @@ public final class DefaultCallbackLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testCallback() {
+    void testCallback() {
         val originalSessionId = sessionStore.getSessionId(context, false);
         context.addRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER, NAME);
         val profile = new CommonProfile();
@@ -137,12 +137,12 @@ public final class DefaultCallbackLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testCallbackWithOriginallyRequestedUrl() {
+    void testCallbackWithOriginallyRequestedUrl() {
         internalTestCallbackWithOriginallyRequestedUrl(302);
     }
 
     @Test
-    public void testCallbackWithOriginallyRequestedUrlAndPostRequest() {
+    void testCallbackWithOriginallyRequestedUrlAndPostRequest() {
         context.setRequestMethod("POST");
         internalTestCallbackWithOriginallyRequestedUrl(303);
     }
@@ -170,7 +170,7 @@ public final class DefaultCallbackLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testCallbackNoRenew() {
+    void testCallbackNoRenew() {
         val originalSessionId = sessionStore.getSessionId(context, true);
         context.addRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER, NAME);
         val profile = new CommonProfile();

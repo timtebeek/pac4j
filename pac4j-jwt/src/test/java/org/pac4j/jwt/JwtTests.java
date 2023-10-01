@@ -3,7 +3,7 @@ package org.pac4j.jwt;
 import com.nimbusds.jose.EncryptionMethod;
 import com.nimbusds.jose.JWSAlgorithm;
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.credentials.TokenCredentials;
 import org.pac4j.core.credentials.authenticator.Authenticator;
 import org.pac4j.core.exception.CredentialsException;
@@ -32,7 +32,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class tests the {@link JwtGenerator} and {@link JwtAuthenticator}.
@@ -40,14 +40,14 @@ import static org.junit.Assert.*;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class JwtTests implements TestsConstants {
+final class JwtTests implements TestsConstants {
 
     private static final String KEY2 = "02ez4f7dsq==drrdz54z---++-6ef78=";
 
     private static final Collection<String> ROLES = new HashSet<>(Arrays.asList(new String[]{"role1", "role2"}));
 
     @Test
-    public void testGenericJwt() {
+    void testGenericJwt() {
         val token = """
             eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIn0..NTvhJXwZ_sN4zYBK.exyLJWkOclCVcffz58CE-
             3XWWV24aYyGWR5HVrfm4HLQi1xgmwglLlEIiFlOSTOSZ_LeAwl2Z3VFh-5EidocjwGkAPGQA_4_KCLbK8Im7M25ZZvDzCJ1kKN1JrDIIrBWCcuI4Mbw0O
@@ -61,7 +61,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testNestedClaimsJwt() {
+    void testNestedClaimsJwt() {
         val generator = new JwtGenerator(new SecretSignatureConfiguration(MAC_SECRET));
         Map<String, Object> claimsMap = new HashMap<>();
         claimsMap.put("userData", Map.of("id", "123345", "name", "pac4j"));
@@ -82,7 +82,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticateSub() {
+    void testGenerateAuthenticateSub() {
         val generator = new JwtGenerator(new SecretSignatureConfiguration(MAC_SECRET));
         val profile = createProfile();
         profile.addAttribute(JwtClaims.SUBJECT, VALUE);
@@ -91,16 +91,18 @@ public final class JwtTests implements TestsConstants {
         assertToken(profile, token);
     }
 
-    @Test(expected = CredentialsException.class)
-    public void testPlainJwtWithSignatureConfigurations() {
-        val generator = new JwtGenerator();
-        val profile = createProfile();
-        val token = generator.generate(profile);
-        assertToken(profile, token);
+    @Test
+    void testPlainJwtWithSignatureConfigurations() {
+        assertThrows(CredentialsException.class, () -> {
+            val generator = new JwtGenerator();
+            val profile = createProfile();
+            val token = generator.generate(profile);
+            assertToken(profile, token);
+        });
     }
 
     @Test
-    public void testPlainJwtWithoutSignatureConfigurations() {
+    void testPlainJwtWithoutSignatureConfigurations() {
         val generator = new JwtGenerator();
         val profile = createProfile();
         val token = generator.generate(profile);
@@ -108,7 +110,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testTwitterProfileJwt() {
+    void testTwitterProfileJwt() {
         val generator = new JwtGenerator();
         UserProfile profile = new TwitterProfile();
         profile.addAttribute(TwitterProfileDefinition.PROFILE_LINK_COLOR, new Color(1, 2, 3));
@@ -117,7 +119,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testPlainJwtNotExpired() {
+    void testPlainJwtNotExpired() {
         val generator = new JwtGenerator();
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaims.SUBJECT, ID);
@@ -128,7 +130,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testPlainJwtExpired() {
+    void testPlainJwtExpired() {
         val generator = new JwtGenerator();
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaims.SUBJECT, ID);
@@ -139,7 +141,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testPlainJwtExpired2() {
+    void testPlainJwtExpired2() {
         val generator = new JwtGenerator();
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaims.SUBJECT, ID);
@@ -150,7 +152,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testPlainJwtExpiredByAuthenticator() {
+    void testPlainJwtExpiredByAuthenticator() {
         val generator = new JwtGenerator();
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaims.SUBJECT, ID);
@@ -164,7 +166,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testPlainJwtNoSubject() {
+    void testPlainJwtNoSubject() {
         val generator = new JwtGenerator();
         val token = generator.generate(new HashMap<>());
         var authenticator = new JwtAuthenticator();
@@ -173,7 +175,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testPlainJwtNoSubjectButIdentifierGenerator() {
+    void testPlainJwtNoSubjectButIdentifierGenerator() {
         val generator = new JwtGenerator();
         val token = generator.generate(new HashMap<>());
         var authenticator = new JwtAuthenticator();
@@ -183,7 +185,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testPemJwt() throws NoSuchAlgorithmException {
+    void testPemJwt() throws NoSuchAlgorithmException {
         val profile = createProfile();
         val signatureConfiguration = buildECSignatureConfiguration();
         val generator = new JwtGenerator(signatureConfiguration);
@@ -194,7 +196,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticate() {
+    void testGenerateAuthenticate() {
         val generator = new JwtGenerator(new SecretSignatureConfiguration(MAC_SECRET),
             new SecretEncryptionConfiguration(MAC_SECRET));
         val profile = createProfile();
@@ -203,7 +205,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticateWithoutEncryption() {
+    void testGenerateAuthenticateWithoutEncryption() {
         val generator = new JwtGenerator(new SecretSignatureConfiguration(MAC_SECRET));
         val profile = createProfile();
         profile.setLinkedId(VALUE);
@@ -213,7 +215,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testDoubleGenerateAuthenticate() {
+    void testDoubleGenerateAuthenticate() {
         val generator = new JwtGenerator(new SecretSignatureConfiguration(MAC_SECRET),
             new SecretEncryptionConfiguration(MAC_SECRET));
         val profile = createProfile();
@@ -227,7 +229,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticateClaims() {
+    void testGenerateAuthenticateClaims() {
         val generator = new JwtGenerator(new SecretSignatureConfiguration(MAC_SECRET),
             new SecretEncryptionConfiguration(MAC_SECRET));
         final Map<String, Object> claims = new HashMap<>();
@@ -258,7 +260,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticateDifferentSecrets() {
+    void testGenerateAuthenticateDifferentSecrets() {
         final SignatureConfiguration signatureConfiguration = new SecretSignatureConfiguration(MAC_SECRET);
         final EncryptionConfiguration encryptionConfiguration = new SecretEncryptionConfiguration(KEY2);
         val generator = new JwtGenerator(signatureConfiguration, encryptionConfiguration);
@@ -268,7 +270,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticateUselessSignatureConfiguration() {
+    void testGenerateAuthenticateUselessSignatureConfiguration() {
         final SignatureConfiguration signatureConfiguration = new SecretSignatureConfiguration(KEY2);
         final SignatureConfiguration signatureConfiguration2 = new SecretSignatureConfiguration(MAC_SECRET);
         final EncryptionConfiguration encryptionConfiguration = new SecretEncryptionConfiguration(MAC_SECRET);
@@ -283,7 +285,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticateSlightlyDifferentSignatureConfiguration() {
+    void testGenerateAuthenticateSlightlyDifferentSignatureConfiguration() {
         val generator = new JwtGenerator(new SecretSignatureConfiguration(KEY2));
         val profile = createProfile();
         val token = generator.generate(profile);
@@ -294,7 +296,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticateDifferentSignatureConfiguration() throws NoSuchAlgorithmException {
+    void testGenerateAuthenticateDifferentSignatureConfiguration() throws NoSuchAlgorithmException {
         val generator = new JwtGenerator(new SecretSignatureConfiguration(KEY2));
         val profile = createProfile();
         val token = generator.generate(profile);
@@ -305,7 +307,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticateDifferentEncryptionConfiguration() {
+    void testGenerateAuthenticateDifferentEncryptionConfiguration() {
         val generator = new JwtGenerator();
         generator.setEncryptionConfiguration(new SecretEncryptionConfiguration(KEY2));
         val profile = createProfile();
@@ -317,7 +319,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticateNotEncrypted() {
+    void testGenerateAuthenticateNotEncrypted() {
         val generator = new JwtGenerator(new SecretSignatureConfiguration(MAC_SECRET));
         val profile = createProfile();
         val token = generator.generate(profile);
@@ -325,7 +327,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticateNotSigned() {
+    void testGenerateAuthenticateNotSigned() {
         val generator = new JwtGenerator();
         generator.setEncryptionConfiguration(new SecretEncryptionConfiguration(MAC_SECRET));
         val profile = createProfile();
@@ -334,7 +336,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testGenerateAuthenticateAndEncryptedWithRoles() {
+    void testGenerateAuthenticateAndEncryptedWithRoles() {
         val generator = new JwtGenerator(new SecretSignatureConfiguration(MAC_SECRET));
         val profile = createProfile();
         profile.addRoles(ROLES);
@@ -370,16 +372,18 @@ public final class JwtTests implements TestsConstants {
         return profile;
     }
 
-    @Test(expected = CredentialsException.class)
-    public void testAuthenticateFailed() {
-        Authenticator authenticator =
-            new JwtAuthenticator(new SecretSignatureConfiguration(MAC_SECRET), new SecretEncryptionConfiguration(MAC_SECRET));
-        val credentials = new TokenCredentials("fakeToken");
-        authenticator.validate(null, credentials);
+    @Test
+    void testAuthenticateFailed() {
+        assertThrows(CredentialsException.class, () -> {
+            Authenticator authenticator =
+                new JwtAuthenticator(new SecretSignatureConfiguration(MAC_SECRET), new SecretEncryptionConfiguration(MAC_SECRET));
+            val credentials = new TokenCredentials("fakeToken");
+            authenticator.validate(null, credentials);
+        });
     }
 
     @Test
-    public void testJwtGenerationA256CBC() {
+    void testJwtGenerationA256CBC() {
         val g = new JwtGenerator(new SecretSignatureConfiguration(MAC_SECRET + MAC_SECRET + MAC_SECRET
             + MAC_SECRET + MAC_SECRET + MAC_SECRET + MAC_SECRET + MAC_SECRET),
             new SecretEncryptionConfiguration(KEY2 + KEY2)
@@ -390,7 +394,7 @@ public final class JwtTests implements TestsConstants {
     }
 
     @Test
-    public void testJwtGenerationA256GCM() {
+    void testJwtGenerationA256GCM() {
         val g = new JwtGenerator(
             new SecretSignatureConfiguration(MAC_SECRET + MAC_SECRET + MAC_SECRET + MAC_SECRET + MAC_SECRET + MAC_SECRET
                 + MAC_SECRET + MAC_SECRET),

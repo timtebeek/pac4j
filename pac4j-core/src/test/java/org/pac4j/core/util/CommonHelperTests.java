@@ -1,14 +1,14 @@
 package org.pac4j.core.util;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.core.profile.CommonProfile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class tests the {@link CommonHelper} class.
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  * @author Jerome Leleu
  * @since 1.4.0
  */
-public final class CommonHelperTests {
+final class CommonHelperTests {
 
     private static final String URL_WITHOUT_PARAMETER = "http://host/app";
 
@@ -29,27 +29,27 @@ public final class CommonHelperTests {
     private static final String ENCODED_VALUE = "va%2Bl%2Bue";
 
     @Test
-    public void testIsNotBlankNull() {
+    void testIsNotBlankNull() {
         assertFalse(CommonHelper.isNotBlank(null));
     }
 
     @Test
-    public void testIsNotBlankEmply() {
+    void testIsNotBlankEmply() {
         assertFalse(CommonHelper.isNotBlank(Pac4jConstants.EMPTY_STRING));
     }
 
     @Test
-    public void testIsNotBlankBlank() {
+    void testIsNotBlankBlank() {
         assertFalse(CommonHelper.isNotBlank("     "));
     }
 
     @Test
-    public void testIsNotBlankNotBlank() {
+    void testIsNotBlankNotBlank() {
         assertTrue(CommonHelper.isNotBlank(NAME));
     }
 
     @Test
-    public void testAssertNotBlankBlank() {
+    void testAssertNotBlankBlank() {
         try {
             CommonHelper.assertNotBlank(NAME, Pac4jConstants.EMPTY_STRING);
             fail("must throw an TechnicalException");
@@ -59,12 +59,12 @@ public final class CommonHelperTests {
     }
 
     @Test
-    public void testAssertNotBlankNotBlank() {
+    void testAssertNotBlankNotBlank() {
         CommonHelper.assertNotBlank(NAME, VALUE);
     }
 
     @Test
-    public void testAssertNotNullNull() {
+    void testAssertNotNullNull() {
         try {
             CommonHelper.assertNotNull(NAME, null);
             fail("must throw an TechnicalException");
@@ -74,104 +74,112 @@ public final class CommonHelperTests {
     }
 
     @Test
-    public void testAssertNotNullNotNull() {
+    void testAssertNotNullNotNull() {
         CommonHelper.assertNotNull(NAME, VALUE);
     }
 
     @Test
-    public void testAddParameterNullUrl() {
+    void testAddParameterNullUrl() {
         assertNull(CommonHelper.addParameter(null, NAME, VALUE));
     }
 
     @Test
-    public void testAddParameterNullName() {
+    void testAddParameterNullName() {
         assertEquals(URL_WITH_PARAMETER, CommonHelper.addParameter(URL_WITH_PARAMETER, null, VALUE));
     }
 
     @Test
-    public void testAddParameterNullValue() {
+    void testAddParameterNullValue() {
         assertEquals(URL_WITH_PARAMETER + "&" + NAME + "=", CommonHelper.addParameter(URL_WITH_PARAMETER, NAME, null));
     }
 
     @Test
-    public void testAddParameterWithParameter() {
+    void testAddParameterWithParameter() {
         assertEquals(URL_WITH_PARAMETER + "&" + NAME + "=" + ENCODED_VALUE,
                 CommonHelper.addParameter(URL_WITH_PARAMETER, NAME, VALUE));
     }
 
     @Test
-    public void testAddParameterWithoutParameter() {
+    void testAddParameterWithoutParameter() {
         assertEquals(URL_WITHOUT_PARAMETER + "?" + NAME + "=" + ENCODED_VALUE,
                 CommonHelper.addParameter(URL_WITHOUT_PARAMETER, NAME, VALUE));
     }
 
     @Test
-    public void testAreEqualsOk() {
+    void testAreEqualsOk() {
         assertTrue(CommonHelper.areEquals(null, null));
         assertTrue(CommonHelper.areEquals(VALUE, VALUE));
     }
 
     @Test
-    public void testAreEqualsIgnoreCaseAndTrimOk() {
+    void testAreEqualsIgnoreCaseAndTrimOk() {
         assertTrue(CommonHelper.areEqualsIgnoreCaseAndTrim(null, null));
         assertTrue(CommonHelper.areEqualsIgnoreCaseAndTrim(" " + VALUE.toUpperCase(), VALUE + "                "));
     }
 
     @Test
-    public void testAreEqualsFails() {
+    void testAreEqualsFails() {
         assertFalse(CommonHelper.areEquals(VALUE, null));
         assertFalse(CommonHelper.areEquals(null, VALUE));
         assertFalse(CommonHelper.areEquals(NAME, VALUE));
     }
 
     @Test
-    public void testAreEqualsIgnoreCaseAndTrimFails() {
+    void testAreEqualsIgnoreCaseAndTrimFails() {
         assertFalse(CommonHelper.areEqualsIgnoreCaseAndTrim(VALUE, null));
         assertFalse(CommonHelper.areEqualsIgnoreCaseAndTrim(NAME, VALUE));
     }
 
-    @Test(expected = TechnicalException.class)
-    public void testAssertNotBlank_null() {
-        String var = null;
-        CommonHelper.assertNotBlank("var", var);
-    }
-
-    @Test(expected = TechnicalException.class)
-    public void testAssertNotBlank_empty() {
-        var var = " ";
-        CommonHelper.assertNotBlank("var", var);
+    @Test
+    void testAssertNotBlank_null() {
+        assertThrows(TechnicalException.class, () -> {
+            String var = null;
+            CommonHelper.assertNotBlank("var", var);
+        });
     }
 
     @Test
-    public void testAssertNotBlank_notBlank() {
+    void testAssertNotBlank_empty() {
+        assertThrows(TechnicalException.class, () -> {
+            var var = " ";
+            CommonHelper.assertNotBlank("var", var);
+        });
+    }
+
+    @Test
+    void testAssertNotBlank_notBlank() {
         var var = "contents";
         CommonHelper.assertNotBlank("var", var);
     }
 
-    @Test(expected = TechnicalException.class)
-    public void testAssertNotNull_null() {
-        String var = null;
-        CommonHelper.assertNotNull("var", var);
+    @Test
+    void testAssertNotNull_null() {
+        assertThrows(TechnicalException.class, () -> {
+            String var = null;
+            CommonHelper.assertNotNull("var", var);
+        });
     }
 
     @Test
-    public void testAssertNotNull_notBlank() {
+    void testAssertNotNull_notBlank() {
         var var = "contents";
         CommonHelper.assertNotNull("var", var);
     }
 
     @Test
-    public void testAssertNull_null() {
+    void testAssertNull_null() {
         CommonHelper.assertNull("var", null);
     }
 
-    @Test(expected = TechnicalException.class)
-    public void testAssertNull_notNull() {
-        CommonHelper.assertNull("var", "notnull");
+    @Test
+    void testAssertNull_notNull() {
+        assertThrows(TechnicalException.class, () -> {
+            CommonHelper.assertNull("var", "notnull");
+        });
     }
 
     @Test
-    public void testRandomStringNChars() {
+    void testRandomStringNChars() {
         for (var i = 0; i < 128; i++) {
             testRandomString(i);
         }
@@ -183,43 +191,45 @@ public final class CommonHelperTests {
     }
 
     @Test
-    public void testSubstringAfter() {
+    void testSubstringAfter() {
         assertEquals("after", CommonHelper.substringAfter("before###after", "###"));
     }
 
     @Test
-    public void testSubstringBefore() {
+    void testSubstringBefore() {
         assertEquals("before", CommonHelper.substringBefore("before###after", "###"));
     }
 
     @Test
-    public void testSubstringBetween() {
+    void testSubstringBetween() {
         assertEquals("bet", CommonHelper.substringBetween("123startbet##456", "start", "##"));
     }
 
     @Test
-    public void testIsEmpty() {
+    void testIsEmpty() {
         assertTrue(CommonHelper.isEmpty(null));
         assertTrue(CommonHelper.isEmpty(new ArrayList<>()));
         assertFalse(CommonHelper.isEmpty(Arrays.asList(new String[] {VALUE})));
     }
 
     @Test
-    public void testIsNotEmpty() {
+    void testIsNotEmpty() {
         assertFalse(CommonHelper.isNotEmpty(null));
         assertFalse(CommonHelper.isNotEmpty(new ArrayList<>()));
         assertTrue(CommonHelper.isNotEmpty(Arrays.asList(new String[] {VALUE})));
     }
 
     @Test
-    public void testGetConstructorOK() throws Exception {
+    void testGetConstructorOK() throws Exception {
         var constructor = CommonHelper.getConstructor(CommonProfile.class.getName());
         val profile = (CommonProfile) constructor.newInstance();
         assertNotNull(profile);
     }
 
-    @Test(expected = ClassNotFoundException.class)
-    public void testGetConstructorMissingClass() throws Exception {
-        CommonHelper.getConstructor("this.class.does.not.Exist");
+    @Test
+    void testGetConstructorMissingClass() throws Exception {
+        assertThrows(ClassNotFoundException.class, () -> {
+            CommonHelper.getConstructor("this.class.does.not.Exist");
+        });
     }
 }

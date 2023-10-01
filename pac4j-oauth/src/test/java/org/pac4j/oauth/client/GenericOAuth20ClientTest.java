@@ -1,6 +1,6 @@
 package org.pac4j.oauth.client;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.profile.converter.BooleanConverter;
 import org.pac4j.core.profile.converter.ColorConverter;
 import org.pac4j.core.profile.converter.GenderConverter;
@@ -13,11 +13,11 @@ import org.pac4j.oauth.profile.generic.GenericOAuth20ProfileDefinition;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.pac4j.core.util.TestsConstants.CALLBACK_URL;
 import static org.pac4j.core.util.TestsConstants.ID;
 
-public class GenericOAuth20ClientTest {
+class GenericOAuth20ClientTest {
     final static String AGE = "age";
     final static String IS_ADMIN = "is_admin";
     final static String BG_COLOR = "bg_color";
@@ -26,7 +26,7 @@ public class GenericOAuth20ClientTest {
     final static String BLOG = "blog";
 
     @Test
-    public void setProfileAttrs() throws Exception {
+    void setProfileAttrs() throws Exception {
         var client = new GenericOAuth20Client();
         Map map = new HashMap();
         map.put(AGE, "Integer|age");

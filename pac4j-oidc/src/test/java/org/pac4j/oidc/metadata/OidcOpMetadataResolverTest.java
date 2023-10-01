@@ -1,7 +1,5 @@
 package org.pac4j.oidc.metadata;
 
-import static org.junit.Assert.assertEquals;
-
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.oauth2.sdk.auth.ClientAuthenticationMethod;
 import com.nimbusds.oauth2.sdk.id.Issuer;
@@ -11,8 +9,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
-import org.junit.Assert;
-import org.junit.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.oidc.config.OidcConfiguration;
 
@@ -25,7 +26,7 @@ public class OidcOpMetadataResolverTest {
     public static final JWSAlgorithm JWS_ALGORITHM = JWSAlgorithm.HS256;
 
     @Test
-    public void shouldUseFirstServerSupportedAuthMethod() throws URISyntaxException {
+    void shouldUseFirstServerSupportedAuthMethod() throws URISyntaxException {
         OidcConfiguration configuration = getOidcConfiguration(null);
 
         OidcOpMetadataResolver metadataResolver = getMetadataResolver(configuration,
@@ -35,7 +36,7 @@ public class OidcOpMetadataResolverTest {
     }
 
     @Test
-    public void shouldRespectClientSupportedAuthMethod() throws URISyntaxException {
+    void shouldRespectClientSupportedAuthMethod() throws URISyntaxException {
         OidcConfiguration configuration = getOidcConfiguration(Set.of(ClientAuthenticationMethod.CLIENT_SECRET_BASIC));
 
         OidcOpMetadataResolver metadataResolver = getMetadataResolver(configuration,
@@ -45,12 +46,12 @@ public class OidcOpMetadataResolverTest {
     }
 
     @Test
-    public void shouldFailInCaseOfNoCommonAuthMethod() throws URISyntaxException {
+    void shouldFailInCaseOfNoCommonAuthMethod() throws URISyntaxException {
         OidcConfiguration oidcConfiguration = getOidcConfiguration(Set.of(ClientAuthenticationMethod.CLIENT_SECRET_BASIC));
 
         try {
             getMetadataResolver(oidcConfiguration, List.of(ClientAuthenticationMethod.CLIENT_SECRET_POST));
-            Assert.fail("TechnicalException expected");
+            fail("TechnicalException expected");
         } catch (TechnicalException e) {
             assertEquals("None of the Token endpoint provider metadata authentication methods are supported: [client_secret_post]",
                 e.getMessage());

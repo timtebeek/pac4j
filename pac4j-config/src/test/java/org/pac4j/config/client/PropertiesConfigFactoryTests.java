@@ -2,7 +2,7 @@ package org.pac4j.config.client;
 
 import com.nimbusds.oauth2.sdk.auth.ClientAuthenticationMethod;
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.pac4j.cas.client.CasClient;
 import org.pac4j.cas.config.CasProtocol;
@@ -32,7 +32,8 @@ import org.pac4j.sql.test.tools.DbServer;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.pac4j.ldap.test.tools.LdapServer.*;
 
 /**
@@ -41,10 +42,10 @@ import static org.pac4j.ldap.test.tools.LdapServer.*;
  * @author Jerome Leleu
  * @since 1.8.1
  */
-public final class PropertiesConfigFactoryTests implements PropertiesConstants, TestsConstants {
+final class PropertiesConfigFactoryTests implements PropertiesConstants, TestsConstants {
 
     @Test
-    public void test() {
+    void test() {
 
         LdapServer ldapServer = null;
         try {

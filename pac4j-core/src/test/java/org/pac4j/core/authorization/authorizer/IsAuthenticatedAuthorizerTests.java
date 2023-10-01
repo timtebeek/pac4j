@@ -1,7 +1,7 @@
 package org.pac4j.core.authorization.authorizer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
 import org.pac4j.core.exception.http.HttpAction;
@@ -14,8 +14,8 @@ import org.pac4j.core.util.TestsHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link IsAuthenticatedAuthorizer}.
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome Leleu
  * @since 1.9.0
  */
-public class IsAuthenticatedAuthorizerTests implements TestsConstants {
+class IsAuthenticatedAuthorizerTests implements TestsConstants {
 
     protected Authorizer authorizer;
 
@@ -31,8 +31,8 @@ public class IsAuthenticatedAuthorizerTests implements TestsConstants {
 
     protected CommonProfile profile;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         authorizer = newAuthorizer();
         profiles = new ArrayList<>();
         profile = new CommonProfile();
@@ -48,31 +48,31 @@ public class IsAuthenticatedAuthorizerTests implements TestsConstants {
     }
 
     @Test
-    public void testNoProfile() {
+    void testNoProfile() {
         assertFalse(authorizer.isAuthorized(null, new MockSessionStore(), profiles));
     }
 
     @Test
-    public void testAnonymousProfile() {
+    void testAnonymousProfile() {
         profiles.add(new AnonymousProfile());
         assertFalse(authorizer.isAuthorized(null, new MockSessionStore(), profiles));
     }
 
     @Test
-    public void testCommonProfileTwoProfiles() {
+    void testCommonProfileTwoProfiles() {
         profiles.add(new AnonymousProfile());
         profiles.add(profile);
         assertTrue(authorizer.isAuthorized(null, new MockSessionStore(), profiles));
     }
 
     @Test
-    public void testCommonProfile() {
+    void testCommonProfile() {
         profiles.add(profile);
         assertTrue(authorizer.isAuthorized(null, new MockSessionStore(), profiles));
     }
 
     @Test
-    public void testAnonymousProfileRedirectionUrl() {
+    void testAnonymousProfileRedirectionUrl() {
         profiles.add(new AnonymousProfile());
         ((IsAuthenticatedAuthorizer) authorizer).setRedirectionUrl(PAC4J_URL);
         TestsHelper.expectException(() -> authorizer.isAuthorized(MockWebContext.create(), new MockSessionStore(), profiles),

@@ -1,15 +1,14 @@
 package org.pac4j.core.authorization.generator;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.UserProfile;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests {@link DefaultRolesAuthorizationGenerator}.
@@ -17,13 +16,13 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class DefaultRolesAuthorizationGeneratorTests {
+final class DefaultRolesAuthorizationGeneratorTests {
 
     private final static String[] DEFAULT_ROLES_ARRAY = new String[]{"R1", "R2"};
     private final static List<String> DEFAULT_ROLES_LIST = Arrays.asList(DEFAULT_ROLES_ARRAY);
 
     @Test
-    public void testNullArrays() {
+    void testNullArrays() {
         val generator = new DefaultRolesAuthorizationGenerator((String[]) null);
         checkEmptyProfile(generator);
     }
@@ -35,13 +34,13 @@ public final class DefaultRolesAuthorizationGeneratorTests {
     }
 
     @Test
-    public void testNullLists() {
+    void testNullLists() {
         val generator = new DefaultRolesAuthorizationGenerator((List<String>) null);
         checkEmptyProfile(generator);
     }
 
     @Test
-    public void testDefaultValuesArrays() {
+    void testDefaultValuesArrays() {
         val generator = new DefaultRolesAuthorizationGenerator(DEFAULT_ROLES_ARRAY);
         checkProfile(generator);
     }
@@ -55,7 +54,7 @@ public final class DefaultRolesAuthorizationGeneratorTests {
     }
 
     @Test
-    public void testDefaultValuesLists() {
+    void testDefaultValuesLists() {
         val generator = new DefaultRolesAuthorizationGenerator(DEFAULT_ROLES_LIST);
         checkProfile(generator);
     }

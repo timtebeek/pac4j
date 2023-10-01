@@ -1,7 +1,7 @@
 package org.pac4j.http.client.direct;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
@@ -18,7 +18,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@link X509Client}.
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 3.3.0
  */
-public final class X509ClientTests implements TestsConstants {
+final class X509ClientTests implements TestsConstants {
 
     private static final String CERTIFICATE = "MIIDdTCCAl2gAwIBAgIEbYmrcjANBgkqhkiG9w0BAQsFADBrMRAwDgYDVQQGEwdV" +
         "bmtub3duMRAwDgYDVQQIEwdVbmtub3duMRAwDgYDVQQHEwdVbmtub3duMRAwDgYD" +
@@ -51,7 +51,7 @@ public final class X509ClientTests implements TestsConstants {
     private Client client = new X509Client();
 
     @Test
-    public void testOk() throws CertificateException {
+    void testOk() throws CertificateException {
         val context = MockWebContext.create();
         val certificateData = Base64.getDecoder().decode(CERTIFICATE);
         val cert = (X509Certificate) CertificateFactory.getInstance("X.509")

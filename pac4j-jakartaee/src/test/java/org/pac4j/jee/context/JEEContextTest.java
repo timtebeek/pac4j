@@ -2,8 +2,8 @@ package org.pac4j.jee.context;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.util.Pac4jConstants;
 import org.pac4j.core.util.TestsConstants;
@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
  * @author Jerome Leleu
  * @since 3.0.0
  */
-public final class JEEContextTest implements TestsConstants {
+final class JEEContextTest implements TestsConstants {
 
     private static final String CTX = "/ctx";
     private static final String PATH = "/path";
@@ -32,19 +32,19 @@ public final class JEEContextTest implements TestsConstants {
 
     private HttpServletResponse response;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
     }
 
     @Test
-    public void testGetHeaderNameMatches() {
+    void testGetHeaderNameMatches() {
         internalTestGetHeader("kEy");
     }
 
     @Test
-    public void testGetHeaderNameStriclyMatches() {
+    void testGetHeaderNameStriclyMatches() {
         internalTestGetHeader(KEY);
     }
 
@@ -58,28 +58,28 @@ public final class JEEContextTest implements TestsConstants {
     }
 
     @Test
-    public void testGetPathNullFullPath() {
+    void testGetPathNullFullPath() {
         when(request.getRequestURI()).thenReturn(null);
         WebContext context = new JEEContext(request, response);
         assertEquals(Pac4jConstants.EMPTY_STRING, context.getPath());
     }
 
     @Test
-    public void testGetPathFullpath() {
+    void testGetPathFullpath() {
         when(request.getRequestURI()).thenReturn(CTX_PATH);
         WebContext context = new JEEContext(request, response);
         assertEquals(CTX_PATH, context.getPath());
     }
 
     @Test
-    public void testGetRequestUrl() throws Exception {
+    void testGetRequestUrl() throws Exception {
         when(request.getRequestURL()).thenReturn(new StringBuffer("https://pac4j.org?name=value&name2=value2"));
         WebContext context = new JEEContext(request, response);
         assertEquals("https://pac4j.org", context.getRequestURL());
     }
 
     @Test
-    public void testGetPathFullpathContext() {
+    void testGetPathFullpathContext() {
         when(request.getRequestURI()).thenReturn(CTX_PATH);
         when(request.getContextPath()).thenReturn(CTX);
         WebContext context = new JEEContext(request, response);
@@ -87,7 +87,7 @@ public final class JEEContextTest implements TestsConstants {
     }
 
     @Test
-    public void testGetPathDoubleSlashFullpathContext() {
+    void testGetPathDoubleSlashFullpathContext() {
         when(request.getRequestURI()).thenReturn("/" + CTX_PATH);
         when(request.getContextPath()).thenReturn(CTX);
         WebContext context = new JEEContext(request, response);

@@ -1,8 +1,8 @@
 package org.pac4j.saml.sso.impl;
 
 import lombok.val;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.AuthnRequest;
 import org.opensaml.saml.saml2.metadata.AssertionConsumerService;
@@ -22,8 +22,8 @@ import org.pac4j.saml.profile.api.SAML2ObjectBuilder;
 
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -34,11 +34,11 @@ import static org.mockito.Mockito.when;
  * @author Misagh Moayyed
  * @since 4.0.0
  */
-public class SAML2AuthnRequestBuilderTests extends AbstractSAML2ClientTests {
+class SAML2AuthnRequestBuilderTests extends AbstractSAML2ClientTests {
     private SAML2Configuration configuration;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    void setup() {
         configuration = getSaml2Configuration();
         configuration.setAssertionConsumerServiceIndex(1);
 
@@ -47,7 +47,7 @@ public class SAML2AuthnRequestBuilderTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testHttpSessionStoreGetterAndSetter() {
+    void testHttpSessionStoreGetterAndSetter() {
         final WebContext webContext = MockWebContext.create();
 
         val messageStoreFactory = configuration.getSamlMessageStoreFactory();
@@ -88,7 +88,7 @@ public class SAML2AuthnRequestBuilderTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testBuildAuthnRequestWithNoProviderAndNameIdPolicyAllowCreate() {
+    void testBuildAuthnRequestWithNoProviderAndNameIdPolicyAllowCreate() {
         configuration.setProviderName(null);
         configuration.setUseNameQualifier(true);
         configuration.setNameIdPolicyFormat("sample-nameid-format");
@@ -99,7 +99,7 @@ public class SAML2AuthnRequestBuilderTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testForceAuthAsRequestAttribute() {
+    void testForceAuthAsRequestAttribute() {
         SAML2ObjectBuilder<AuthnRequest> builder = new SAML2AuthnRequestBuilder();
         val context = buildContext();
         context.getCallContext().webContext().setRequestAttribute(RedirectionActionBuilder.ATTRIBUTE_FORCE_AUTHN, true);
@@ -107,7 +107,7 @@ public class SAML2AuthnRequestBuilderTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testPassiveAuthAsRequestAttribute() {
+    void testPassiveAuthAsRequestAttribute() {
         SAML2ObjectBuilder<AuthnRequest> builder = new SAML2AuthnRequestBuilder();
         val context = buildContext();
         context.getCallContext().webContext().setRequestAttribute(RedirectionActionBuilder.ATTRIBUTE_PASSIVE, true);
@@ -115,7 +115,7 @@ public class SAML2AuthnRequestBuilderTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testScopingIdentityProviders() {
+    void testScopingIdentityProviders() {
         SAML2ObjectBuilder<AuthnRequest> builder = new SAML2AuthnRequestBuilder();
         val context = buildContext();
         var authnRequest = builder.build(context);

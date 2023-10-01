@@ -4,9 +4,9 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import lombok.val;
 import org.bson.types.ObjectId;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
 import org.pac4j.core.exception.AccountNotFoundException;
 import org.pac4j.core.exception.BadCredentialsException;
@@ -23,7 +23,7 @@ import org.pac4j.mongo.test.tools.MongoServer;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the {@link MongoProfileService}.
@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class MongoProfileServiceIT implements TestsConstants {
+final class MongoProfileServiceIT implements TestsConstants {
 
     private static final int PORT = 37017;
     private static final String MONGO_ID = "mongoId";
@@ -44,52 +44,52 @@ public final class MongoProfileServiceIT implements TestsConstants {
 
     private final MongoServer mongoServer = new MongoServer();
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         mongoServer.start(PORT);
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         mongoServer.stop();
     }
 
     @Test
-    public void testNullPasswordEncoder() {
+    void testNullPasswordEncoder() {
         val authenticator = new MongoProfileService(getClient(), FIRSTNAME);
         authenticator.setPasswordEncoder(null);
         TestsHelper.expectException(authenticator::init, TechnicalException.class, "passwordEncoder cannot be null");
     }
 
     @Test
-    public void testNullMongoClient() {
+    void testNullMongoClient() {
         val authenticator = new MongoProfileService(null, FIRSTNAME, MongoServer.PASSWORD_ENCODER);
         TestsHelper.expectException(authenticator::init, TechnicalException.class, "mongoClient cannot be null");
     }
 
     @Test
-    public void testNullDatabase() {
+    void testNullDatabase() {
         val authenticator = new MongoProfileService(getClient(), FIRSTNAME, MongoServer.PASSWORD_ENCODER);
         authenticator.setUsersDatabase(null);
         TestsHelper.expectException(authenticator::init, TechnicalException.class, "usersDatabase cannot be blank");
     }
 
     @Test
-    public void testNullCollection() {
+    void testNullCollection() {
         val authenticator = new MongoProfileService(getClient(), FIRSTNAME, MongoServer.PASSWORD_ENCODER);
         authenticator.setUsersCollection(null);
         TestsHelper.expectException(authenticator::init, TechnicalException.class, "usersCollection cannot be blank");
     }
 
     @Test
-    public void testNullUsername() {
+    void testNullUsername() {
         val authenticator = new MongoProfileService(getClient(), FIRSTNAME, MongoServer.PASSWORD_ENCODER);
         authenticator.setUsernameAttribute(null);
         TestsHelper.expectException(authenticator::init, TechnicalException.class, "usernameAttribute cannot be blank");
     }
 
     @Test
-    public void testNullPassword() {
+    void testNullPassword() {
         val authenticator = new MongoProfileService(getClient(), FIRSTNAME, MongoServer.PASSWORD_ENCODER);
         authenticator.setPasswordAttribute(null);
         val credentials = new UsernamePasswordCredentials(GOOD_USERNAME, PASSWORD);
@@ -111,7 +111,7 @@ public final class MongoProfileServiceIT implements TestsConstants {
     }
 
     @Test
-    public void testGoodUsernameAttribute() {
+    void testGoodUsernameAttribute() {
         val credentials =  login(GOOD_USERNAME, PASSWORD, FIRSTNAME);
 
         val profile = credentials.getUserProfile();
@@ -123,7 +123,7 @@ public final class MongoProfileServiceIT implements TestsConstants {
     }
 
     @Test
-    public void testGoodUsernameNoAttribute() {
+    void testGoodUsernameNoAttribute() {
         val credentials = login(GOOD_USERNAME, PASSWORD, Pac4jConstants.EMPTY_STRING);
 
         val profile = credentials.getUserProfile();
@@ -135,25 +135,25 @@ public final class MongoProfileServiceIT implements TestsConstants {
     }
 
     @Test
-    public void testMultipleUsername() {
+    void testMultipleUsername() {
         TestsHelper.expectException(() -> login(MULTIPLE_USERNAME, PASSWORD, Pac4jConstants.EMPTY_STRING),
             MultipleAccountsFoundException.class, "Too many accounts found for: misagh");
     }
 
     @Test
-    public void testBadUsername() {
+    void testBadUsername() {
         TestsHelper.expectException(() -> login(BAD_USERNAME, PASSWORD, Pac4jConstants.EMPTY_STRING), AccountNotFoundException.class,
             "No account found for: michael");
     }
 
     @Test
-    public void testBadPassword() {
+    void testBadPassword() {
         TestsHelper.expectException(() -> login(GOOD_USERNAME, PASSWORD + "bad",
                 Pac4jConstants.EMPTY_STRING), BadCredentialsException.class, "Bad credentials for: jle");
     }
 
     @Test
-    public void testCreateUpdateFindDelete() {
+    void testCreateUpdateFindDelete() {
         val objectId = new ObjectId();
         val profile = new MongoProfile();
         profile.setId(MONGO_ID);
@@ -205,7 +205,7 @@ public final class MongoProfileServiceIT implements TestsConstants {
     }
 
     @Test
-    public void testChangeUserAndPasswordAttributes() {
+    void testChangeUserAndPasswordAttributes() {
         val mongoProfileService = new MongoProfileService(getClient(), MongoServer.PASSWORD_ENCODER);
         mongoProfileService.setUsernameAttribute(ALT_USER_ATT);
         mongoProfileService.setPasswordAttribute(ALT_PASS_ATT);

@@ -3,7 +3,7 @@ package org.pac4j.oauth.client;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.util.TestsConstants;
 import org.pac4j.oauth.profile.casoauthwrapper.CasOAuthWrapperProfileDefinition;
 
@@ -12,7 +12,7 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests the profile parsing from the {@link CasOAuthWrapperClient}.
@@ -20,10 +20,10 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 1.9.2
  */
-public final class CasOAuthWrapperClientTests implements TestsConstants {
+final class CasOAuthWrapperClientTests implements TestsConstants {
 
     @Test
-    public void testParsingAttributesCASServerV4_2AndBefore() throws IOException {
+    void testParsingAttributesCASServerV4_2AndBefore() throws IOException {
         val jsonFactory = new JsonFactory(new ObjectMapper());
         final Map<String, Object> attributes = new HashMap<>();
         attributes.put(KEY, VALUE);
@@ -56,7 +56,7 @@ public final class CasOAuthWrapperClientTests implements TestsConstants {
     }
 
     @Test
-    public void testParsingAttributesCASServerV5() throws IOException {
+    void testParsingAttributesCASServerV5() throws IOException {
         final Map<String, Object> attributes = new HashMap<>();
         attributes.put(KEY, VALUE);
         attributes.put(NAME, TOKEN);

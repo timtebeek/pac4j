@@ -1,7 +1,7 @@
 package org.pac4j.sql.profile.service;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
 import org.pac4j.core.exception.AccountNotFoundException;
 import org.pac4j.core.exception.BadCredentialsException;
@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the {@link DbProfileService}.
@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class DbProfileServiceTests implements TestsConstants {
+final class DbProfileServiceTests implements TestsConstants {
 
     private static final int DB_ID = 100000000;
     private static final String DB_LINKED_ID = "dbLinkedId";
@@ -41,14 +41,14 @@ public final class DbProfileServiceTests implements TestsConstants {
     private DataSource ds = DbServer.getInstance();
 
     @Test
-    public void testNullPasswordEncoder() {
+    void testNullPasswordEncoder() {
         val dbProfileService = new DbProfileService(ds, FIRSTNAME);
         TestsHelper.expectException(() -> dbProfileService.validate(null, null), TechnicalException.class,
             "passwordEncoder cannot be null");
     }
 
     @Test
-    public void testNullDataSource() {
+    void testNullDataSource() {
         val dbProfileService = new DbProfileService(null, FIRSTNAME);
         dbProfileService.setPasswordEncoder(DbServer.PASSWORD_ENCODER);
         TestsHelper.expectException(() -> dbProfileService.validate(null, null),
@@ -66,7 +66,7 @@ public final class DbProfileServiceTests implements TestsConstants {
     }
 
     @Test
-    public void testGoodUsernameAttribute() {
+    void testGoodUsernameAttribute() {
         val credentials =  login(GOOD_USERNAME, PASSWORD, FIRSTNAME);
 
         val profile = credentials.getUserProfile();
@@ -78,7 +78,7 @@ public final class DbProfileServiceTests implements TestsConstants {
     }
 
     @Test
-    public void testGoodUsernameNoAttribute() {
+    void testGoodUsernameNoAttribute() {
         val credentials =  login(GOOD_USERNAME, PASSWORD, Pac4jConstants.EMPTY_STRING);
 
         val profile = credentials.getUserProfile();
@@ -90,25 +90,25 @@ public final class DbProfileServiceTests implements TestsConstants {
     }
 
     @Test
-    public void testMultipleUsername() {
+    void testMultipleUsername() {
         TestsHelper.expectException(() -> login(MULTIPLE_USERNAME, PASSWORD, Pac4jConstants.EMPTY_STRING),
             MultipleAccountsFoundException.class, "Too many accounts found for: misagh");
     }
 
     @Test
-    public void testBadUsername() {
+    void testBadUsername() {
         TestsHelper.expectException(() -> login(BAD_USERNAME, PASSWORD, Pac4jConstants.EMPTY_STRING), AccountNotFoundException.class,
             "No account found for: michael");
     }
 
     @Test
-    public void testBadPassword() {
+    void testBadPassword() {
         TestsHelper.expectException(() -> login(GOOD_USERNAME, PASSWORD + "bad", Pac4jConstants.EMPTY_STRING),
             BadCredentialsException.class, "Bad credentials for: jle");
     }
 
     @Test
-    public void testCreateUpdateFindDelete() {
+    void testCreateUpdateFindDelete() {
         val profile = new DbProfile();
         profile.setId(Pac4jConstants.EMPTY_STRING + DB_ID);
         profile.setLinkedId(DB_LINKED_ID);
@@ -157,7 +157,7 @@ public final class DbProfileServiceTests implements TestsConstants {
     }
 
     @Test
-    public void testChangeUserAndPasswordAttributes() {
+    void testChangeUserAndPasswordAttributes() {
         alterTableChangeColumnName(USERNAME, ALT_USER_ATT);
         alterTableChangeColumnName(PASSWORD, ALT_PASS_ATT);
         val dbProfileService = new DbProfileService(ds, DbServer.PASSWORD_ENCODER);

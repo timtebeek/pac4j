@@ -1,7 +1,7 @@
 package org.pac4j.cas.client;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
@@ -9,7 +9,7 @@ import org.pac4j.core.exception.http.HttpAction;
 import org.pac4j.core.util.TestsConstants;
 import org.pac4j.core.util.TestsHelper;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests the {@link CasProxyReceptor} class.
@@ -17,17 +17,17 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 1.4.0
  */
-public final class CasProxyReceptorTests implements TestsConstants {
+final class CasProxyReceptorTests implements TestsConstants {
 
     @Test
-    public void testMissingCallbackUrl() {
+    void testMissingCallbackUrl() {
         val client = new CasProxyReceptor();
         TestsHelper.initShouldFail(client,
                 "callbackUrl cannot be blank: set it up either on this IndirectClient or on the global Config");
     }
 
     @Test
-    public void testMissingStorage() {
+    void testMissingStorage() {
         val client = new CasProxyReceptor();
         client.setCallbackUrl(CALLBACK_URL);
         client.setStore(null);
@@ -35,7 +35,7 @@ public final class CasProxyReceptorTests implements TestsConstants {
     }
 
     @Test
-    public void testMissingPgt() {
+    void testMissingPgt() {
         val client = new CasProxyReceptor();
         client.setCallbackUrl(CALLBACK_URL);
         val context = MockWebContext.create();
@@ -46,7 +46,7 @@ public final class CasProxyReceptorTests implements TestsConstants {
     }
 
     @Test
-    public void testMissingPgtiou() {
+    void testMissingPgtiou() {
         val client = new CasProxyReceptor();
         client.setCallbackUrl(CALLBACK_URL);
         val context = MockWebContext.create();
@@ -57,7 +57,7 @@ public final class CasProxyReceptorTests implements TestsConstants {
     }
 
     @Test
-    public void testOk() {
+    void testOk() {
         val client = new CasProxyReceptor();
         client.setCallbackUrl(CALLBACK_URL);
         val context = MockWebContext.create()

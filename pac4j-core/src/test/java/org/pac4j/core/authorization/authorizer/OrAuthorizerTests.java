@@ -1,7 +1,7 @@
 package org.pac4j.core.authorization.authorizer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
 import org.pac4j.core.profile.CommonProfile;
@@ -10,8 +10,8 @@ import org.pac4j.core.profile.UserProfile;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.pac4j.core.authorization.authorizer.OrAuthorizer.or;
 import static org.pac4j.core.authorization.authorizer.RequireAnyRoleAuthorizer.requireAnyRole;
 
@@ -22,19 +22,19 @@ import static org.pac4j.core.authorization.authorizer.RequireAnyRoleAuthorizer.r
  * @since 3.4.0
  */
 @SuppressWarnings("PMD.TooManyStaticImports")
-public class OrAuthorizerTests {
+class OrAuthorizerTests {
 
     private List<UserProfile> profiles = new ArrayList<>();
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         UserProfile profile = new CommonProfile();
         profile.addRole("profile_role");
         profiles.add(profile);
     }
 
     @Test
-    public void testDisjunctionAuthorizer1() {
+    void testDisjunctionAuthorizer1() {
         final Authorizer authorizer = or(
             requireAnyRole("profile_role2")
         );
@@ -42,7 +42,7 @@ public class OrAuthorizerTests {
     }
 
     @Test
-    public void testDisjunctionAuthorizer2() {
+    void testDisjunctionAuthorizer2() {
         final Authorizer authorizer = or(
             requireAnyRole("profile_role")
         );

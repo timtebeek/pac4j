@@ -9,8 +9,8 @@ import com.nimbusds.oauth2.sdk.token.BearerAccessToken;
 import com.nimbusds.openid.connect.sdk.claims.IDTokenClaimsSet;
 import com.nimbusds.openid.connect.sdk.op.OIDCProviderMetadata;
 import lombok.val;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
@@ -25,7 +25,7 @@ import org.pac4j.oidc.metadata.OidcOpMetadataResolver;
 import java.net.URI;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -36,15 +36,15 @@ import static org.mockito.Mockito.when;
  * @author Misagh Moayyed
  * @since 5.4.4
  */
-public class OidcProfileCreatorTests implements TestsConstants {
+class OidcProfileCreatorTests implements TestsConstants {
     private OidcConfiguration configuration;
 
     private IDTokenClaimsSet idTokenClaims;
 
     private List<JWSAlgorithm> algorithms;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         this.idTokenClaims = new IDTokenClaimsSet(new JWTClaimsSet.Builder()
             .issuer("pac4j")
             .audience("pac4j")
@@ -73,7 +73,7 @@ public class OidcProfileCreatorTests implements TestsConstants {
     }
 
     @Test
-    public void testCreateOidcProfile() throws Exception {
+    void testCreateOidcProfile() throws Exception {
         when(configuration.isIncludeAccessTokenClaimsInProfile()).thenReturn(true);
         ProfileCreator creator = new OidcProfileCreator(configuration, new OidcClient(configuration));
         var webContext = MockWebContext.create();
@@ -85,7 +85,7 @@ public class OidcProfileCreatorTests implements TestsConstants {
     }
 
     @Test
-    public void testCreateOidcProfileWithoutAccessToken() throws Exception {
+    void testCreateOidcProfileWithoutAccessToken() throws Exception {
         when(configuration.isIncludeAccessTokenClaimsInProfile()).thenReturn(true);
         ProfileCreator creator = new OidcProfileCreator(configuration, new OidcClient(configuration));
         var webContext = MockWebContext.create();
@@ -97,7 +97,7 @@ public class OidcProfileCreatorTests implements TestsConstants {
     }
 
     @Test
-    public void testCreateOidcProfileJwtAccessToken() throws Exception {
+    void testCreateOidcProfileJwtAccessToken() throws Exception {
         when(configuration.isIncludeAccessTokenClaimsInProfile()).thenReturn(false);
         ProfileCreator creator = new OidcProfileCreator(configuration, new OidcClient(configuration));
         var webContext = MockWebContext.create();

@@ -2,7 +2,7 @@ package org.pac4j.oauth.profile.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.util.TestsConstants;
 import org.pac4j.oauth.profile.JsonHelper;
 import org.pac4j.oauth.profile.facebook.FacebookObject;
@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests the {@link JsonConverter}.
@@ -19,7 +20,7 @@ import static org.junit.Assert.*;
  * @author Jerome Leleu
  * @since 1.9.0
  */
-public final class JsonConverterTests implements TestsConstants {
+final class JsonConverterTests implements TestsConstants {
 
     private final static JsonConverter OBJECT_CONVERTER = new JsonConverter(FacebookObject.class);
     private final static JsonConverter LIST_CONVERTER = new JsonConverter(List.class, new TypeReference<List<FacebookObject>>(){});
@@ -28,19 +29,19 @@ public final class JsonConverterTests implements TestsConstants {
     private final static String JSON = "[" + ONE_JSON + "]";
 
     @Test
-    public void testNull() {
+    void testNull() {
         assertNull(OBJECT_CONVERTER.convert(null));
         assertNull(LIST_CONVERTER.convert(null));
     }
 
     @Test
-    public void testBadType() {
+    void testBadType() {
         assertNull(OBJECT_CONVERTER.convert(1));
         assertNull(LIST_CONVERTER.convert(1));
     }
 
     @Test
-    public void testString() {
+    void testString() {
         val object = (FacebookObject) OBJECT_CONVERTER.convert(ONE_JSON);
         assertNotNull(object);
         assertEquals("x", object.getId());
@@ -48,7 +49,7 @@ public final class JsonConverterTests implements TestsConstants {
     }
 
     @Test
-    public void testJsonNode() {
+    void testJsonNode() {
         val node = JsonHelper.getFirstNode(ONE_JSON);
         val object = (FacebookObject) OBJECT_CONVERTER.convert(node);
         assertNotNull(object);
@@ -57,12 +58,12 @@ public final class JsonConverterTests implements TestsConstants {
     }
 
     @Test
-    public void testObject() {
+    void testObject() {
         assertNotNull(OBJECT_CONVERTER.convert(new FacebookObject()));
     }
 
     @Test
-    public void testStringForListConverter() {
+    void testStringForListConverter() {
         val objects = (List<FacebookObject>) LIST_CONVERTER.convert(JSON);
         assertNotNull(objects);
         assertEquals(1, objects.size());
@@ -72,7 +73,7 @@ public final class JsonConverterTests implements TestsConstants {
     }
 
     @Test
-    public void testJsonNodeForListConverter() {
+    void testJsonNodeForListConverter() {
         val node = JsonHelper.getFirstNode(JSON);
         val objects = (List<FacebookObject>) LIST_CONVERTER.convert(node);
         assertNotNull(objects);
@@ -83,7 +84,7 @@ public final class JsonConverterTests implements TestsConstants {
     }
 
     @Test
-    public void testListObjectForListConverter() {
+    void testListObjectForListConverter() {
         final Collection<FacebookObject> list = new ArrayList<>();
         list.add(new FacebookObject());
         val objects = (List<FacebookObject>) LIST_CONVERTER.convert(list);

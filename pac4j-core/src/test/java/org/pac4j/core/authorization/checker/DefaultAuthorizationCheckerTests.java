@@ -1,8 +1,8 @@
 package org.pac4j.core.authorization.checker;
 
 import lombok.val;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.authorization.authorizer.Authorizer;
 import org.pac4j.core.authorization.authorizer.DefaultAuthorizers;
 import org.pac4j.core.authorization.authorizer.RequireAnyRoleAuthorizer;
@@ -27,7 +27,7 @@ import org.pac4j.core.util.TestsHelper;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the {@link DefaultAuthorizationChecker}.
@@ -35,7 +35,7 @@ import static org.junit.Assert.*;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class DefaultAuthorizationCheckerTests implements TestsConstants {
+final class DefaultAuthorizationCheckerTests implements TestsConstants {
 
     private final DefaultAuthorizationChecker checker = new DefaultAuthorizationChecker();
 
@@ -43,8 +43,8 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
 
     private BasicUserProfile profile;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         profile = new BasicUserProfile();
         profiles = new ArrayList<>();
         profiles.add(profile);
@@ -58,25 +58,25 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testBlankAuthorizerNameAProfile() {
+    void testBlankAuthorizerNameAProfile() {
         assertTrue(checker.isAuthorized(MockWebContext.create(), new MockSessionStore(), profiles,
             Pac4jConstants.EMPTY_STRING, new HashMap<>(), new ArrayList<>()));
     }
 
     @Test
-    public void testNullAuthorizerNameAProfileGetRequest() {
+    void testNullAuthorizerNameAProfileGetRequest() {
         assertTrue(checker.isAuthorized(MockWebContext.create(), new MockSessionStore(), profiles, null, new HashMap<>(),
             new ArrayList<>()));
     }
 
     @Test
-    public void testNullAuthorizerNameAProfilePostRequestNoIndirectClient() {
+    void testNullAuthorizerNameAProfilePostRequestNoIndirectClient() {
         val context = MockWebContext.create().setRequestMethod("POST");
         assertTrue(checker.isAuthorized(context, new MockSessionStore(), profiles, null, new HashMap<>(), new ArrayList<>()));
     }
 
     @Test
-    public void testNullAuthorizerNameAProfilePostRequestIndirectClient() {
+    void testNullAuthorizerNameAProfilePostRequestIndirectClient() {
         val context = MockWebContext.create().setRequestMethod("POST");
         final List<Client> clients = new ArrayList<>();
         clients.add(new MockIndirectClient("test"));
@@ -84,13 +84,13 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testBlankAuthorizerNameAProfilePostRequestNoIndirectClient() {
+    void testBlankAuthorizerNameAProfilePostRequestNoIndirectClient() {
         val context = MockWebContext.create().setRequestMethod("POST");
         assertTrue(checker.isAuthorized(context, new MockSessionStore(), profiles, " ", new HashMap<>(), new ArrayList<>()));
     }
 
     @Test
-    public void testBlankAuthorizerNameAProfilePostRequestIndirectClient() {
+    void testBlankAuthorizerNameAProfilePostRequestIndirectClient() {
         val context = MockWebContext.create().setRequestMethod("POST");
         final List<Client> clients = new ArrayList<>();
         clients.add(new MockIndirectClient("test"));
@@ -98,13 +98,13 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testNoneAuthorizerNameAProfilePostRequest() {
+    void testNoneAuthorizerNameAProfilePostRequest() {
         val context = MockWebContext.create().setRequestMethod("POST");
         assertTrue(checker.isAuthorized(context, new MockSessionStore(), profiles, "noNe", new HashMap<>(), new ArrayList<>()));
     }
 
     @Test
-    public void testOneExistingAuthorizerProfileMatch() {
+    void testOneExistingAuthorizerProfileMatch() {
         profile.setId(VALUE);
         final Map<String, Authorizer> authorizers = new HashMap<>();
         authorizers.put(NAME, new IdAuthorizer());
@@ -112,12 +112,12 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testOneExistingAuthorizerProfileDoesNotMatch() {
+    void testOneExistingAuthorizerProfileDoesNotMatch() {
         internalTestOneExistingAuthorizerProfileDoesNotMatch(NAME);
     }
 
     @Test
-    public void testOneExistingAuthorizerProfileDoesNotMatchCasTrim() {
+    void testOneExistingAuthorizerProfileDoesNotMatchCasTrim() {
         internalTestOneExistingAuthorizerProfileDoesNotMatch("   NaME       ");
     }
 
@@ -128,7 +128,7 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testOneAuthorizerDoesNotExist() {
+    void testOneAuthorizerDoesNotExist() {
         final Map<String, Authorizer> authorizers = new HashMap<>();
         authorizers.put(NAME, new IdAuthorizer());
         TestsHelper.expectException(() -> checker.isAuthorized(null, new MockSessionStore(), profiles, VALUE, authorizers,
@@ -136,7 +136,7 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testTwoExistingAuthorizerProfileMatch() {
+    void testTwoExistingAuthorizerProfileMatch() {
         profile.setId(VALUE);
         profile.addRole(ROLE);
         final Map<String, Authorizer> authorizers = new HashMap<>();
@@ -147,7 +147,7 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testTwoExistingAuthorizerProfileDoesNotMatch() {
+    void testTwoExistingAuthorizerProfileDoesNotMatch() {
         profile.addRole(ROLE);
         final Map<String, Authorizer> authorizers = new HashMap<>();
         authorizers.put(NAME, new IdAuthorizer());
@@ -156,29 +156,33 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
             authorizers, new ArrayList<>()));
     }
 
-    @Test(expected = TechnicalException.class)
-    public void testTwoAuthorizerOneDoesNotExist() {
-        final Map<String, Authorizer> authorizers = new HashMap<>();
-        authorizers.put(NAME, new IdAuthorizer());
-        checker.isAuthorized(null, new MockSessionStore(), profiles, NAME + Pac4jConstants.ELEMENT_SEPARATOR + VALUE,
-            authorizers, new ArrayList<>());
-    }
-
-    @Test(expected = TechnicalException.class)
-    public void testNullAuthorizers() {
-        assertTrue(checker.isAuthorized(null, new MockSessionStore(), profiles, null));
-        checker.isAuthorized(null, new MockSessionStore(), profiles, "auth1", null, new ArrayList<>());
+    @Test
+    void testTwoAuthorizerOneDoesNotExist() {
+        assertThrows(TechnicalException.class, () -> {
+            final Map<String, Authorizer> authorizers = new HashMap<>();
+            authorizers.put(NAME, new IdAuthorizer());
+            checker.isAuthorized(null, new MockSessionStore(), profiles, NAME + Pac4jConstants.ELEMENT_SEPARATOR + VALUE,
+                authorizers, new ArrayList<>());
+        });
     }
 
     @Test
-    public void testZeroAuthorizers() {
+    void testNullAuthorizers() {
+        assertThrows(TechnicalException.class, () -> {
+            assertTrue(checker.isAuthorized(null, new MockSessionStore(), profiles, null));
+            checker.isAuthorized(null, new MockSessionStore(), profiles, "auth1", null, new ArrayList<>());
+        });
+    }
+
+    @Test
+    void testZeroAuthorizers() {
         assertTrue(checker.isAuthorized(MockWebContext.create(), new MockSessionStore(), profiles, new ArrayList<>()));
         assertTrue(checker.isAuthorized(MockWebContext.create(), new MockSessionStore(), profiles,
             Pac4jConstants.EMPTY_STRING, new HashMap<>(), new ArrayList<>()));
     }
 
     @Test
-    public void testOneExistingAuthorizerProfileMatch2() {
+    void testOneExistingAuthorizerProfileMatch2() {
         profile.setId(VALUE);
         final List<Authorizer> authorizers = new ArrayList<>();
         authorizers.add(new IdAuthorizer());
@@ -186,14 +190,14 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testOneExistingAuthorizerProfileDoesNotMatch2() {
+    void testOneExistingAuthorizerProfileDoesNotMatch2() {
         final List<Authorizer> authorizers = new ArrayList<>();
         authorizers.add(new IdAuthorizer());
         assertFalse(checker.isAuthorized(null, new MockSessionStore(), profiles, authorizers));
     }
 
     @Test
-    public void testTwoExistingAuthorizerProfileMatch2() {
+    void testTwoExistingAuthorizerProfileMatch2() {
         profile.setId(VALUE);
         profile.addRole(ROLE);
         final List<Authorizer> authorizers = new ArrayList<>();
@@ -203,7 +207,7 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testTwoExistingAuthorizerProfileDoesNotMatch2() {
+    void testTwoExistingAuthorizerProfileDoesNotMatch2() {
         profile.addRole(ROLE);
         final List<Authorizer> authorizers = new ArrayList<>();
         authorizers.add(new IdAuthorizer());
@@ -211,14 +215,16 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
         assertFalse(checker.isAuthorized(null, new MockSessionStore(), profiles, authorizers));
     }
 
-    @Test(expected = TechnicalException.class)
-    public void testNullProfile() {
-        checker.isAuthorized(null, new MockSessionStore(), null, new ArrayList<>());
+    @Test
+    void testNullProfile() {
+        assertThrows(TechnicalException.class, () -> {
+            checker.isAuthorized(null, new MockSessionStore(), null, new ArrayList<>());
+        });
     }
 
 
     @Test
-    public void testCsrfCheckPost() {
+    void testCsrfCheckPost() {
         val context = MockWebContext.create().setRequestMethod(HttpConstants.HTTP_METHOD.POST.name());
         CsrfTokenGenerator generator = new DefaultCsrfTokenGenerator();
         final SessionStore sessionStore = new MockSessionStore();
@@ -228,7 +234,7 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testCsrfCheckPostTokenParameter() {
+    void testCsrfCheckPostTokenParameter() {
         val context = MockWebContext.create().setRequestMethod(HttpConstants.HTTP_METHOD.POST.name());
         val generator = new DefaultCsrfTokenGenerator();
         final SessionStore sessionStore = new MockSessionStore();
@@ -241,7 +247,7 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testIsAnonymous() {
+    void testIsAnonymous() {
         profiles.clear();
         profiles.add(new AnonymousProfile());
         assertTrue(checker.isAuthorized(null, new MockSessionStore(), profiles, DefaultAuthorizers.IS_ANONYMOUS, new HashMap<>(),
@@ -249,66 +255,66 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testIsAuthenticated() {
+    void testIsAuthenticated() {
         assertTrue(checker.isAuthorized(null, new MockSessionStore(), profiles, DefaultAuthorizers.IS_AUTHENTICATED, new HashMap<>(),
             new ArrayList<>()));
     }
 
     @Test
-    public void testIsFullyAuthenticated() {
+    void testIsFullyAuthenticated() {
         assertTrue(checker.isAuthorized(null, new MockSessionStore(), profiles, DefaultAuthorizers.IS_FULLY_AUTHENTICATED,
             new HashMap<>(), new ArrayList<>()));
     }
 
     @Test
-    public void testIsRemembered() {
+    void testIsRemembered() {
         profile.setRemembered(true);
         assertTrue(checker.isAuthorized(null, new MockSessionStore(), profiles, DefaultAuthorizers.IS_REMEMBERED, new HashMap<>(),
             new ArrayList<>()));
     }
 
     @Test
-    public void testDefaultAuthorizersNoClient() {
+    void testDefaultAuthorizersNoClient() {
         assertEquals(List.of(DefaultAuthorizationChecker.IS_AUTHENTICATED_AUTHORIZER),
             checker.computeDefaultAuthorizers(MockWebContext.create(), new ArrayList<>(), new ArrayList<>(), new HashMap<>()));
     }
 
     @Test
-    public void testDefaultAuthorizersAnonymousClient() {
+    void testDefaultAuthorizersAnonymousClient() {
         final List<Client> clients = List.of(AnonymousClient.INSTANCE);
         assertEquals(0, checker.computeDefaultAuthorizers(MockWebContext.create(), new ArrayList<>(), clients, new HashMap<>()).size());
     }
 
     @Test
-    public void testDefaultAuthorizersDirectClient() {
+    void testDefaultAuthorizersDirectClient() {
         final List<Client> clients = List.of(new MockDirectClient("test"));
         assertEquals(List.of(DefaultAuthorizationChecker.IS_AUTHENTICATED_AUTHORIZER),
             checker.computeDefaultAuthorizers(MockWebContext.create(), new ArrayList<>(), clients, new HashMap<>()));
     }
 
     @Test
-    public void testDefaultAuthorizersIndirectClient() {
+    void testDefaultAuthorizersIndirectClient() {
         final List<Client> clients = List.of(new MockIndirectClient("test"));
         assertEquals(Arrays.asList(DefaultAuthorizationChecker.CSRF_AUTHORIZER, DefaultAuthorizationChecker.IS_AUTHENTICATED_AUTHORIZER),
             checker.computeDefaultAuthorizers(MockWebContext.create(), new ArrayList<>(), clients, new HashMap<>()));
     }
 
     @Test
-    public void testDefaultAuthorizersIndirectAndAnonymousClients() {
+    void testDefaultAuthorizersIndirectAndAnonymousClients() {
         final List<Client> clients = Arrays.asList(new MockIndirectClient("test"), AnonymousClient.INSTANCE);
         assertEquals(List.of(DefaultAuthorizationChecker.CSRF_AUTHORIZER),
             checker.computeDefaultAuthorizers(MockWebContext.create(), new ArrayList<>(), clients, new HashMap<>()));
     }
 
     @Test
-    public void testComputeAuthorizerNoClientIsFullyAuthenticated() {
+    void testComputeAuthorizerNoClientIsFullyAuthenticated() {
         assertEquals(List.of(DefaultAuthorizationChecker.IS_FULLY_AUTHENTICATED_AUTHORIZER),
             checker.computeAuthorizers(MockWebContext.create(), new ArrayList<>(),
                 DefaultAuthorizers.IS_FULLY_AUTHENTICATED, new HashMap<>(), new ArrayList<>()));
     }
 
     @Test
-    public void testComputeAuthorizerNoClientPlusIsFullyAuthenticated() {
+    void testComputeAuthorizerNoClientPlusIsFullyAuthenticated() {
         assertEquals(Arrays.asList(DefaultAuthorizationChecker.IS_AUTHENTICATED_AUTHORIZER,
             DefaultAuthorizationChecker.IS_FULLY_AUTHENTICATED_AUTHORIZER),
             checker.computeAuthorizers(MockWebContext.create(), new ArrayList<>(),
@@ -316,7 +322,7 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testComputeAuthorizersOverrideDefault() {
+    void testComputeAuthorizersOverrideDefault() {
         final Map<String, Authorizer> authorizers = new HashMap<>();
         authorizers.put(DefaultAuthorizers.IS_AUTHENTICATED, DefaultAuthorizationChecker.IS_FULLY_AUTHENTICATED_AUTHORIZER);
         assertEquals(List.of(DefaultAuthorizationChecker.IS_FULLY_AUTHENTICATED_AUTHORIZER),
@@ -325,7 +331,7 @@ public final class DefaultAuthorizationCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testComputeAuthorizersOverrideEmptyDefault() {
+    void testComputeAuthorizersOverrideEmptyDefault() {
         final Map<String, Authorizer> authorizers = new HashMap<>();
         authorizers.put(DefaultAuthorizers.IS_AUTHENTICATED, DefaultAuthorizationChecker.IS_FULLY_AUTHENTICATED_AUTHORIZER);
         assertEquals(List.of(DefaultAuthorizationChecker.IS_FULLY_AUTHENTICATED_AUTHORIZER),

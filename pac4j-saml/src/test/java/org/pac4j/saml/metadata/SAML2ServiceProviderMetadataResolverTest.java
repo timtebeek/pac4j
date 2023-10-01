@@ -4,7 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import lombok.val;
 import org.apache.commons.io.IOUtils;
 import org.apache.hc.core5.http.ContentType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.saml.config.SAML2Configuration;
 import org.pac4j.saml.util.SAML2HttpClientBuilder;
 import org.springframework.core.io.ClassPathResource;
@@ -17,9 +17,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class SAML2ServiceProviderMetadataResolverTest {
+class SAML2ServiceProviderMetadataResolverTest {
 
     private static SAML2Configuration initializeConfiguration(final Resource serviceProviderMetadataResource,
                                                               final String keystorePath) {
@@ -47,7 +47,7 @@ public class SAML2ServiceProviderMetadataResolverTest {
     }
 
     @Test
-    public void resolveServiceProviderMetadataViaFile() {
+    void resolveServiceProviderMetadataViaFile() {
         val configuration =
             initializeConfiguration(new FileSystemResource("target/out.xml"), "target/keystore.jks");
         final SAML2MetadataResolver metadataResolver = new SAML2ServiceProviderMetadataResolver(configuration);
@@ -55,7 +55,7 @@ public class SAML2ServiceProviderMetadataResolverTest {
     }
 
     @Test
-    public void resolveServiceProviderMetadataViaExistingClasspath() {
+    void resolveServiceProviderMetadataViaExistingClasspath() {
         val configuration =
             initializeConfiguration(new ClassPathResource("sample-sp-metadata.xml"), "target/keystore.jks");
         final SAML2MetadataResolver metadataResolver = new SAML2ServiceProviderMetadataResolver(configuration);
@@ -63,7 +63,7 @@ public class SAML2ServiceProviderMetadataResolverTest {
     }
 
     @Test
-    public void resolveServiceProviderMetadataViaUrl() throws Exception {
+    void resolveServiceProviderMetadataViaUrl() throws Exception {
         val restBody = IOUtils.toString(
             new ClassPathResource("sample-sp-metadata.xml").getInputStream(), StandardCharsets.UTF_8);
         val wireMockServer = new WireMockServer(8181);

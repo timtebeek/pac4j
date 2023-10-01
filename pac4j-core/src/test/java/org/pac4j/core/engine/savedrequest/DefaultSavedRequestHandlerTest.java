@@ -1,8 +1,8 @@
 package org.pac4j.core.engine.savedrequest;
 
 import lombok.val;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
@@ -14,7 +14,8 @@ import org.pac4j.core.util.HttpActionHelper;
 import org.pac4j.core.util.Pac4jConstants;
 import org.pac4j.core.util.TestsConstants;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@link DefaultSavedRequestHandler}.
@@ -22,7 +23,7 @@ import static org.junit.Assert.*;
  * @author Jerome LELEU
  * @since 4.0.0
  */
-public class DefaultSavedRequestHandlerTest implements TestsConstants {
+class DefaultSavedRequestHandlerTest implements TestsConstants {
 
     private static final String FORM_DATA = "<html>\n" +
         "<body>\n" +
@@ -36,13 +37,13 @@ public class DefaultSavedRequestHandlerTest implements TestsConstants {
 
     private SavedRequestHandler handler = new DefaultSavedRequestHandler();
 
-    @BeforeClass
-    public static void beforeClass() {
+    @BeforeAll
+    static void beforeClass() {
         HttpActionHelper.setUseModernHttpCodes(true);
     }
 
     @Test
-    public void testSaveGet() {
+    void testSaveGet() {
         val context = MockWebContext.create().setFullRequestURL(PAC4J_URL);
         val sessionStore = new MockSessionStore();
         handler.save(new CallContext(context, sessionStore));
@@ -51,7 +52,7 @@ public class DefaultSavedRequestHandlerTest implements TestsConstants {
     }
 
     @Test
-    public void testSavePost() {
+    void testSavePost() {
         val context = MockWebContext.create().setFullRequestURL(PAC4J_URL).setRequestMethod("POST");
         context.addRequestParameter(KEY, VALUE);
         val sessionStore = new MockSessionStore();
@@ -61,7 +62,7 @@ public class DefaultSavedRequestHandlerTest implements TestsConstants {
     }
 
     @Test
-    public void testRestoreNoRequestedUrl() {
+    void testRestoreNoRequestedUrl() {
         val context = MockWebContext.create();
         val sessionStore = new MockSessionStore();
         val action = handler.restore(new CallContext(context, sessionStore), LOGIN_URL);
@@ -71,7 +72,7 @@ public class DefaultSavedRequestHandlerTest implements TestsConstants {
     }
 
     @Test
-    public void testRestoreEmptyString() {
+    void testRestoreEmptyString() {
         val context = MockWebContext.create();
         val sessionStore = new MockSessionStore();
         sessionStore.set(context, Pac4jConstants.REQUESTED_URL, null);
@@ -82,7 +83,7 @@ public class DefaultSavedRequestHandlerTest implements TestsConstants {
     }
 
     @Test
-    public void testRestoreURLString() {
+    void testRestoreURLString() {
         val context = MockWebContext.create();
         val sessionStore = new MockSessionStore();
         sessionStore.set(context, Pac4jConstants.REQUESTED_URL, VALUE);
@@ -93,7 +94,7 @@ public class DefaultSavedRequestHandlerTest implements TestsConstants {
     }
 
     @Test
-    public void testRestoreFoundAction() {
+    void testRestoreFoundAction() {
         val context = MockWebContext.create();
         val sessionStore = new MockSessionStore();
         sessionStore.set(context, Pac4jConstants.REQUESTED_URL, new FoundAction(PAC4J_URL));
@@ -104,7 +105,7 @@ public class DefaultSavedRequestHandlerTest implements TestsConstants {
     }
 
     @Test
-    public void testRestoreFoundActionAfterPost() {
+    void testRestoreFoundActionAfterPost() {
         val context = MockWebContext.create();
         context.setRequestMethod("POST");
         val sessionStore = new MockSessionStore();
@@ -116,7 +117,7 @@ public class DefaultSavedRequestHandlerTest implements TestsConstants {
     }
 
     @Test
-    public void testRestoreOkAction() {
+    void testRestoreOkAction() {
         val context = MockWebContext.create().setFullRequestURL(PAC4J_URL).addRequestParameter(KEY, VALUE);
         val formPost = HttpActionHelper.buildFormPostContent(context);
         val sessionStore = new MockSessionStore();
@@ -128,7 +129,7 @@ public class DefaultSavedRequestHandlerTest implements TestsConstants {
     }
 
     @Test
-    public void testRestoreOkActionAfterPost() {
+    void testRestoreOkActionAfterPost() {
         val context = MockWebContext.create().setFullRequestURL(PAC4J_URL).addRequestParameter(KEY, VALUE);
         val formPost = HttpActionHelper.buildFormPostContent(context);
         context.setRequestMethod("POST");

@@ -1,7 +1,7 @@
 package org.pac4j.core.matching.checker;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.client.MockIndirectClient;
 import org.pac4j.core.context.CallContext;
@@ -20,7 +20,7 @@ import org.pac4j.core.util.TestsHelper;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.pac4j.core.context.HttpConstants.*;
 
 /**
@@ -29,7 +29,7 @@ import static org.pac4j.core.context.HttpConstants.*;
  * @author Jerome Leleu
  * @since 4.0.0
  */
-public final class DefaultMatchingCheckerTests implements TestsConstants {
+final class DefaultMatchingCheckerTests implements TestsConstants {
 
     private final static DefaultMatchingChecker checker = new DefaultMatchingChecker();
 
@@ -54,40 +54,40 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testNoMatcherName() {
+    void testNoMatcherName() {
         val context = MockWebContext.create();
         assertTrue(checker.matches(new CallContext(context, new MockSessionStore()), null, new HashMap<>(), new ArrayList<>()));
         assertEquals(6, context.getResponseHeaders().size());
     }
 
     @Test
-    public void testNoneMatcherName() {
+    void testNoneMatcherName() {
         val context = MockWebContext.create();
         assertTrue(checker.matches(new CallContext(context, new MockSessionStore()), "  NoNe   ", new HashMap<>(), new ArrayList<>()));
         assertEquals(0, context.getResponseHeaders().size());
     }
 
     @Test
-    public void testNoMatchers() {
+    void testNoMatchers() {
         TestsHelper.expectException(() -> checker.matches(new CallContext(null, new MockSessionStore()), NAME, null, new ArrayList<>()),
             TechnicalException.class, "matchersMap cannot be null");
     }
 
     @Test
-    public void testNoExistingMatcher()  {
+    void testNoExistingMatcher()  {
         TestsHelper.expectException(() -> checker.matches(new CallContext(null, new MockSessionStore()), NAME, new HashMap<>(),
                 new ArrayList<>()), TechnicalException.class, "The matcher '" + NAME + "' must be defined in the security configuration");
     }
 
     @Test
-    public void testMatch() {
+    void testMatch() {
         final Map<String, Matcher> matchers = new HashMap<>();
         matchers.put(NAME, new NullContextMatcher());
         assertTrue(checker.matches(new CallContext(MockWebContext.create(), new MockSessionStore()), NAME, matchers, new ArrayList<>()));
     }
 
     @Test
-    public void testMatchCasTrim() {
+    void testMatchCasTrim() {
         final Map<String, Matcher> matchers = new HashMap<>();
         matchers.put(NAME, new NullContextMatcher());
         assertTrue(checker.matches(new CallContext(MockWebContext.create(), new MockSessionStore()), "  NAmE  ",
@@ -95,14 +95,14 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testDontMatch() {
+    void testDontMatch() {
         final Map<String, Matcher> matchers = new HashMap<>();
         matchers.put(NAME, new NullContextMatcher());
         assertFalse(checker.matches(new CallContext(null, new MockSessionStore()), NAME, matchers, new ArrayList<>()));
     }
 
     @Test
-    public void testMatchAll() {
+    void testMatchAll() {
         final Map<String, Matcher> matchers = new HashMap<>();
         matchers.put(NAME, new NullContextMatcher());
         matchers.put(VALUE, new NullContextMatcher());
@@ -111,7 +111,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testDontMatchOneOfThem() {
+    void testDontMatchOneOfThem() {
         final Map<String, Matcher> matchers = new HashMap<>();
         matchers.put(NAME, new NullContextMatcher());
         matchers.put(VALUE, new AlwaysFalseMatcher());
@@ -120,13 +120,13 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testDefaultGetMatcher() {
+    void testDefaultGetMatcher() {
         final Map<String, Matcher> matchers = new HashMap<>();
         assertTrue(checker.matches(new CallContext(MockWebContext.create(), new MockSessionStore()), "get", matchers, new ArrayList<>()));
     }
 
     @Test
-    public void testGetMatcherDefinedAsPost() {
+    void testGetMatcherDefinedAsPost() {
         final Map<String, Matcher> matchers = new HashMap<>();
         matchers.put("get", new HttpMethodMatcher(HttpConstants.HTTP_METHOD.POST));
         assertTrue(checker.matches(new CallContext(MockWebContext.create().setRequestMethod("post"), new MockSessionStore()), "get",
@@ -134,28 +134,28 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testDefaultPostMatcher() {
+    void testDefaultPostMatcher() {
         final Map<String, Matcher> matchers = new HashMap<>();
         assertTrue(checker.matches(new CallContext(MockWebContext.create().setRequestMethod("post"), new MockSessionStore()), "post",
             matchers, new ArrayList<>()));
     }
 
     @Test
-    public void testDefaultPutMatcher() {
+    void testDefaultPutMatcher() {
         final Map<String, Matcher> matchers = new HashMap<>();
         assertTrue(checker.matches(new CallContext(MockWebContext.create().setRequestMethod("put"), new MockSessionStore()), "put",
             matchers, new ArrayList<>()));
     }
 
     @Test
-    public void testDefaultDeleteMatcher() {
+    void testDefaultDeleteMatcher() {
         final Map<String, Matcher> matchers = new HashMap<>();
         assertTrue(checker.matches(new CallContext(MockWebContext.create().setRequestMethod("delete"), new MockSessionStore()), "delete",
             matchers, new ArrayList<>()));
     }
 
     @Test
-    public void testHsts() {
+    void testHsts() {
         val context = MockWebContext.create();
         context.setScheme(SCHEME_HTTPS);
         checker.matches(new CallContext(context, new MockSessionStore()), DefaultMatchers.HSTS, new HashMap<>(), new ArrayList<>());
@@ -163,7 +163,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testHstsCaseTrim() {
+    void testHstsCaseTrim() {
         val context = MockWebContext.create();
         context.setScheme(SCHEME_HTTPS);
         checker.matches(new CallContext(context, new MockSessionStore()), "  HSTS ", new HashMap<>(), new ArrayList<>());
@@ -171,21 +171,21 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testNosniff() {
+    void testNosniff() {
         val context = MockWebContext.create();
         checker.matches(new CallContext(context, new MockSessionStore()), DefaultMatchers.NOSNIFF, new HashMap<>(), new ArrayList<>());
         assertNotNull(context.getResponseHeaders().get("X-Content-Type-Options"));
     }
 
     @Test
-    public void testNoframe() {
+    void testNoframe() {
         val context = MockWebContext.create();
         checker.matches(new CallContext(context, new MockSessionStore()), DefaultMatchers.NOFRAME, new HashMap<>(), new ArrayList<>());
         assertNotNull(context.getResponseHeaders().get("X-Frame-Options"));
     }
 
     @Test
-    public void testXssprotection() {
+    void testXssprotection() {
         val context = MockWebContext.create();
         checker.matches(new CallContext(context, new MockSessionStore()), DefaultMatchers.XSSPROTECTION,
             new HashMap<>(), new ArrayList<>());
@@ -193,7 +193,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testNocache() {
+    void testNocache() {
         val context = MockWebContext.create();
         checker.matches(new CallContext(context, new MockSessionStore()), DefaultMatchers.NOCACHE, new HashMap<>(), new ArrayList<>());
         assertNotNull(context.getResponseHeaders().get("Cache-Control"));
@@ -202,7 +202,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testAllowAjaxRequests() {
+    void testAllowAjaxRequests() {
         val context = MockWebContext.create();
         checker.matches(new CallContext(context, new MockSessionStore()), DefaultMatchers.ALLOW_AJAX_REQUESTS,
             new HashMap<>(), new ArrayList<>());
@@ -218,7 +218,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testSecurityHeaders() {
+    void testSecurityHeaders() {
         val context = MockWebContext.create();
         context.setScheme(SCHEME_HTTPS);
         checker.matches(new CallContext(context, new MockSessionStore()), DefaultMatchers.SECURITYHEADERS,
@@ -233,7 +233,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testCsrfToken() {
+    void testCsrfToken() {
         val context = MockWebContext.create();
         assertTrue(checker.matches(new CallContext(context, new MockSessionStore()), DefaultMatchers.CSRF_TOKEN,
             new HashMap<>(), new ArrayList<>()));
@@ -242,7 +242,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testCsrfTokenDefault() {
+    void testCsrfTokenDefault() {
         val context = MockWebContext.create();
         assertTrue(checker.matches(new CallContext(context, new MockSessionStore()), Pac4jConstants.EMPTY_STRING,
             new HashMap<>(), new ArrayList<>()));
@@ -251,7 +251,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testCsrfTokenDefaultButSessionAlreadyExists() {
+    void testCsrfTokenDefaultButSessionAlreadyExists() {
         val context = MockWebContext.create();
         final SessionStore sessionStore = new MockSessionStore();
         sessionStore.getSessionId(context, true);
@@ -262,7 +262,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testCsrfTokenDefaultButIndirectClient() {
+    void testCsrfTokenDefaultButIndirectClient() {
         val context = MockWebContext.create();
         final List<Client> clients = new ArrayList<>();
         clients.add(new MockIndirectClient("test"));
@@ -273,7 +273,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testCsrfTokenPost() {
+    void testCsrfTokenPost() {
         val context = MockWebContext.create().setRequestMethod(HTTP_METHOD.POST.name());
         assertTrue(checker.matches(new CallContext(context, new MockSessionStore()), DefaultMatchers.CSRF_TOKEN,
             new HashMap<>(), new ArrayList<>()));
@@ -282,20 +282,20 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testComputeMatchers() {
+    void testComputeMatchers() {
         assertEquals(SECURITY_HEADERS_MATCHERS, checker.computeMatchers(new CallContext(MockWebContext.create(), new MockSessionStore()),
             Pac4jConstants.EMPTY_STRING , new HashMap<>(), new ArrayList<>()));
     }
 
     @Test
-    public void testComputeMatchersPost() {
+    void testComputeMatchersPost() {
         assertEquals(List.of(DefaultMatchingChecker.POST_MATCHER),
             checker.computeMatchers(new CallContext(MockWebContext.create(), new MockSessionStore()), "post" ,
                 new HashMap<>(), new ArrayList<>()));
     }
 
     @Test
-    public void testComputeMatchersPlusPost() {
+    void testComputeMatchersPlusPost() {
         final Collection<Matcher> matchers = new ArrayList<>();
         matchers.addAll(SECURITY_HEADERS_MATCHERS);
         matchers.add(DefaultMatchingChecker.POST_MATCHER);
@@ -304,7 +304,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testComputeMatchersOverrideOneMatcher() {
+    void testComputeMatchersOverrideOneMatcher() {
         final Map<String, Matcher> matchers = new HashMap<>();
         matchers.put(DefaultMatchers.GET, DefaultMatchingChecker.POST_MATCHER);
         assertEquals(List.of(DefaultMatchingChecker.POST_MATCHER), checker.computeMatchers(new CallContext(MockWebContext.create(),
@@ -312,7 +312,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testComputeMatchersOverrideSecurityHeadersDefault() {
+    void testComputeMatchersOverrideSecurityHeadersDefault() {
         final Matcher overriden = new Matcher() {
             @Override
             public boolean matches(final CallContext ctx) {
@@ -330,7 +330,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testComputeMatchersOverrideSecurityHeaders() {
+    void testComputeMatchersOverrideSecurityHeaders() {
         final Matcher overriden = new Matcher() {
             @Override
             public boolean matches(final CallContext ctx) {
@@ -348,7 +348,7 @@ public final class DefaultMatchingCheckerTests implements TestsConstants {
     }
 
     @Test
-    public void testComputeMatchersOverrideOneMatcherDefault() {
+    void testComputeMatchersOverrideOneMatcherDefault() {
         final Matcher overriden = new Matcher() {
             @Override
             public boolean matches(final CallContext ctx) {

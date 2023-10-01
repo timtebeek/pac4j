@@ -1,7 +1,7 @@
 package org.pac4j.core.store;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.core.util.TestsHelper;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @author Jerome Leleu
  * @since 2.0.0
  */
-public final class GuavaStoreTests extends AbstractStoreTests<GuavaStore> {
+final class GuavaStoreTests extends AbstractStoreTests<GuavaStore> {
 
     @Override
     protected GuavaStore buildStore() {
@@ -21,7 +21,7 @@ public final class GuavaStoreTests extends AbstractStoreTests<GuavaStore> {
     }
 
     @Test
-    public void testBadSize() {
+    void testBadSize() {
         val store = new GuavaStore();
         store.setTimeout(15);
         store.setTimeUnit(TimeUnit.SECONDS);
@@ -29,7 +29,7 @@ public final class GuavaStoreTests extends AbstractStoreTests<GuavaStore> {
     }
 
     @Test
-    public void testBadTimeout() {
+    void testBadTimeout() {
         val store = new GuavaStore();
         store.setSize(15);
         store.setTimeUnit(TimeUnit.SECONDS);
@@ -37,7 +37,7 @@ public final class GuavaStoreTests extends AbstractStoreTests<GuavaStore> {
     }
 
     @Test
-    public void testBadTimeUnit() {
+    void testBadTimeUnit() {
         val store = new GuavaStore();
         store.setSize(15);
         store.setTimeout(20);

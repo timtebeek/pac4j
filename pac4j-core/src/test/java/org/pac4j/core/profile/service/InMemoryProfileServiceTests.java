@@ -2,8 +2,8 @@ package org.pac4j.core.profile.service;
 
 import lombok.val;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
 import org.pac4j.core.credentials.password.PasswordEncoder;
@@ -17,8 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the {@link InMemoryProfileService}.
@@ -42,8 +41,8 @@ public final class InMemoryProfileServiceTests implements TestsConstants {
     public InMemoryProfileService<CommonProfile> inMemoryProfileService;
 
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         inMemoryProfileService = new InMemoryProfileService<>(x -> new CommonProfile());
         inMemoryProfileService.setPasswordEncoder(PASSWORD_ENCODER);
         val password = PASSWORD_ENCODER.encode(PASSWORD);
@@ -68,14 +67,16 @@ public final class InMemoryProfileServiceTests implements TestsConstants {
         inMemoryProfileService.create(profile, PASSWORD);
     }
 
-    @Test(expected = AccountNotFoundException.class)
-    public void authentFailed() {
-        val credentials = new UsernamePasswordCredentials(BAD_USERNAME, PASSWORD);
-        inMemoryProfileService.validate(new CallContext(null, null), credentials);
+    @Test
+    void authentFailed() {
+        assertThrows(AccountNotFoundException.class, () -> {
+            val credentials = new UsernamePasswordCredentials(BAD_USERNAME, PASSWORD);
+            inMemoryProfileService.validate(new CallContext(null, null), credentials);
+        });
     }
 
     @Test
-    public void authentSuccessSingleAttribute() {
+    void authentSuccessSingleAttribute() {
         val credentials = new UsernamePasswordCredentials(GOOD_USERNAME, PASSWORD);
         inMemoryProfileService.validate(new CallContext(null, null), credentials);
         val profile = credentials.getUserProfile();
@@ -86,7 +87,7 @@ public final class InMemoryProfileServiceTests implements TestsConstants {
     }
 
     @Test
-    public void testCreateUpdateFindDelete() {
+    void testCreateUpdateFindDelete() {
         val profile = new CommonProfile();
         profile.setId(TEST_ID);
         profile.setLinkedId(TEST_LINKED_ID);

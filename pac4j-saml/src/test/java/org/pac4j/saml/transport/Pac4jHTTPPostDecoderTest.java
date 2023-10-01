@@ -2,7 +2,7 @@ package org.pac4j.saml.transport;
 
 import lombok.val;
 import net.shibboleth.shared.component.ComponentInitializationException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.messaging.decoder.MessageDecodingException;
 import org.opensaml.saml.saml2.core.impl.ResponseImpl;
 import org.pac4j.core.context.CallContext;
@@ -13,7 +13,7 @@ import org.pac4j.saml.util.Configuration;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link Pac4jHTTPPostDecoder}.
@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  * @author Garry Boyce
  * @since 4.0.0
  */
-public class Pac4jHTTPPostDecoderTest {
+class Pac4jHTTPPostDecoderTest {
 
     private static final String  SAML_RESPONSE = """
             PHNhbWxwOlJlc3BvbnNlIHhtbG5zOnNhbWxwPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6
@@ -96,7 +96,7 @@ public class Pac4jHTTPPostDecoderTest {
 
 
     @Test
-    public void testDecodeBody() throws Exception {
+    void testDecodeBody() throws Exception {
         val webContext = MockWebContext.create();
 
         webContext.setRequestMethod("POST");
@@ -111,7 +111,7 @@ public class Pac4jHTTPPostDecoderTest {
     }
 
     @Test
-    public void testDecodeBodyNotAsQueryString() throws Exception {
+    void testDecodeBodyNotAsQueryString() throws Exception {
         val webContext = MockWebContext.create();
 
         webContext.setRequestMethod("POST");
@@ -125,7 +125,7 @@ public class Pac4jHTTPPostDecoderTest {
     }
 
     @Test
-    public void testDecodeParam() throws Exception {
+    void testDecodeParam() throws Exception {
         val webContext = MockWebContext.create();
 
         webContext.setRequestMethod("POST");

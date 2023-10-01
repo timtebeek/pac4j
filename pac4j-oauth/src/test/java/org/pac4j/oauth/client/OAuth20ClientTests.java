@@ -1,7 +1,7 @@
 package org.pac4j.oauth.client;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
@@ -16,7 +16,8 @@ import org.pac4j.core.util.generator.StaticValueGenerator;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests the {@link OAuth20Client} class.
@@ -24,7 +25,7 @@ import static org.junit.Assert.*;
  * @author Jerome Leleu
  * @since 1.0.0
  */
-public final class OAuth20ClientTests implements TestsConstants {
+final class OAuth20ClientTests implements TestsConstants {
 
     private OAuth20Client getClient() {
         val client = new GitHubClient();
@@ -35,7 +36,7 @@ public final class OAuth20ClientTests implements TestsConstants {
     }
 
     @Test
-    public void testState() throws MalformedURLException {
+    void testState() throws MalformedURLException {
         var client = new FacebookClient(KEY, SECRET);
         client.setCallbackUrl(CALLBACK_URL);
         client.getConfiguration().setStateGenerator(new StaticValueGenerator("OK"));
@@ -46,7 +47,7 @@ public final class OAuth20ClientTests implements TestsConstants {
     }
 
     @Test
-    public void testSetState() throws MalformedURLException {
+    void testSetState() throws MalformedURLException {
         var client = new FacebookClient(KEY, SECRET);
         client.setCallbackUrl(CALLBACK_URL);
         client.getConfiguration().setStateGenerator(new StaticValueGenerator("oldstate"));
@@ -64,7 +65,7 @@ public final class OAuth20ClientTests implements TestsConstants {
     }
 
     @Test
-    public void testStateRandom() throws MalformedURLException {
+    void testStateRandom() throws MalformedURLException {
         OAuth20Client client = new FacebookClient(KEY, SECRET);
         client.setCallbackUrl(CALLBACK_URL);
         var action = (FoundAction) client.getRedirectionAction(
@@ -82,7 +83,7 @@ public final class OAuth20ClientTests implements TestsConstants {
     }
 
     @Test
-    public void testGetRedirectionGithub() {
+    void testGetRedirectionGithub() {
         WithLocationAction action = (FoundAction) getClient().getRedirectionAction(
             new CallContext(MockWebContext.create(), new MockSessionStore())).get();
         val url = action.getLocation();
@@ -90,20 +91,20 @@ public final class OAuth20ClientTests implements TestsConstants {
     }
 
     @Test
-    public void testDefaultName20() {
+    void testDefaultName20() {
         final Client client = new FacebookClient();
         assertEquals("FacebookClient", client.getName());
     }
 
     @Test
-    public void testDefinedName() {
+    void testDefinedName() {
         final OAuth20Client client = new FacebookClient();
         client.setName(TYPE);
         assertEquals(TYPE, client.getName());
     }
 
     @Test
-    public void testMissingKey() {
+    void testMissingKey() {
         val client = getClient();
         client.setKey(null);
         TestsHelper.expectException(() -> client.getRedirectionAction(
@@ -112,7 +113,7 @@ public final class OAuth20ClientTests implements TestsConstants {
     }
 
     @Test
-    public void testMissingSecret() {
+    void testMissingSecret() {
         val client = getClient();
         client.setSecret(null);
         TestsHelper.expectException(() -> client.getRedirectionAction(
@@ -121,7 +122,7 @@ public final class OAuth20ClientTests implements TestsConstants {
     }
 
     @Test
-    public void testMissingFieldsFacebook() {
+    void testMissingFieldsFacebook() {
         val client = new FacebookClient(KEY, SECRET);
         client.setCallbackUrl(CALLBACK_URL);
         client.setFields(null);
@@ -135,19 +136,19 @@ public final class OAuth20ClientTests implements TestsConstants {
     }
 
     @Test
-    public void testMissingScopeGoogle() {
+    void testMissingScopeGoogle() {
         val client = getGoogleClient();
         client.setScope(null);
         TestsHelper.initShouldFail(client, "scope cannot be null");
     }
 
     @Test
-    public void testDefaultScopeGoogle() {
+    void testDefaultScopeGoogle() {
         getGoogleClient().getRedirectionAction(new CallContext(MockWebContext.create(), new MockSessionStore()));
     }
 
     @Test
-    public void testMissingFieldsOk() {
+    void testMissingFieldsOk() {
         val client = new OkClient();
         client.setKey(KEY);
         client.setSecret(SECRET);
@@ -163,14 +164,14 @@ public final class OAuth20ClientTests implements TestsConstants {
     }
 
     @Test
-    public void testMissingScopeLinkedIn() {
+    void testMissingScopeLinkedIn() {
         val client = getLinkedInClient();
         client.setScope(null);
         TestsHelper.initShouldFail(client, "scope cannot be blank");
     }
 
     @Test
-    public void testMissingFieldsPaypal() {
+    void testMissingFieldsPaypal() {
         val client = new PayPalClient(KEY, SECRET);
         client.setCallbackUrl(CALLBACK_URL);
         client.setScope(null);

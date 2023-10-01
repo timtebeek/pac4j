@@ -1,12 +1,12 @@
 package org.pac4j.core.util.serializer;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.UserProfile;
 import org.pac4j.core.util.TestsConstants;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@link Serializer}.
@@ -14,10 +14,10 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome LELEU
  * @since 3.9.0
  */
-public class JsonSerializerTest implements TestsConstants {
+class JsonSerializerTest implements TestsConstants {
 
     @Test
-    public void testString() {
+    void testString() {
         UserProfile profile = new CommonProfile();
         profile.setId(ID);
         profile.addAttribute(KEY, VALUE);
@@ -32,7 +32,7 @@ public class JsonSerializerTest implements TestsConstants {
     }
 
     @Test
-    public void testBytes() {
+    void testBytes() {
         UserProfile profile = new CommonProfile();
         profile.setId(ID);
         profile.addAttribute(KEY, VALUE);

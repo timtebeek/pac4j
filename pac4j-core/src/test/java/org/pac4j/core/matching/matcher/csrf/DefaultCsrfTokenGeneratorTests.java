@@ -1,7 +1,7 @@
 package org.pac4j.core.matching.matcher.csrf;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.context.session.MockSessionStore;
@@ -10,7 +10,7 @@ import org.pac4j.core.util.Pac4jConstants;
 
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests {@link DefaultCsrfTokenGenerator}.
@@ -18,23 +18,23 @@ import static org.junit.Assert.*;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class DefaultCsrfTokenGeneratorTests {
+final class DefaultCsrfTokenGeneratorTests {
 
     @Test
-    public void testDefault() {
+    void testDefault() {
         val generator = new DefaultCsrfTokenGenerator();
         internalTest(generator, true);
     }
 
     @Test
-    public void testNoRotate() {
+    void testNoRotate() {
         val generator = new DefaultCsrfTokenGenerator();
         generator.setRotateTokens(false);
         internalTest(generator, false);
     }
 
     @Test
-    public void testRotate() {
+    void testRotate() {
         val generator = new DefaultCsrfTokenGenerator();
         generator.setRotateTokens(true);
         internalTest(generator, true);

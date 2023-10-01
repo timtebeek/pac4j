@@ -1,9 +1,9 @@
 package org.pac4j.ldap.profile.service;
 
 import lombok.val;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.ldaptive.ConnectionFactory;
 import org.ldaptive.auth.Authenticator;
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the {@link LdapProfileService}.
@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class LdapProfileServiceTests implements TestsConstants {
+final class LdapProfileServiceTests implements TestsConstants {
 
     private static final String LDAP_ID = "ldapid";
     private static final String LDAP_LINKED_ID = "ldapLinkedId";
@@ -46,8 +46,8 @@ public final class LdapProfileServiceTests implements TestsConstants {
 
     private ConnectionFactory connectionFactory;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         ldapServer = new LdapServer();
         ldapServer.start();
         val client = new LdapClient(ldapServer.getPort());
@@ -55,39 +55,41 @@ public final class LdapProfileServiceTests implements TestsConstants {
         connectionFactory = client.getConnectionFactory();
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         ldapServer.stop();
     }
 
     @Test
-    public void testNullAuthenticator() {
+    void testNullAuthenticator() {
         val ldapProfileService = new LdapProfileService(connectionFactory, null, LdapServer.BASE_PEOPLE_DN);
         TestsHelper.expectException(ldapProfileService::init, TechnicalException.class, "ldapAuthenticator cannot be null");
     }
 
     @Test
-    public void testNullConnectionFactory() {
+    void testNullConnectionFactory() {
         val ldapProfileService = new LdapProfileService(null, authenticator, LdapServer.BASE_PEOPLE_DN);
         TestsHelper.expectException(ldapProfileService::init, TechnicalException.class, "connectionFactory cannot be null");
     }
 
     @Test
-    public void testBlankUsersDn() {
+    void testBlankUsersDn() {
         val ldapProfileService = new LdapProfileService(connectionFactory, authenticator, Pac4jConstants.EMPTY_STRING);
         TestsHelper.expectException(ldapProfileService::init, TechnicalException.class, "usersDn cannot be blank");
     }
 
 
-    @Test(expected = BadCredentialsException.class)
-    public void authentFailed() {
-        val ldapProfileService = new LdapProfileService(connectionFactory, authenticator, LdapServer.BASE_PEOPLE_DN);
-        val credentials = new UsernamePasswordCredentials(BAD_USERNAME, PASSWORD);
-        ldapProfileService.validate(null, credentials);
+    @Test
+    void authentFailed() {
+        assertThrows(BadCredentialsException.class, () -> {
+            val ldapProfileService = new LdapProfileService(connectionFactory, authenticator, LdapServer.BASE_PEOPLE_DN);
+            val credentials = new UsernamePasswordCredentials(BAD_USERNAME, PASSWORD);
+            ldapProfileService.validate(null, credentials);
+        });
     }
 
     @Test
-    public void authentSuccessNoAttribute() {
+    void authentSuccessNoAttribute() {
         val ldapProfileService =
             new LdapProfileService(connectionFactory, authenticator, Pac4jConstants.EMPTY_STRING, LdapServer.BASE_PEOPLE_DN);
         ldapProfileService.setUsernameAttribute(LdapServer.CN);
@@ -103,7 +105,7 @@ public final class LdapProfileServiceTests implements TestsConstants {
     }
 
     @Test
-    public void authentSuccessSingleAttribute() {
+    void authentSuccessSingleAttribute() {
         val ldapProfileService =
             new LdapProfileService(connectionFactory, authenticator, LdapServer.SN, LdapServer.BASE_PEOPLE_DN);
         ldapProfileService.setUsernameAttribute(LdapServer.CN);
@@ -120,7 +122,7 @@ public final class LdapProfileServiceTests implements TestsConstants {
     }
 
     @Test
-    public void authentSuccessMultiAttribute() {
+    void authentSuccessMultiAttribute() {
         val ldapProfileService = new LdapProfileService(connectionFactory, authenticator, LdapServer.SN + ","
             + LdapServer.ROLE, LdapServer.BASE_PEOPLE_DN);
         ldapProfileService.setUsernameAttribute(LdapServer.CN);
@@ -141,7 +143,7 @@ public final class LdapProfileServiceTests implements TestsConstants {
     }
 
     @Test
-    public void testCreateUpdateFindDelete() {
+    void testCreateUpdateFindDelete() {
         val profile = new LdapProfile();
         profile.setId(LDAP_ID);
         profile.setLinkedId(LDAP_LINKED_ID);

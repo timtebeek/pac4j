@@ -1,7 +1,7 @@
 package org.pac4j.http.client.direct;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
@@ -19,7 +19,7 @@ import org.pac4j.http.credentials.authenticator.test.SimpleTestTokenAuthenticato
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests the {@link HeaderClient} class.
@@ -27,17 +27,17 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class HeaderClientTests implements TestsConstants {
+final class HeaderClientTests implements TestsConstants {
 
     @Test
-    public void testMissingTokendAuthenticator() {
+    void testMissingTokendAuthenticator() {
         val client = new HeaderClient(VALUE, (Authenticator) null);
         TestsHelper.expectException(() -> client.getCredentials(new CallContext(MockWebContext.create(), new MockSessionStore())),
                 TechnicalException.class, "authenticator cannot be null");
     }
 
     @Test
-    public void testMissingProfileCreator() {
+    void testMissingProfileCreator() {
         val client = new HeaderClient(NAME, new SimpleTestTokenAuthenticator());
         client.setProfileCreator(null);
         TestsHelper.expectException(() -> client.getUserProfile(new CallContext(MockWebContext.create(), new MockSessionStore()),
@@ -45,19 +45,19 @@ public final class HeaderClientTests implements TestsConstants {
     }
 
     @Test
-    public void testHasDefaultProfileCreator() {
+    void testHasDefaultProfileCreator() {
         val client = new HeaderClient(HEADER_NAME, new SimpleTestTokenAuthenticator());
         client.init();
     }
 
     @Test
-    public void testMissingHeaderName() {
+    void testMissingHeaderName() {
         val client = new HeaderClient(null, new SimpleTestTokenAuthenticator());
         TestsHelper.initShouldFail(client, "headerName cannot be blank");
     }
 
     @Test
-    public void testAuthentication() {
+    void testAuthentication() {
         Client client = new HeaderClient(HEADER_NAME, PREFIX_HEADER, new SimpleTestTokenAuthenticator());
         val context = MockWebContext.create();
         context.addRequestHeader(HEADER_NAME, PREFIX_HEADER + VALUE);
@@ -70,7 +70,7 @@ public final class HeaderClientTests implements TestsConstants {
     }
 
     @Test
-    public void testProfileCreation() {
+    void testProfileCreation() {
         Client client = new HeaderClient(HEADER_NAME, PREFIX_HEADER, new ProfileCreator() {
             @Override
             public Optional<UserProfile> create(final CallContext ctx, final Credentials credentials) {

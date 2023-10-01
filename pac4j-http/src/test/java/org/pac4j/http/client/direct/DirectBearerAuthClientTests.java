@@ -1,7 +1,7 @@
 package org.pac4j.http.client.direct;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.HttpConstants;
 import org.pac4j.core.context.MockWebContext;
@@ -19,7 +19,7 @@ import org.pac4j.http.credentials.authenticator.test.SimpleTestTokenAuthenticato
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests the {@link DirectBearerAuthClient} class.
@@ -27,37 +27,37 @@ import static org.junit.Assert.assertEquals;
  * @author Graham Leggett
  * @since 3.5.0
  */
-public final class DirectBearerAuthClientTests implements TestsConstants {
+final class DirectBearerAuthClientTests implements TestsConstants {
 
     @Test
-    public void testMissingTokenAuthenticator() {
+    void testMissingTokenAuthenticator() {
         val bearerAuthClient = new DirectBearerAuthClient((Authenticator) null);
         TestsHelper.expectException(() -> bearerAuthClient.getCredentials(new CallContext(MockWebContext.create(),
                 new MockSessionStore())), TechnicalException.class, "authenticator cannot be null");
     }
 
     @Test
-    public void testMissingProfileCreator() {
+    void testMissingProfileCreator() {
         val bearerAuthClient = new DirectBearerAuthClient((ProfileCreator) null);
         TestsHelper.expectException(() -> bearerAuthClient.getCredentials(new CallContext(MockWebContext.create(),
                 new MockSessionStore())), TechnicalException.class, "profileCreator cannot be null");
     }
 
     @Test
-    public void testMissingProfileCreator2() {
+    void testMissingProfileCreator2() {
         val bearerAuthClient = new DirectBearerAuthClient(new SimpleTestTokenAuthenticator(), null);
         TestsHelper.expectException(() -> bearerAuthClient.getUserProfile(new CallContext(MockWebContext.create(), new MockSessionStore()),
             new TokenCredentials(TOKEN)), TechnicalException.class, "profileCreator cannot be null");
     }
 
     @Test
-    public void testHasDefaultProfileCreator() {
+    void testHasDefaultProfileCreator() {
         val bearerAuthClient = new DirectBearerAuthClient(new SimpleTestTokenAuthenticator());
         bearerAuthClient.init();
     }
 
     @Test
-    public void testAuthentication() {
+    void testAuthentication() {
         val client = new DirectBearerAuthClient(new SimpleTestTokenAuthenticator());
         val context = MockWebContext.create();
         context.addRequestHeader(HttpConstants.AUTHORIZATION_HEADER,
@@ -71,7 +71,7 @@ public final class DirectBearerAuthClientTests implements TestsConstants {
     }
 
     @Test
-    public void testProfileCreation() {
+    void testProfileCreation() {
         val client = new DirectBearerAuthClient(new ProfileCreator() {
             @Override
             public Optional<UserProfile> create(final CallContext ctx, final Credentials credentials) {

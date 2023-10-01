@@ -1,7 +1,7 @@
 package org.pac4j.core.client;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.HttpConstants;
 import org.pac4j.core.context.MockWebContext;
@@ -17,8 +17,7 @@ import org.pac4j.core.util.TestsHelper;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests the {@link BaseClient} class.
@@ -26,10 +25,10 @@ import static org.junit.Assert.assertFalse;
  * @author Jerome Leleu
  * @since 1.4.0
  */
-public final class BaseClientTests implements TestsConstants {
+final class BaseClientTests implements TestsConstants {
 
     @Test
-    public void testDirectClient() {
+    void testDirectClient() {
         val client =
             new MockIndirectClient(TYPE, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         client.setCallbackUrl(CALLBACK_URL);
@@ -43,7 +42,7 @@ public final class BaseClientTests implements TestsConstants {
     }
 
     @Test
-    public void testIndirectClientWithImmediate() {
+    void testIndirectClientWithImmediate() {
         val client =
             new MockIndirectClient(TYPE, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         client.setCallbackUrl(CALLBACK_URL);
@@ -54,7 +53,7 @@ public final class BaseClientTests implements TestsConstants {
     }
 
     @Test
-    public void testNullCredentials() {
+    void testNullCredentials() {
         val client =
             new MockIndirectClient(TYPE, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val context = MockWebContext.create();
@@ -63,7 +62,7 @@ public final class BaseClientTests implements TestsConstants {
     }
 
     @Test
-    public void testNullCredentialsButForceAnonymous() {
+    void testNullCredentialsButForceAnonymous() {
         val client =
             new MockIndirectClient(TYPE, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         client.setProfileFactoryWhenNotAuthenticated(p -> AnonymousProfile.INSTANCE);
@@ -74,7 +73,7 @@ public final class BaseClientTests implements TestsConstants {
     }
 
     @Test
-    public void testAjaxRequest() {
+    void testAjaxRequest() {
         val client =
             new MockIndirectClient(TYPE, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         client.setCallbackUrl(CALLBACK_URL);
@@ -86,7 +85,7 @@ public final class BaseClientTests implements TestsConstants {
     }
 
     @Test
-    public void testAlreadyTried() {
+    void testAlreadyTried() {
         val client =
             new MockIndirectClient(TYPE, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         client.setCallbackUrl(CALLBACK_URL);
@@ -98,7 +97,7 @@ public final class BaseClientTests implements TestsConstants {
     }
 
     @Test
-    public void testSaveAlreadyTried() {
+    void testSaveAlreadyTried() {
         val client =
             new MockIndirectClient(TYPE, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         client.setCallbackUrl(CALLBACK_URL);
@@ -109,7 +108,7 @@ public final class BaseClientTests implements TestsConstants {
     }
 
     @Test
-    public void testStateParameter() {
+    void testStateParameter() {
         val client =
             new MockIndirectClient(TYPE, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val context = MockWebContext.create();

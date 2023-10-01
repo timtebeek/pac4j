@@ -1,7 +1,7 @@
 package org.pac4j.http.client.direct;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
@@ -15,7 +15,7 @@ import org.pac4j.http.credentials.DigestCredentials;
 import org.pac4j.http.credentials.authenticator.test.SimpleTestDigestAuthenticator;
 import org.pac4j.http.credentials.authenticator.test.SimpleTestTokenAuthenticator;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.pac4j.core.context.HttpConstants.AUTHORIZATION_HEADER;
 import static org.pac4j.core.context.HttpConstants.HTTP_METHOD;
 
@@ -25,17 +25,17 @@ import static org.pac4j.core.context.HttpConstants.HTTP_METHOD;
  * @author Mircea Carasel
  * @since 1.9.0
  */
-public class DirectDigestAuthClientTests implements TestsConstants {
+class DirectDigestAuthClientTests implements TestsConstants {
 
     @Test
-    public void testMissingUsernamePasswordAuthenticator() {
+    void testMissingUsernamePasswordAuthenticator() {
         val digestAuthClient = new DirectDigestAuthClient(null);
         TestsHelper.expectException(() -> digestAuthClient.getCredentials(new CallContext(MockWebContext.create(),
                 new MockSessionStore())), TechnicalException.class, "authenticator cannot be null");
     }
 
     @Test
-    public void testMissingProfileCreator() {
+    void testMissingProfileCreator() {
         val digestAuthClient = new DirectDigestAuthClient(new SimpleTestTokenAuthenticator(), null);
         TestsHelper.expectException(() -> digestAuthClient.getUserProfile(new CallContext(MockWebContext.create(), new MockSessionStore()),
                 new DigestCredentials(TOKEN, HTTP_METHOD.POST.name(), null, null, null, null, null, null, null)), TechnicalException.class,
@@ -43,13 +43,13 @@ public class DirectDigestAuthClientTests implements TestsConstants {
     }
 
     @Test
-    public void testHasDefaultProfileCreator() {
+    void testHasDefaultProfileCreator() {
         val digestAuthClient = new DirectDigestAuthClient(new SimpleTestTokenAuthenticator());
         digestAuthClient.init();
     }
 
     @Test
-    public void testAuthentication() {
+    void testAuthentication() {
         val client = new DirectDigestAuthClient(new SimpleTestDigestAuthenticator());
         client.setRealm(REALM);
         val context = MockWebContext.create();

@@ -4,9 +4,9 @@ import lombok.val;
 import org.apache.kerby.kerberos.kdc.impl.NettyKdcServerImpl;
 import org.apache.kerby.kerberos.kerb.KrbException;
 import org.apache.kerby.kerberos.kerb.server.SimpleKdcServer;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.HttpConstants;
@@ -22,7 +22,7 @@ import org.springframework.core.io.FileSystemResource;
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This tests both Direct and Indirect Kerberos clients.
@@ -41,7 +41,7 @@ import static org.junit.Assert.*;
  * @author Vidmantas Zemleris, at Kensu.io
  * @since 2.1.0
  */
-public class KerberosClientsKerbyTests implements TestsConstants {
+class KerberosClientsKerbyTests implements TestsConstants {
     private static SimpleKdcServer kerbyServer;
 
     static String clientPrincipal = "clientPrincipal@MYREALM.LT";
@@ -53,13 +53,13 @@ public class KerberosClientsKerbyTests implements TestsConstants {
     static String serviceKeyTabFileName = "/tmp/testServiceKeyTabFile";
     static File serviceKeytabFile = new File(serviceKeyTabFileName);
 
-    @BeforeClass
-    public static void beforeAll() throws KrbException, IOException {
+    @BeforeAll
+    static void beforeAll() throws KrbException, IOException {
         setupKerbyServer();
     }
 
-    @AfterClass
-    public static void afterAll() throws KrbException {
+    @AfterAll
+    static void afterAll() throws KrbException {
         kerbyServer.stop();
     }
 
@@ -81,14 +81,14 @@ public class KerberosClientsKerbyTests implements TestsConstants {
     }
 
     @Test
-    public void testDirectNoAuth() {
+    void testDirectNoAuth() {
         // a request without "Authentication: (Negotiate|Kerberos) SomeToken" header, yields NULL credentials
         assertFalse(setupDirectKerberosClient().getCredentials(
             new CallContext(MockWebContext.create(), new MockSessionStore())).isPresent());
     }
 
     @Test
-    public void testDirectAuthenticationWithRealTicket() throws Exception {
+    void testDirectAuthenticationWithRealTicket() throws Exception {
         checkWithGoodTicket(setupDirectKerberosClient());
     }
 
@@ -98,7 +98,7 @@ public class KerberosClientsKerbyTests implements TestsConstants {
     // =====================
 
     @Test
-    public void testDirectIncorrectAuth() {
+    void testDirectIncorrectAuth() {
         // a request with an incorrect Kerberos token, yields NULL credentials also
         val context = MockWebContext.create()
             .addRequestHeader(HttpConstants.AUTHORIZATION_HEADER, "Negotiate " + "AAAbbAA123");
@@ -110,13 +110,13 @@ public class KerberosClientsKerbyTests implements TestsConstants {
     }
 
     @Test
-    public void testIndirectNoAuth() {
+    void testIndirectNoAuth() {
         // a request without "Authentication: (Negotiate|Kerberos) SomeToken" header
         assertGetCredentialsFailsWithAuthRequired(setupIndirectKerberosClient(), MockWebContext.create(),"Performing a 401 HTTP action");
     }
 
     @Test
-    public void testIndirectIncorrectAuth() {
+    void testIndirectIncorrectAuth() {
         // a request with an incorrect Kerberos token, yields NULL credentials also
         val context = MockWebContext.create()
             .addRequestHeader(HttpConstants.AUTHORIZATION_HEADER, "Negotiate " + "AAAbbAA123");
@@ -124,7 +124,7 @@ public class KerberosClientsKerbyTests implements TestsConstants {
     }
 
     @Test
-    public void testIndirectAuthenticationWithRealTicket() throws Exception {
+    void testIndirectAuthenticationWithRealTicket() throws Exception {
         checkWithGoodTicket(setupIndirectKerberosClient());
     }
 

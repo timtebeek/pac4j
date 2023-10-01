@@ -1,7 +1,7 @@
 package org.pac4j.cas.client;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.cas.config.CasConfiguration;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.zip.Deflater;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.pac4j.core.context.HttpConstants.FOUND;
 import static org.pac4j.core.context.HttpConstants.HTTP_METHOD;
 
@@ -30,7 +30,7 @@ import static org.pac4j.core.context.HttpConstants.HTTP_METHOD;
  * @author Jerome Leleu
  * @since 1.4.0
  */
-public final class CasClientTests implements TestsConstants {
+final class CasClientTests implements TestsConstants {
 
     private static final String CAS = "/cas";
     private static final String CASBACK = "/casback";
@@ -45,14 +45,14 @@ public final class CasClientTests implements TestsConstants {
         + TICKET + "\"</samlp:SessionIndex></samlp:LogoutRequest>\";";
 
     @Test
-    public void testMissingCasUrls() {
+    void testMissingCasUrls() {
         val casClient = new CasClient();
         casClient.setCallbackUrl(CALLBACK_URL);
         TestsHelper.initShouldFail(casClient.getConfiguration(), "loginUrl, prefixUrl and restUrl cannot be all blank");
     }
 
     @Test
-    public void testMissingSlashOnPrefixUrl() {
+    void testMissingSlashOnPrefixUrl() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         configuration.setPrefixUrl(PREFIX_URL_WITHOUT_SLASH);
@@ -63,7 +63,7 @@ public final class CasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testInitPrefixUrl() {
+    void testInitPrefixUrl() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val casClient = new CasClient(configuration);
@@ -74,7 +74,7 @@ public final class CasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testInitLoginUrl() {
+    void testInitLoginUrl() {
         val configuration = new CasConfiguration();
         configuration.setPrefixUrl(PREFIX_URL);
         val casClient = new CasClient(configuration);
@@ -85,7 +85,7 @@ public final class CasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testCallbackUrlResolver() {
+    void testCallbackUrlResolver() {
         val configuration = new CasConfiguration();
         configuration.setPrefixUrl(CAS);
         configuration.setLoginUrl(CAS + LOGIN);
@@ -109,7 +109,7 @@ public final class CasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testRenewMissing() {
+    void testRenewMissing() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val casClient = new CasClient(configuration);
@@ -120,7 +120,7 @@ public final class CasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testRenew() {
+    void testRenew() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val casClient = new CasClient(configuration);
@@ -132,7 +132,7 @@ public final class CasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testGatewayMissing() {
+    void testGatewayMissing() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val casClient = new CasClient(configuration);
@@ -143,7 +143,7 @@ public final class CasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testGatewayOK() {
+    void testGatewayOK() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val casClient = new CasClient(configuration);
@@ -157,7 +157,7 @@ public final class CasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testBackLogout() {
+    void testBackLogout() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val casClient = new CasClient(configuration);
@@ -184,7 +184,7 @@ public final class CasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testFrontLogout() {
+    void testFrontLogout() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val casClient = new CasClient(configuration);
@@ -201,7 +201,7 @@ public final class CasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testFrontLogoutWithRelayState() {
+    void testFrontLogoutWithRelayState() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val casClient = new CasClient(configuration);
@@ -217,7 +217,7 @@ public final class CasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testInitUrlWithLoginString() {
+    void testInitUrlWithLoginString() {
         val testCasLoginUrl = "https://login.foo.bar/login/login";
         val testCasPrefixUrl = "https://login.foo.bar/login/";
         val configuration = new CasConfiguration();

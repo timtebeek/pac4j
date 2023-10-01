@@ -2,7 +2,7 @@ package org.pac4j.saml.credentials;
 
 import lombok.val;
 import org.apache.commons.lang3.SerializationUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.saml.common.SAMLObjectBuilder;
 import org.opensaml.saml.saml2.core.Attribute;
@@ -18,18 +18,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * This is {@link SAML2CredentialsSerializationTests}.
  *
  * @author Misagh Moayyed
  */
-public class SAML2CredentialsSerializationTests {
+class SAML2CredentialsSerializationTests {
     private final XMLObjectBuilderFactory builderFactory = Configuration.getBuilderFactory();
 
     @Test
-    public void verifyOperation() {
+    void verifyOperation() {
         val nameIdBuilder = (SAMLObjectBuilder<NameID>)
             this.builderFactory.getBuilder(NameID.DEFAULT_ELEMENT_NAME);
         assertNotNull(nameIdBuilder);

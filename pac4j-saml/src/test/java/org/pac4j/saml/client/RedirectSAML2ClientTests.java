@@ -2,7 +2,7 @@ package org.pac4j.saml.client;
 
 import lombok.val;
 import org.apache.hc.core5.net.URLEncodedUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
 import org.pac4j.core.context.CallContext;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Redirection tests on the {@link SAML2Client}.
@@ -36,7 +36,7 @@ public final class RedirectSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testCustomSpEntityIdForRedirectBinding() {
+    void testCustomSpEntityIdForRedirectBinding() {
         val client = getClient();
         client.getConfiguration().setServiceProviderEntityId("http://localhost:8080/callback");
         client.getConfiguration().setUseNameQualifier(true);
@@ -53,7 +53,7 @@ public final class RedirectSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testStandardSpEntityIdForRedirectBinding() {
+    void testStandardSpEntityIdForRedirectBinding() {
         val client = getClient();
         client.getConfiguration().setServiceProviderEntityId("http://localhost:8080/callback");
 
@@ -68,7 +68,7 @@ public final class RedirectSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testForceAuthIsSetForRedirectBinding() {
+    void testForceAuthIsSetForRedirectBinding() {
         val client = getClient();
         client.getConfiguration().setForceAuth(true);
         WithLocationAction action = (FoundAction) client.getRedirectionAction(
@@ -77,7 +77,7 @@ public final class RedirectSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testSetComparisonTypeWithRedirectBinding() {
+    void testSetComparisonTypeWithRedirectBinding() {
         val client = getClient();
         client.getConfiguration().setComparisonType(AuthnContextComparisonTypeEnumeration.EXACT.toString());
         WithLocationAction action = (FoundAction) client.getRedirectionAction(
@@ -86,7 +86,7 @@ public final class RedirectSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testNameIdPolicyFormat() {
+    void testNameIdPolicyFormat() {
         val client = getClient();
         client.getConfiguration().setNameIdPolicyFormat("urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress");
         WithLocationAction action = (FoundAction) client.getRedirectionAction(
@@ -97,7 +97,7 @@ public final class RedirectSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testAuthnContextClassRef() {
+    void testAuthnContextClassRef() {
         val client = getClient();
         client.getConfiguration().setComparisonType(AuthnContextComparisonTypeEnumeration.EXACT.toString());
         client.getConfiguration()
@@ -114,7 +114,7 @@ public final class RedirectSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testRelayState() {
+    void testRelayState() {
         val client = getClient();
         final WebContext context = MockWebContext.create();
         final SessionStore sessionStore = new MockSessionStore();

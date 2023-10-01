@@ -1,11 +1,11 @@
 package org.pac4j.core.profile.converter;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Locale;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * This class tests the {@link ChainingConverterTests} class.
@@ -13,10 +13,10 @@ import static org.junit.Assert.assertNotNull;
  * @author Misagh Moayyed
  * @since 4.3.0
  */
-public final class ChainingConverterTests {
+final class ChainingConverterTests {
 
     @Test
-    public void testChain() {
+    void testChain() {
         AttributeConverter chain = new ChainingConverter(List.of(Converters.STRING, Converters.LOCALE));
         assertNotNull(chain.convert("english"));
         assertNotNull(chain.convert(List.of("english")));

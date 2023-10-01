@@ -1,7 +1,7 @@
 package org.pac4j.saml.client;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.saml.config.SAML2Configuration;
 import org.pac4j.saml.crypto.CredentialProvider;
@@ -16,8 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Generic tests on the {@link SAML2Client}.
@@ -32,17 +32,17 @@ public final class SAML2ClientTests {
     }
 
     @Test
-    public void testIdpMetadataParsing_fromFile() {
+    void testIdpMetadataParsing_fromFile() {
         internalTestIdpMetadataParsing(new ClassPathResource("testshib-providers.xml"));
     }
 
     @Test
-    public void testIdpMetadataParsing_fromUrl() throws MalformedURLException {
+    void testIdpMetadataParsing_fromUrl() throws MalformedURLException {
         internalTestIdpMetadataParsing(new UrlResource("https://www.pac4j.org/testshib-providers.xml"));
     }
 
     @Test
-    public void testSaml2ConfigurationOfKeyStore() throws IOException {
+    void testSaml2ConfigurationOfKeyStore() throws IOException {
         final Resource rs = new FileSystemResource("testKeystore.jks");
         if (rs.exists() && !rs.getFile().delete()) {
             throw new TechnicalException("File could not be deleted");
@@ -62,8 +62,9 @@ public final class SAML2ClientTests {
         assertNotNull(p.getKeyInfoCredentialResolver());
         assertNotNull(p.getCredential());
     }
+
     @Test
-    public void testSaml2ConfigurationOfKeyStoreUsingResource() throws IOException {
+    void testSaml2ConfigurationOfKeyStoreUsingResource() throws IOException {
         final Resource rs = new FileSystemResource("testKeystore.jks");
         if (rs.exists() && !rs.getFile().delete()) {
             throw new TechnicalException("File could not be deleted");

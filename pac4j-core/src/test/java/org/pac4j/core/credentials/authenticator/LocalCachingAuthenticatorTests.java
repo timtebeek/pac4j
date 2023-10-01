@@ -1,7 +1,7 @@
 package org.pac4j.core.credentials.authenticator;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.credentials.Credentials;
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
@@ -12,8 +12,7 @@ import org.pac4j.core.profile.UserProfile;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for {@link LocalCachingAuthenticator}.
@@ -22,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  * @since 1.8
  */
 @SuppressWarnings("unchecked")
-public class LocalCachingAuthenticatorTests {
+class LocalCachingAuthenticatorTests {
 
     private static class OnlyOneCallAuthenticator implements Authenticator {
 
@@ -55,7 +54,7 @@ public class LocalCachingAuthenticatorTests {
     private final UsernamePasswordCredentials credentials = new UsernamePasswordCredentials("a", "a");
 
     @Test
-    public void testDoubleCalls() {
+    void testDoubleCalls() {
         val authenticator = new OnlyOneCallAuthenticator();
         val localCachingAuthenticator = new LocalCachingAuthenticator(authenticator, 10, 10, TimeUnit.SECONDS);
         localCachingAuthenticator.init();
@@ -66,7 +65,7 @@ public class LocalCachingAuthenticatorTests {
     }
 
     @Test
-    public void testNoCache() {
+    void testNoCache() {
         val authenticator = new
                 LocalCachingAuthenticator(this.delegate, 10, 2, TimeUnit.SECONDS);
         authenticator.init();
@@ -75,7 +74,7 @@ public class LocalCachingAuthenticatorTests {
     }
 
     @Test
-    public void testValidateAndCache() {
+    void testValidateAndCache() {
         val authenticator = new
                 LocalCachingAuthenticator(this.delegate, 10, 2, TimeUnit.SECONDS);
         authenticator.init();
@@ -85,7 +84,7 @@ public class LocalCachingAuthenticatorTests {
     }
 
     @Test
-    public void testValidateAndCacheSwitchDelegate() {
+    void testValidateAndCacheSwitchDelegate() {
         val authenticator = new
                 LocalCachingAuthenticator(this.delegate, 10, 2, TimeUnit.SECONDS);
         authenticator.init();
@@ -97,20 +96,22 @@ public class LocalCachingAuthenticatorTests {
         assertTrue(authenticator.isCached(this.credentials));
     }
 
-    @Test(expected=CredentialsException.class)
-    public void testValidateAndNoCacheSwitchDelegate() {
-        val authenticator = new
+    @Test
+    void testValidateAndNoCacheSwitchDelegate() {
+        assertThrows(CredentialsException.class, () -> {
+            val authenticator = new
                 LocalCachingAuthenticator(this.delegate, 10, 2, TimeUnit.MINUTES);
-        authenticator.init();
-        authenticator.validate(null, this.credentials);
-        assertTrue(authenticator.isCached(this.credentials));
-        authenticator.setDelegate(new ThrowingAuthenticator());
-        authenticator.removeFromCache(this.credentials);
-        authenticator.validate(null, this.credentials);
+            authenticator.init();
+            authenticator.validate(null, this.credentials);
+            assertTrue(authenticator.isCached(this.credentials));
+            authenticator.setDelegate(new ThrowingAuthenticator());
+            authenticator.removeFromCache(this.credentials);
+            authenticator.validate(null, this.credentials);
+        });
     }
 
     @Test
-    public void testValidateAndCacheAndRemove() {
+    void testValidateAndCacheAndRemove() {
         val authenticator = new
                 LocalCachingAuthenticator(this.delegate, 10, 2, TimeUnit.SECONDS);
         authenticator.init();
@@ -122,7 +123,7 @@ public class LocalCachingAuthenticatorTests {
     }
 
     @Test
-    public void testValidateAndExpire() {
+    void testValidateAndExpire() {
         val authenticator = new
                 LocalCachingAuthenticator(this.delegate, 10, 500, TimeUnit.MILLISECONDS);
         authenticator.init();

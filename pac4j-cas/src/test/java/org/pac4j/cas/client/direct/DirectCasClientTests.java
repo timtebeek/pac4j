@@ -2,7 +2,7 @@ package org.pac4j.cas.client.direct;
 
 import lombok.val;
 import org.apereo.cas.client.validation.AssertionImpl;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.cas.config.CasConfiguration;
 import org.pac4j.cas.profile.CasProfile;
 import org.pac4j.core.context.CallContext;
@@ -15,8 +15,8 @@ import org.pac4j.core.exception.http.HttpAction;
 import org.pac4j.core.util.TestsConstants;
 import org.pac4j.core.util.TestsHelper;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.pac4j.core.util.CommonHelper.addParameter;
 
 /**
@@ -25,10 +25,10 @@ import static org.pac4j.core.util.CommonHelper.addParameter;
  * @author Jerome Leleu
  * @since 1.9.2
  */
-public final class DirectCasClientTests implements TestsConstants {
+final class DirectCasClientTests implements TestsConstants {
 
     @Test
-    public void testInitOk() {
+    void testInitOk() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val client = new DirectCasClient(configuration);
@@ -36,13 +36,13 @@ public final class DirectCasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testInitMissingConfiguration() {
+    void testInitMissingConfiguration() {
         val client = new DirectCasClient();
         TestsHelper.expectException(client::init, TechnicalException.class, "configuration cannot be null");
     }
 
     @Test
-    public void testInitGatewayForbidden() {
+    void testInitGatewayForbidden() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         configuration.setGateway(true);
@@ -52,7 +52,7 @@ public final class DirectCasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testNoTokenRedirectionExpected() {
+    void testNoTokenRedirectionExpected() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         val client = new DirectCasClient(configuration);
@@ -66,7 +66,7 @@ public final class DirectCasClientTests implements TestsConstants {
     }
 
     @Test
-    public void testTicketExistsValidationOccurs() {
+    void testTicketExistsValidationOccurs() {
         val configuration = new CasConfiguration();
         configuration.setLoginUrl(LOGIN_URL);
         configuration.setDefaultTicketValidator((ticket, service) -> {

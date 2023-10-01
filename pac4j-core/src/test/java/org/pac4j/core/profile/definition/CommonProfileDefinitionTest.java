@@ -1,12 +1,12 @@
 package org.pac4j.core.profile.definition;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.profile.BasicUserProfile;
 import org.pac4j.core.profile.CommonProfile;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link CommonProfileDefinition}.
@@ -14,17 +14,17 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome LELEU
  * @since 5.0.0
  */
-public class CommonProfileDefinitionTest {
+class CommonProfileDefinitionTest {
 
     @Test
-    public void testNewProfile() {
+    void testNewProfile() {
         final ProfileDefinition definition = new CommonProfileDefinition();
         val profile = definition.newProfile();
         assertTrue(profile instanceof CommonProfile);
     }
 
     @Test
-    public void testRestoreProfile() {
+    void testRestoreProfile() {
         final ProfileDefinition definition = new CommonProfileDefinition();
         definition.setRestoreProfileFromTypedId(true);
         val profile = definition.newProfile(BasicUserProfile.class.getName() + "#");
@@ -33,7 +33,7 @@ public class CommonProfileDefinitionTest {
     }
 
     @Test
-    public void testRestoreProfileNoSeparator() {
+    void testRestoreProfileNoSeparator() {
         final ProfileDefinition definition = new CommonProfileDefinition();
         definition.setRestoreProfileFromTypedId(true);
         val profile = definition.newProfile(BasicUserProfile.class.getName());
@@ -41,7 +41,7 @@ public class CommonProfileDefinitionTest {
     }
 
     @Test
-    public void testRestoreProfileBadType() {
+    void testRestoreProfileBadType() {
         final ProfileDefinition definition = new CommonProfileDefinition();
         definition.setRestoreProfileFromTypedId(true);
         val profile = definition.newProfile(String.class.getName() + "#");

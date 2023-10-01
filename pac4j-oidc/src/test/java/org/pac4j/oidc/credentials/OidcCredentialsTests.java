@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.util.TestsConstants;
 import org.pac4j.core.util.serializer.JavaSerializer;
 import org.pac4j.core.util.serializer.JsonSerializer;
@@ -20,8 +20,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests {@link OidcCredentials}.
@@ -29,7 +28,7 @@ import static org.junit.Assert.assertNotNull;
  * @author Jerome Leleu
  * @since 1.9.2
  */
-public final class OidcCredentialsTests implements TestsConstants {
+final class OidcCredentialsTests implements TestsConstants {
 
     private static final JavaSerializer serializer = new JavaSerializer();
 
@@ -39,7 +38,7 @@ public final class OidcCredentialsTests implements TestsConstants {
         MTUsImlhdCI6MTQ0MDExMjAxNSwianRpIjoiaWQxMjM0NTYiLCJ0eXAiOiJodHRwczovL2V4YW1wbGUuY29tL3JlZ2lzdGVyIn0.""";
 
     @Test
-    public void testSerialization() throws ParseException {
+    void testSerialization() throws ParseException {
         val credentials = new OidcCredentials();
         credentials.setCode(VALUE);
         credentials.setAccessToken(new BearerAccessToken(VALUE, 0L, Scope.parse("oidc email")).toJSONObject());
@@ -53,7 +52,7 @@ public final class OidcCredentialsTests implements TestsConstants {
     }
 
     @Test
-    public void testJsonSerializationOfOidcCredentials() throws Exception {
+    void testJsonSerializationOfOidcCredentials() throws Exception {
         val oidcCredentials = new OidcCredentials();
         oidcCredentials.setCode("authcode");
         oidcCredentials.setAccessToken(new BearerAccessToken("value", 0L, Scope.parse("oidc email")).toJSONObject());
@@ -69,7 +68,7 @@ public final class OidcCredentialsTests implements TestsConstants {
     }
 
     @Test
-    public void testJsonSerializationOfOidcCredentialsWithTyping() throws Exception {
+    void testJsonSerializationOfOidcCredentialsWithTyping() throws Exception {
         val oidcCredentials = new OidcCredentials();
         oidcCredentials.setCode("authcode");
         oidcCredentials.setAccessToken(new BearerAccessToken("value", 0L, Scope.parse("oidc email")).toJSONObject());

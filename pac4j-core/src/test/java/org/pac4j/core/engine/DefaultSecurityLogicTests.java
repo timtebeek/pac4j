@@ -1,8 +1,8 @@
 package org.pac4j.core.engine;
 
 import lombok.val;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.adapter.FrameworkAdapter;
 import org.pac4j.core.client.*;
 import org.pac4j.core.config.Config;
@@ -24,7 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.mock;
  * @author Jerome Leleu
  * @since 1.9.0
  */
-public final class DefaultSecurityLogicTests implements TestsConstants {
+final class DefaultSecurityLogicTests implements TestsConstants {
 
     private DefaultSecurityLogic logic;
 
@@ -55,8 +55,8 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
 
     private HttpAction action;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         logic = new DefaultSecurityLogic();
         config = new Config();
         context = MockWebContext.create();
@@ -78,49 +78,49 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testNullConfig() {
+    void testNullConfig() {
         config = null;
         TestsHelper.expectException(this::call, TechnicalException.class, "config cannot be null");
     }
 
     @Test
-    public void testNullContext() {
+    void testNullContext() {
         context = null;
         TestsHelper.expectException(this::call, TechnicalException.class, "context cannot be null");
     }
 
     @Test
-    public void testNullHttpActionAdapter() {
+    void testNullHttpActionAdapter() {
         config.setHttpActionAdapter(null);
         TestsHelper.expectException(this::call, TechnicalException.class, "httpActionAdapter cannot be null");
     }
 
     @Test
-    public void testNullClients() {
+    void testNullClients() {
         config.setClients(null);
         TestsHelper.expectException(this::call, TechnicalException.class, "configClients cannot be null");
     }
 
     @Test
-    public void testNullClientFinder() {
+    void testNullClientFinder() {
         logic.setClientFinder(null);
         TestsHelper.expectException(this::call, TechnicalException.class, "clientFinder cannot be null");
     }
 
     @Test
-    public void testNullAuthorizationChecker() {
+    void testNullAuthorizationChecker() {
         logic.setAuthorizationChecker(null);
         TestsHelper.expectException(this::call, TechnicalException.class, "authorizationChecker cannot be null");
     }
 
     @Test
-    public void testNullMatchingChecker() {
+    void testNullMatchingChecker() {
         logic.setMatchingChecker(null);
         TestsHelper.expectException(this::call, TechnicalException.class, "matchingChecker cannot be null");
     }
 
     @Test
-    public void testNotAuthenticated() {
+    void testNotAuthenticated() {
         final IndirectClient indirectClient = new MockIndirectClient(NAME, null, Optional.of(new MockCredentials()), new CommonProfile());
         config.setClients(new Clients(CALLBACK_URL, indirectClient));
         clients = Pac4jConstants.EMPTY_STRING;
@@ -129,7 +129,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testNotAuthenticatedButMatcher() {
+    void testNotAuthenticatedButMatcher() {
         final IndirectClient indirectClient = new MockIndirectClient(NAME, null, Optional.of(new MockCredentials()), new CommonProfile());
         config.setClients(new Clients(CALLBACK_URL, indirectClient));
         config.addMatcher(NAME, ctx -> false);
@@ -140,7 +140,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testForceAuthentication() {
+    void testForceAuthentication() {
         this.logic.setLoadProfilesFromSession(false);
         var profile = new CommonProfile();
         profile.setId(ID);
@@ -158,7 +158,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testAlreadyAuthenticatedAndAuthorized() {
+    void testAlreadyAuthenticatedAndAuthorized() {
         val profile = new CommonProfile();
         profile.setId(ID);
         Map<String, CommonProfile> profiles = new LinkedHashMap<>();
@@ -174,7 +174,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testAlreadyAuthenticatedNotAuthorized() {
+    void testAlreadyAuthenticatedNotAuthorized() {
         val profile = new CommonProfile();
         Map<String, CommonProfile> profiles = new LinkedHashMap<>();
         profiles.put(NAME, profile);
@@ -188,7 +188,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testAuthorizerThrowsRequiresHttpAction() {
+    void testAuthorizerThrowsRequiresHttpAction() {
         val profile = new CommonProfile();
         Map<String, CommonProfile> profiles = new LinkedHashMap<>();
         profiles.put(NAME, profile);
@@ -203,7 +203,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testDoubleDirectClient() {
+    void testDoubleDirectClient() {
         val profile = new CommonProfile();
         profile.setId(NAME);
         val profile2 = new CommonProfile();
@@ -222,7 +222,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testDirectClientThrowsRequiresHttpAction() {
+    void testDirectClientThrowsRequiresHttpAction() {
         val profile = new CommonProfile();
         profile.setId(NAME);
         final DirectClient directClient = new MockDirectClient(NAME, () -> { throw new StatusAction(400); },
@@ -235,7 +235,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testDoubleDirectClientSupportingMultiProfile() {
+    void testDoubleDirectClientSupportingMultiProfile() {
         val profile = new CommonProfile();
         profile.setId(NAME);
         val profile2 = new CommonProfile();
@@ -257,7 +257,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testDoubleDirectClientChooseDirectClient() {
+    void testDoubleDirectClientChooseDirectClient() {
         val profile = new CommonProfile();
         profile.setId(NAME);
         val profile2 = new CommonProfile();
@@ -277,7 +277,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testDoubleDirectClientChooseBadDirectClient() {
+    void testDoubleDirectClientChooseBadDirectClient() {
         val profile = new CommonProfile();
         profile.setId(NAME);
         val profile2 = new CommonProfile();
@@ -292,7 +292,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testRedirectByIndirectClient() {
+    void testRedirectByIndirectClient() {
         final IndirectClient indirectClient =
             new MockIndirectClient(NAME, new FoundAction(PAC4J_URL), Optional.of(new MockCredentials()), new CommonProfile());
         config.setClients(new Clients(CALLBACK_URL, indirectClient));
@@ -303,7 +303,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testDoubleIndirectClientOneChosen() {
+    void testDoubleIndirectClientOneChosen() {
         final IndirectClient indirectClient =
             new MockIndirectClient(NAME, new FoundAction(PAC4J_URL), Optional.of(new MockCredentials()), new CommonProfile());
         final IndirectClient indirectClient2 =
@@ -317,7 +317,7 @@ public final class DefaultSecurityLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testDoubleIndirectClientBadOneChosen() {
+    void testDoubleIndirectClientBadOneChosen() {
         final IndirectClient indirectClient =
             new MockIndirectClient(NAME, new FoundAction(PAC4J_URL), Optional.of(new MockCredentials()), new CommonProfile());
         final IndirectClient indirectClient2 =

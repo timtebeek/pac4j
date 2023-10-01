@@ -1,12 +1,14 @@
 package org.pac4j.core.util;
 
 import lombok.val;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.pac4j.core.exception.TechnicalException;
 
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * This class is an helper for tests: get a basic web client, parameters from an url, a formatted date, etc.
@@ -31,8 +33,8 @@ public final class TestsHelper {
 
     public static void expectException(final Executable executable, final Class<? extends Exception> clazz, final String message) {
         val e = expectException(executable);
-        Assert.assertTrue(clazz.isAssignableFrom(e.getClass()));
-        Assert.assertEquals(message, e.getMessage());
+        assertTrue(clazz.isAssignableFrom(e.getClass()));
+        Assertions.assertEquals(message, e.getMessage());
     }
 
     public static Map<String, String> splitQuery(URL url) {

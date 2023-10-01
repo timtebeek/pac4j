@@ -5,7 +5,7 @@ import lombok.val;
 import net.shibboleth.shared.resolver.CriteriaSet;
 import org.apache.commons.io.IOUtils;
 import org.apache.hc.core5.http.ContentType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.pac4j.saml.config.SAML2Configuration;
 import org.pac4j.saml.util.ConfigurationManager;
@@ -19,15 +19,14 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * This is {@link SAML2HttpUrlMetadataGeneratorTests}.
  *
  * @author Misagh Moayyed
  */
-public class SAML2HttpUrlMetadataGeneratorTests {
+class SAML2HttpUrlMetadataGeneratorTests {
     private static SAML2Configuration initialConfiguration() throws MalformedURLException {
         final ConfigurationManager mgr = new DefaultConfigurationManager();
         mgr.configure();
@@ -46,7 +45,7 @@ public class SAML2HttpUrlMetadataGeneratorTests {
     }
 
     @Test
-    public void verifyPost() throws Exception {
+    void verifyPost() throws Exception {
 
         val wireMockServer = new WireMockServer(8088);
         wireMockServer.stubFor(
@@ -70,7 +69,7 @@ public class SAML2HttpUrlMetadataGeneratorTests {
     }
 
     @Test
-    public void verifyGet() throws Exception {
+    void verifyGet() throws Exception {
         val restBody = IOUtils.toString(
             new ClassPathResource("sample-sp-metadata.xml").getInputStream(), StandardCharsets.UTF_8);
         val wireMockServer = new WireMockServer(8087);

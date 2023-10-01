@@ -13,8 +13,7 @@ import org.pac4j.oauth.profile.paypal.PayPalProfile;
 
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Run manually a test for the {@link PayPalClient}.

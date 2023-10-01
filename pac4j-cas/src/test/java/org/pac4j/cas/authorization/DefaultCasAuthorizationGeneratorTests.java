@@ -1,7 +1,7 @@
 package org.pac4j.cas.authorization;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.cas.profile.CasProfile;
 import org.pac4j.core.authorization.generator.AuthorizationGenerator;
 import org.pac4j.core.context.CallContext;
@@ -11,7 +11,7 @@ import org.pac4j.core.util.TestsConstants;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests the {@link DefaultCasAuthorizationGenerator}.
@@ -19,10 +19,10 @@ import static org.junit.Assert.assertEquals;
  * @author Michael Remond
  * @since 1.5.1
  */
-public final class DefaultCasAuthorizationGeneratorTests implements TestsConstants {
+final class DefaultCasAuthorizationGeneratorTests implements TestsConstants {
 
     @Test
-    public void testNoAttribute() {
+    void testNoAttribute() {
         AuthorizationGenerator generator = new DefaultCasAuthorizationGenerator();
         Map<String, Object> attributes = new HashMap<>();
         val profile = new CasProfile();
@@ -32,7 +32,7 @@ public final class DefaultCasAuthorizationGeneratorTests implements TestsConstan
     }
 
     @Test
-    public void testBadAttributeValue() {
+    void testBadAttributeValue() {
         AuthorizationGenerator generator = new DefaultCasAuthorizationGenerator();
         Map<String, Object> attributes = new HashMap<>();
         attributes.put(DefaultCasAuthorizationGenerator.DEFAULT_REMEMBER_ME_ATTRIBUTE_NAME, "yes");
@@ -43,7 +43,7 @@ public final class DefaultCasAuthorizationGeneratorTests implements TestsConstan
     }
 
     @Test
-    public void testIsNotRemembered() {
+    void testIsNotRemembered() {
         AuthorizationGenerator generator = new DefaultCasAuthorizationGenerator();
         Map<String, Object> attributes = new HashMap<>();
         attributes.put(DefaultCasAuthorizationGenerator.DEFAULT_REMEMBER_ME_ATTRIBUTE_NAME, "false");
@@ -54,7 +54,7 @@ public final class DefaultCasAuthorizationGeneratorTests implements TestsConstan
     }
 
     @Test
-    public void testIsRemembered() {
+    void testIsRemembered() {
         AuthorizationGenerator generator = new DefaultCasAuthorizationGenerator();
         Map<String, Object> attributes = new HashMap<>();
         attributes.put(DefaultCasAuthorizationGenerator.DEFAULT_REMEMBER_ME_ATTRIBUTE_NAME, "true");

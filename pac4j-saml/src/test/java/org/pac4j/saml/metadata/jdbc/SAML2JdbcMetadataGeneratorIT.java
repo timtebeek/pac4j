@@ -2,8 +2,8 @@ package org.pac4j.saml.metadata.jdbc;
 
 import lombok.val;
 import net.shibboleth.shared.resolver.CriteriaSet;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.pac4j.core.util.TestsConstants;
 import org.pac4j.saml.config.SAML2Configuration;
@@ -15,8 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * This is {@link SAML2JdbcMetadataGeneratorIT}.
@@ -24,13 +23,13 @@ import static org.junit.Assert.assertTrue;
  * @author Misagh Moayyed
  * @since 5.7.0
  */
-public class SAML2JdbcMetadataGeneratorIT implements TestsConstants {
+class SAML2JdbcMetadataGeneratorIT implements TestsConstants {
     private static final String ENTITY_ID = "org:pac4j:example";
 
     private SAML2MetadataGenerator jdbcMetadataGenerator;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         var dataSource = new EmbeddedDatabaseBuilder()
             .setType(EmbeddedDatabaseType.H2)
             .build();
@@ -40,7 +39,7 @@ public class SAML2JdbcMetadataGeneratorIT implements TestsConstants {
     }
 
     @Test
-    public void testMetadata() throws Exception {
+    void testMetadata() throws Exception {
         ConfigurationManager mgr = new DefaultConfigurationManager();
         mgr.configure();
 

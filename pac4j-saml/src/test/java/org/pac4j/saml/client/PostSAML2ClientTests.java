@@ -1,7 +1,7 @@
 package org.pac4j.saml.client;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.saml.common.xml.SAMLConstants;
 import org.opensaml.saml.saml2.core.AuthnContextComparisonTypeEnumeration;
 import org.pac4j.core.context.CallContext;
@@ -20,8 +20,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collections;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * POST tests on the {@link SAML2Client}.
@@ -33,7 +33,7 @@ public final class PostSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testCustomSpEntityIdForPostBinding() {
+    void testCustomSpEntityIdForPostBinding() {
         val client = getClient();
         client.getConfiguration().setServiceProviderEntityId("http://localhost:8080/cb");
         client.getConfiguration().setUseNameQualifier(true);
@@ -68,7 +68,7 @@ public final class PostSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testStandardSpEntityIdForPostBinding() {
+    void testStandardSpEntityIdForPostBinding() {
         val client = getClient();
         client.getConfiguration().setServiceProviderEntityId("http://localhost:8080/cb");
         WithContentAction action = (OkAction) client.getRedirectionAction(
@@ -82,7 +82,7 @@ public final class PostSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testForceAuthIsSetForPostBinding() {
+    void testForceAuthIsSetForPostBinding() {
         val client =  getClient();
         client.getConfiguration().setForceAuth(true);
         WithContentAction action = (OkAction) client.getRedirectionAction(
@@ -91,7 +91,7 @@ public final class PostSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testSetComparisonTypeWithPostBinding() {
+    void testSetComparisonTypeWithPostBinding() {
         val client = getClient();
         client.getConfiguration().setComparisonType(AuthnContextComparisonTypeEnumeration.EXACT.toString());
         WithContentAction action = (OkAction) client.getRedirectionAction(
@@ -100,7 +100,7 @@ public final class PostSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testRelayState() {
+    void testRelayState() {
         val client = getClient();
         final WebContext context = MockWebContext.create();
         final SessionStore sessionStore = new MockSessionStore();
@@ -110,7 +110,7 @@ public final class PostSAML2ClientTests extends AbstractSAML2ClientTests {
     }
 
     @Test
-    public void testPostDestinationBindingWithRequestSignedWorks() {
+    void testPostDestinationBindingWithRequestSignedWorks() {
         val client = getClient();
         client.getConfiguration().setAuthnRequestBindingType(SAMLConstants.SAML2_POST_BINDING_URI);
         client.getConfiguration().setAuthnRequestSigned(true);

@@ -1,22 +1,21 @@
 package org.pac4j.scribe.extractors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.scribe.model.WeiboToken;
 
 import com.github.scribejava.core.exceptions.OAuthException;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Weibo token extra test.
  * <p>More info at: <a href="http://open.weibo.com/wiki/Oauth2/access_token">Oauth2/access token</a></p>
  * <p>
  */
-public class WeiboJsonExtractorTest {
+class WeiboJsonExtractorTest {
 
     private final WeiboJsonExtractor extractor = WeiboJsonExtractor.instance();
 
@@ -35,19 +34,21 @@ public class WeiboJsonExtractorTest {
         " }";
 
     @Test
-    public void createTokenHasUid() throws IOException {
+    void createTokenHasUid() throws IOException {
         var accessToken = extractor.createToken("ACCESS_TOKEN", null,
             123, null, null, mapper.readTree(responseOk), responseOk);
-        Assert.assertEquals("ACCESS_TOKEN", accessToken.getAccessToken());
+        assertEquals("ACCESS_TOKEN", accessToken.getAccessToken());
         assertTrue(accessToken instanceof WeiboToken);
         if (accessToken instanceof WeiboToken) {
-            Assert.assertEquals("12341234", ((WeiboToken) accessToken).getUid());
+            assertEquals("12341234", ((WeiboToken) accessToken).getUid());
         }
     }
 
-    @Test(expected = OAuthException.class)
-    public void createTokenWithOutUid() throws IOException {
-        extractor.createToken("ACCESS_TOKEN", null,
-            123, null, null, mapper.readTree(responseError), responseError);
+    @Test
+    void createTokenWithOutUid() throws IOException {
+        assertThrows(OAuthException.class, () -> {
+            extractor.createToken("ACCESS_TOKEN", null,
+                123, null, null, mapper.readTree(responseError), responseError);
+        });
     }
 }

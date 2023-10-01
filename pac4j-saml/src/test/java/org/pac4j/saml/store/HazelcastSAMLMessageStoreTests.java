@@ -1,7 +1,7 @@
 package org.pac4j.saml.store;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 import com.hazelcast.core.HazelcastInstance;
@@ -10,11 +10,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.saml.common.SAMLObjectBuilder;
 import org.opensaml.saml.saml2.core.NameID;
@@ -27,8 +27,8 @@ import org.pac4j.saml.util.Configuration;
  * @author Francesco Chicchiriccò
  * @since 5.0.1
  */
-@RunWith(MockitoJUnitRunner.class)
-public class HazelcastSAMLMessageStoreTests implements TestsConstants {
+@ExtendWith(MockitoExtension.class)
+class HazelcastSAMLMessageStoreTests implements TestsConstants {
 
     private final XMLObjectBuilderFactory builderFactory = Configuration.getBuilderFactory();
 
@@ -39,8 +39,8 @@ public class HazelcastSAMLMessageStoreTests implements TestsConstants {
 
     private HazelcastSAMLMessageStore store;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         when(storeMapInstance.put(anyString(), anyString())).thenAnswer(ic -> {
             backendMap.put(ic.getArgument(0), ic.getArgument(1));
             return ic.getArgument(0);
@@ -56,7 +56,7 @@ public class HazelcastSAMLMessageStoreTests implements TestsConstants {
     }
 
     @Test
-    public void setGet() {
+    void setGet() {
         @SuppressWarnings("unchecked")
         NameID message = ((SAMLObjectBuilder<NameID>) builderFactory.getBuilder(NameID.DEFAULT_ELEMENT_NAME)).
                 buildObject();
@@ -74,14 +74,14 @@ public class HazelcastSAMLMessageStoreTests implements TestsConstants {
     }
 
     @Test
-    public void getEmpty() {
+    void getEmpty() {
         assertTrue(store.get("notfound").isEmpty());
         verify(storeMapInstance, times(1)).get(eq("notfound"));
         verify(storeMapInstance, times(0)).remove(anyString());
     }
 
     @Test
-    public void removeEmpty() {
+    void removeEmpty() {
         store.remove("notfound");
         verify(storeMapInstance, times(1)).remove(eq("notfound"));
     }

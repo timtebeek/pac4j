@@ -1,14 +1,14 @@
 package org.pac4j.core.client.finder;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.*;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.http.callback.PathParameterCallbackUrlResolver;
 import org.pac4j.core.util.Pac4jConstants;
 import org.pac4j.core.util.TestsConstants;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@link DefaultCallbackClientFinder}.
@@ -16,10 +16,10 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 3.0.0
  */
-public final class DefaultCallbackClientFinderTests implements TestsConstants {
+final class DefaultCallbackClientFinderTests implements TestsConstants {
 
     @Test
-    public void testQueryParameter() {
+    void testQueryParameter() {
         final IndirectClient facebook = new MockIndirectClient("Facebook");
         final DirectClient basicAuth = new MockDirectClient("BasicAuth");
         final IndirectClient cas = new MockIndirectClient("cas");
@@ -33,7 +33,7 @@ public final class DefaultCallbackClientFinderTests implements TestsConstants {
     }
 
     @Test
-    public void testPathParameter() {
+    void testPathParameter() {
         final IndirectClient azure = new MockIndirectClient("azure");
         azure.setCallbackUrlResolver(new PathParameterCallbackUrlResolver());
         val clients = new Clients(CALLBACK_URL, azure);
@@ -45,7 +45,7 @@ public final class DefaultCallbackClientFinderTests implements TestsConstants {
     }
 
     @Test
-    public void testDefaultClientDirectClientInURL() {
+    void testDefaultClientDirectClientInURL() {
         final IndirectClient facebook = new MockIndirectClient("Facebook");
         final DirectClient basicAuth = new MockDirectClient("BasicAuth");
         val clients = new Clients(CALLBACK_URL, basicAuth, facebook);
@@ -58,7 +58,7 @@ public final class DefaultCallbackClientFinderTests implements TestsConstants {
     }
 
     @Test
-    public void testDefaultClientIndirectClientInURL() {
+    void testDefaultClientIndirectClientInURL() {
         final IndirectClient facebook = new MockIndirectClient("Facebook");
         final IndirectClient twitter = new MockIndirectClient("Twitter");
         val clients = new Clients(CALLBACK_URL, twitter, facebook);
@@ -71,7 +71,7 @@ public final class DefaultCallbackClientFinderTests implements TestsConstants {
     }
 
     @Test
-    public void testDefaultClientNoIndirectClientInURL() {
+    void testDefaultClientNoIndirectClientInURL() {
         final IndirectClient facebook = new MockIndirectClient("Facebook");
         final IndirectClient twitter = new MockIndirectClient("Twitter");
         val clients = new Clients(CALLBACK_URL, twitter, facebook);
@@ -82,7 +82,7 @@ public final class DefaultCallbackClientFinderTests implements TestsConstants {
     }
 
     @Test
-    public void testOneIndirectClientNoIndirectClientInURL() {
+    void testOneIndirectClientNoIndirectClientInURL() {
         final IndirectClient facebook = new MockIndirectClient("Facebook");
         val clients = new Clients(CALLBACK_URL, facebook);
         ClientFinder finder = new DefaultCallbackClientFinder();

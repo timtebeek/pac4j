@@ -1,7 +1,7 @@
 package org.pac4j.core.util.security;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.authorization.authorizer.Authorizer;
 import org.pac4j.core.authorization.authorizer.CheckHttpMethodAuthorizer;
 import org.pac4j.core.authorization.authorizer.IsAnonymousAuthorizer;
@@ -20,7 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@link SecurityEndpointBuilder}.
@@ -28,7 +29,7 @@ import static org.junit.Assert.*;
  * @author Jerome LELEU
  * @since 5.5.0
  */
-public final class SecurityEndpointBuilderTests implements TestsConstants {
+final class SecurityEndpointBuilderTests implements TestsConstants {
 
     private static final String CLIENT1 = "client1";
     private static final String AUTHORIZER1 = "authorizer1";
@@ -38,14 +39,14 @@ public final class SecurityEndpointBuilderTests implements TestsConstants {
 
     private Config config;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         endpoint = new MockSecurityEndpoint();
         config = new Config();
     }
 
     @Test
-    public void buildNoParameters() {
+    void buildNoParameters() {
         SecurityEndpointBuilder.buildConfig(endpoint, config);
 
         assertEquals(config, endpoint.getConfig());
@@ -55,7 +56,7 @@ public final class SecurityEndpointBuilderTests implements TestsConstants {
     }
 
     @Test
-    public void buildSimpleStringConfig() {
+    void buildSimpleStringConfig() {
         SecurityEndpointBuilder.buildConfig(endpoint, config, CLIENT1, AUTHORIZER1, MATCHER1);
 
         assertEquals(config, endpoint.getConfig());
@@ -65,13 +66,13 @@ public final class SecurityEndpointBuilderTests implements TestsConstants {
     }
 
     @Test
-    public void buildSimpleStringNoConfig() {
+    void buildSimpleStringNoConfig() {
         TestsHelper.expectException(() -> SecurityEndpointBuilder.buildConfig(endpoint, CLIENT1, AUTHORIZER1, MATCHER1),
             TechnicalException.class, "Cannot accept strings without a provided Config");
     }
 
     @Test
-    public void buildSimpleStringConfigAtTheEnd() {
+    void buildSimpleStringConfigAtTheEnd() {
         SecurityEndpointBuilder.buildConfig(endpoint, CLIENT1, AUTHORIZER1, MATCHER1, config);
 
         assertEquals(config, endpoint.getConfig());
@@ -81,13 +82,13 @@ public final class SecurityEndpointBuilderTests implements TestsConstants {
     }
 
     @Test
-    public void buildFailsTooManyStrings() {
+    void buildFailsTooManyStrings() {
         TestsHelper.expectException(() -> SecurityEndpointBuilder.buildConfig(endpoint, config,
                 CLIENT1, AUTHORIZER1, MATCHER1, "toomanystrings"), TechnicalException.class, "Too many strings used in constructor");
     }
 
     @Test
-    public void buildSimpleObjectConfig() {
+    void buildSimpleObjectConfig() {
         final Authorizer authorizer = new IsAnonymousAuthorizer();
         final Matcher matcher = new PathMatcher();
 
@@ -100,7 +101,7 @@ public final class SecurityEndpointBuilderTests implements TestsConstants {
     }
 
     @Test
-    public void buildList() {
+    void buildList() {
         final List<Client> clients = Arrays.asList(new MockDirectClient(KEY), new MockDirectClient(VALUE));
         final Authorizer authorizer1 = new IsAnonymousAuthorizer();
         final Authorizer authorizer2 = new CheckHttpMethodAuthorizer();
@@ -127,7 +128,7 @@ public final class SecurityEndpointBuilderTests implements TestsConstants {
     }
 
     @Test
-    public void buildArray() {
+    void buildArray() {
         final Client[] clients = new Client[] {new MockDirectClient(KEY), new MockDirectClient(VALUE)};
         final Authorizer authorizer1 = new IsAnonymousAuthorizer();
         final Authorizer authorizer2 = new CheckHttpMethodAuthorizer();
@@ -143,7 +144,7 @@ public final class SecurityEndpointBuilderTests implements TestsConstants {
     }
 
     @Test
-    public void buildMultiple() {
+    void buildMultiple() {
         final Authorizer authorizer1 = new IsAnonymousAuthorizer();
         final Authorizer authorizer2 = new CheckHttpMethodAuthorizer();
         final Matcher matcher1 = new PathMatcher();
@@ -157,7 +158,7 @@ public final class SecurityEndpointBuilderTests implements TestsConstants {
     }
 
     @Test
-    public void buildMultipleDifferentOrder() {
+    void buildMultipleDifferentOrder() {
         final Authorizer authorizer1 = new IsAnonymousAuthorizer();
         final Authorizer authorizer2 = new CheckHttpMethodAuthorizer();
 
@@ -172,7 +173,7 @@ public final class SecurityEndpointBuilderTests implements TestsConstants {
     }
 
     @Test
-    public void buildMultipleMixedTypesDifferentOrder() {
+    void buildMultipleMixedTypesDifferentOrder() {
         final Client[] clients = new Client[] {new MockDirectClient(KEY)};
         final Authorizer authorizer1 = new IsAnonymousAuthorizer();
         final Authorizer authorizer2 = new CheckHttpMethodAuthorizer();
@@ -190,13 +191,13 @@ public final class SecurityEndpointBuilderTests implements TestsConstants {
     }
 
     @Test
-    public void buildUnsupportedType() {
+    void buildUnsupportedType() {
         TestsHelper.expectException(() -> SecurityEndpointBuilder.buildConfig(endpoint, config, true),
             TechnicalException.class, "Unsupported parameter type: true");
     }
 
     @Test
-    public void buildOtherTypes() {
+    void buildOtherTypes() {
         SecurityEndpointBuilder.buildConfig(endpoint, config);
 
         assertEquals(config, endpoint.getConfig());
@@ -206,13 +207,13 @@ public final class SecurityEndpointBuilderTests implements TestsConstants {
     }
 
     @Test
-    public void buildTwoConfig() {
+    void buildTwoConfig() {
         TestsHelper.expectException(() -> SecurityEndpointBuilder.buildConfig(endpoint, config, config),
             TechnicalException.class, "Only one Config can be used");
     }
 
     @Test
-    public void buildAllTypesWithoutConfig() {
+    void buildAllTypesWithoutConfig() {
         final Client client = new MockDirectClient(KEY);
         final Authorizer authorizer = new CheckHttpMethodAuthorizer();
         final Matcher matcher = new HttpMethodMatcher();

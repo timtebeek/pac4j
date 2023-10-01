@@ -1,7 +1,7 @@
 package org.pac4j.http.client.direct;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.client.Client;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.HttpConstants;
@@ -20,8 +20,7 @@ import org.pac4j.http.credentials.authenticator.test.SimpleTestTokenAuthenticato
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests the {@link ParameterClient} class.
@@ -29,39 +28,39 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class ParameterClientTests implements TestsConstants {
+final class ParameterClientTests implements TestsConstants {
 
     private final static String PARAMETER_NAME = "parameterName";
 
     @Test
-    public void testMissingTokenAuthenticator() {
+    void testMissingTokenAuthenticator() {
         val client = new ParameterClient(PARAMETER_NAME, (Authenticator) null);
         TestsHelper.expectException(() -> client.getCredentials(new CallContext(MockWebContext.create(), new MockSessionStore())),
             TechnicalException.class, "authenticator cannot be null");
     }
 
     @Test
-    public void testMissingProfileCreator() {
+    void testMissingProfileCreator() {
         val client = new ParameterClient(PARAMETER_NAME, new SimpleTestTokenAuthenticator(), null);
         TestsHelper.expectException(() -> client.getUserProfile(new CallContext(MockWebContext.create(), new MockSessionStore()),
             new TokenCredentials(TOKEN)), TechnicalException.class, "profileCreator cannot be null");
     }
 
     @Test
-    public void testHasDefaultProfileCreator() {
+    void testHasDefaultProfileCreator() {
         val client = new ParameterClient(null, new SimpleTestTokenAuthenticator());
         client.setParameterName(PARAMETER_NAME);
         client.init();
     }
 
     @Test
-    public void testMissingParameterName() {
+    void testMissingParameterName() {
         val client = new ParameterClient(null, new SimpleTestTokenAuthenticator());
         TestsHelper.initShouldFail(client, "parameterName cannot be blank");
     }
 
     @Test
-    public void testBadHttpMethod() {
+    void testBadHttpMethod() {
         Client client = new ParameterClient(PARAMETER_NAME, new SimpleTestTokenAuthenticator());
         val context = MockWebContext.create();
         context.addRequestParameter(PARAMETER_NAME, VALUE);
@@ -71,7 +70,7 @@ public final class ParameterClientTests implements TestsConstants {
     }
 
     @Test
-    public void testAuthentication() {
+    void testAuthentication() {
         val client = new ParameterClient(PARAMETER_NAME, new SimpleTestTokenAuthenticator());
         client.setSupportGetRequest(true);
         val context = MockWebContext.create();
@@ -86,7 +85,7 @@ public final class ParameterClientTests implements TestsConstants {
     }
 
     @Test
-    public void testProfileCreation() {
+    void testProfileCreation() {
         val client = new ParameterClient(PARAMETER_NAME, new ProfileCreator() {
             @Override
             public Optional<UserProfile> create(final CallContext ctx, final Credentials credentials) {

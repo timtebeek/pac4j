@@ -1,8 +1,8 @@
 package org.pac4j.core.client;
 
 import lombok.val;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.authorization.generator.AuthorizationGenerator;
 import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.core.exception.http.FoundAction;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class tests the {@link Clients} class.
@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
  * @since 1.3.0
  */
 @SuppressWarnings("rawtypes")
-public final class ClientsTests implements TestsConstants {
+final class ClientsTests implements TestsConstants {
 
     private MockIndirectClient newFacebookClient() {
         return new MockIndirectClient("FacebookClient", new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
@@ -41,14 +41,14 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    public void testMissingClient() {
+    void testMissingClient() {
         val clients = new Clients();
         clients.setCallbackUrl(CALLBACK_URL);
         TestsHelper.expectException(() -> clients.setClients((List<Client>) null), TechnicalException.class, "clients cannot be null");
     }
 
     @Test
-    public void testNoValuesSet() {
+    void testNoValuesSet() {
         var facebookClient = newFacebookClient();
         val clients = new Clients(facebookClient);
         clients.findAllClients();
@@ -60,7 +60,7 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    public void testValuesSet() {
+    void testValuesSet() {
         var facebookClient = newFacebookClient();
         val clients = new Clients(facebookClient);
         final AjaxRequestResolver ajaxRequestResolver = new DefaultAjaxRequestResolver();
@@ -81,7 +81,7 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    public void testAllClients() {
+    void testAllClients() {
         val facebookClient = newFacebookClient();
         val yahooClient = newYahooClient();
         final List<Client> clients = new ArrayList<>();
@@ -96,12 +96,12 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    public void testByName1() {
+    void testByName1() {
         internalTestByName(false);
     }
 
     @Test
-    public void testByName2() {
+    void testByName2() {
         internalTestByName(true);
     }
 
@@ -119,7 +119,7 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    public void rejectSameName() {
+    void rejectSameName() {
         val client1 =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val client2 =
@@ -130,7 +130,7 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    public void rejectSameNameOnAddingNewClient() {
+    void rejectSameNameOnAddingNewClient() {
         val client1 =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val clients = new Clients(CALLBACK_URL, client1);
@@ -142,7 +142,7 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    public void rejectSameNameDifferentCase() {
+    void rejectSameNameDifferentCase() {
         val client1 =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val client2 =
@@ -153,7 +153,7 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    public void testFindByName() {
+    void testFindByName() {
         val facebookClient = newFacebookClient();
         val yahooClient = newYahooClient();
         val clients = new Clients(facebookClient, yahooClient);
@@ -161,7 +161,7 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    public void testFindByNameCase() {
+    void testFindByNameCase() {
         val facebookClient = newFacebookClient();
         val yahooClient = newYahooClient();
         val clients = new Clients(facebookClient, yahooClient);
@@ -169,7 +169,7 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    public void testFindByNameBlankSpaces() {
+    void testFindByNameBlankSpaces() {
         val facebookClient = newFacebookClient();
         val yahooClient = newYahooClient();
         val clients = new Clients(facebookClient, yahooClient);
@@ -177,7 +177,7 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    public void testAddClient() {
+    void testAddClient() {
         val facebookClient = newFacebookClient();
         val yahooClient = newYahooClient();
         val clients = new Clients(CALLBACK_URL, facebookClient);
@@ -194,8 +194,8 @@ public final class ClientsTests implements TestsConstants {
     }
 
     @Test
-    @Ignore
-    public void testPerfFind() {
+    @Disabled
+    void testPerfFind() {
         val list = new ArrayList<Client>();
         final int max = 10000;
         for (int i = 1; i < max; i++) {

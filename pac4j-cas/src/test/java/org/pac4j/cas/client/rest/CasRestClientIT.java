@@ -2,7 +2,7 @@ package org.pac4j.cas.client.rest;
 
 import lombok.val;
 import org.apereo.cas.client.validation.Cas20ServiceTicketValidator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.cas.config.CasConfiguration;
 import org.pac4j.cas.credentials.authenticator.CasRestAuthenticator;
 import org.pac4j.cas.profile.CasRestProfile;
@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests the {@link CasRestBasicAuthClient} and {@link CasRestFormClient}.
@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
  * @author Misagh Moayyed
  * @since 1.8.0
  */
-public final class CasRestClientIT implements TestsConstants {
+final class CasRestClientIT implements TestsConstants {
 
     private final static String CAS_PREFIX_URL = "http://casserverpac4j.herokuapp.com/";
     private final static String USER = "jleleu";
@@ -40,12 +40,12 @@ public final class CasRestClientIT implements TestsConstants {
     }
 
     @Test
-    public void testRestForm() {
+    void testRestForm() {
         internalTestRestForm(new CasRestAuthenticator(getConfig()));
     }
 
     @Test
-    public void testRestFormWithCaching() {
+    void testRestFormWithCaching() {
         internalTestRestForm(new LocalCachingAuthenticator(new CasRestAuthenticator(getConfig()), 100, 100, TimeUnit.SECONDS));
     }
 
@@ -72,12 +72,12 @@ public final class CasRestClientIT implements TestsConstants {
     }
 
     @Test
-    public void testRestBasic() {
+    void testRestBasic() {
         internalTestRestBasic(new CasRestBasicAuthClient(getConfig(), VALUE, NAME), 3);
     }
 
     @Test
-    public void testRestBasicWithCas20TicketValidator() {
+    void testRestBasicWithCas20TicketValidator() {
         val config = getConfig();
         config.setDefaultTicketValidator(new Cas20ServiceTicketValidator(CAS_PREFIX_URL));
         internalTestRestBasic(new CasRestBasicAuthClient(config, VALUE, NAME), 0);

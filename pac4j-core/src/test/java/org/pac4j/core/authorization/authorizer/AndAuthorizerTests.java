@@ -1,8 +1,8 @@
 package org.pac4j.core.authorization.authorizer;
 
 import lombok.val;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
 import org.pac4j.core.profile.CommonProfile;
@@ -11,8 +11,8 @@ import org.pac4j.core.profile.UserProfile;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.pac4j.core.authorization.authorizer.AndAuthorizer.and;
 import static org.pac4j.core.authorization.authorizer.IsAuthenticatedAuthorizer.isAuthenticated;
 import static org.pac4j.core.authorization.authorizer.RequireAnyRoleAuthorizer.requireAnyRole;
@@ -24,12 +24,12 @@ import static org.pac4j.core.authorization.authorizer.RequireAnyRoleAuthorizer.r
  * @since 3.4.0
  */
 @SuppressWarnings("PMD.TooManyStaticImports")
-public class AndAuthorizerTests {
+class AndAuthorizerTests {
 
     private List<UserProfile> profiles = new ArrayList<>();
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         UserProfile profile = new CommonProfile();
         profile.setId("profile_id");
         profile.addRole("profile_role");
@@ -37,7 +37,7 @@ public class AndAuthorizerTests {
     }
 
     @Test
-    public void testAuthorizerConstraint1() {
+    void testAuthorizerConstraint1() {
         val authorizer = and(
             isAuthenticated(),
             requireAnyRole("profile_role")
@@ -46,7 +46,7 @@ public class AndAuthorizerTests {
     }
 
     @Test
-    public void testAuthorizerConstraint2() {
+    void testAuthorizerConstraint2() {
         val authorizer = and(
             requireAnyRole("profile_role2")
         );

@@ -1,11 +1,11 @@
 package org.pac4j.core.http.url;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.util.TestsConstants;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests the {@link DefaultUrlResolver}.
@@ -13,12 +13,12 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 1.8.1
  */
-public final class DefaultUrlResolverTests implements TestsConstants {
+final class DefaultUrlResolverTests implements TestsConstants {
 
     private final UrlResolver resolver = new DefaultUrlResolver(true);
 
     @Test
-    public void testComputePassthrough() {
+    void testComputePassthrough() {
         val context = MockWebContext.create();
         context.setServerName("pac4j.com");
 
@@ -28,7 +28,7 @@ public final class DefaultUrlResolverTests implements TestsConstants {
     }
 
     @Test
-    public void testCompute_whenHostIsNotPresent() {
+    void testCompute_whenHostIsNotPresent() {
         val context = MockWebContext.create();
         context.setServerName("pac4j.com");
 
@@ -38,7 +38,7 @@ public final class DefaultUrlResolverTests implements TestsConstants {
     }
 
     @Test
-    public void testCompute_whenHostIsPresent() {
+    void testCompute_whenHostIsPresent() {
         val context = MockWebContext.create();
         context.setServerName("pac4j.com");
 
@@ -48,7 +48,7 @@ public final class DefaultUrlResolverTests implements TestsConstants {
     }
 
     @Test
-    public void testCompute_whenServerIsNotUsingDefaultHttpPort() {
+    void testCompute_whenServerIsNotUsingDefaultHttpPort() {
         val context = MockWebContext.create();
         context.setServerName("pac4j.com");
         context.setServerPort(8080);
@@ -59,7 +59,7 @@ public final class DefaultUrlResolverTests implements TestsConstants {
     }
 
     @Test
-    public void testCompute_whenRequestIsSecure() {
+    void testCompute_whenRequestIsSecure() {
         val context = MockWebContext.create();
         context.setScheme("https");
         context.setSecure(true);
@@ -71,7 +71,7 @@ public final class DefaultUrlResolverTests implements TestsConstants {
     }
 
     @Test
-    public void testCompute_whenServerIsNotUsingDefaultHttpsPort() {
+    void testCompute_whenServerIsNotUsingDefaultHttpsPort() {
         val context = MockWebContext.create();
         context.setServerName("pac4j.com");
         context.setScheme("https");

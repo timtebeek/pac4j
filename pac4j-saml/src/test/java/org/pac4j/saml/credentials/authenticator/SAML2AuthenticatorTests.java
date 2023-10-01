@@ -1,7 +1,7 @@
 package org.pac4j.saml.credentials.authenticator;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.XMLObject;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.saml.common.SAMLObjectBuilder;
@@ -22,7 +22,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.pac4j.core.profile.AttributeLocation.PROFILE_ATTRIBUTE;
@@ -31,7 +31,7 @@ import static org.pac4j.core.profile.AttributeLocation.PROFILE_ATTRIBUTE;
  * This is {@link SAML2AuthenticatorTests}.
  * @author Misagh Moayyed
  */
-public class SAML2AuthenticatorTests {
+class SAML2AuthenticatorTests {
     private final XMLObjectBuilderFactory builderFactory = Configuration.getBuilderFactory();
 
     private final SAMLObjectBuilder<Conditions> conditionsBuilder = (SAMLObjectBuilder<Conditions>)this.builderFactory.getBuilder(
@@ -41,7 +41,7 @@ public class SAML2AuthenticatorTests {
         NameID.DEFAULT_ELEMENT_NAME);
 
     @Test
-    public void verifyAttributeMapping() {
+    void verifyAttributeMapping() {
         val credentials = createCredentialsForTest(true, true);
         final Map<String, String> mappedAttributes = createMappedAttributesForTest();
 
@@ -56,7 +56,7 @@ public class SAML2AuthenticatorTests {
     }
 
     @Test
-    public void validateWithMissingNotBeforeCondition() {
+    void validateWithMissingNotBeforeCondition() {
         val credentials = createCredentialsForTest(false, true);
         final Map<String, String> mappedAttributes = createMappedAttributesForTest();
 
@@ -71,7 +71,7 @@ public class SAML2AuthenticatorTests {
     }
 
     @Test
-    public void validateAttributeConversion() throws URISyntaxException {
+    void validateAttributeConversion() throws URISyntaxException {
         val credentials = createCredentialsForTest(false, true);
         final Map<String, String> mappedAttributes = createMappedAttributesForTest();
 
@@ -103,7 +103,7 @@ public class SAML2AuthenticatorTests {
     }
 
     @Test
-    public void validateInvalidAttributeConversion() {
+    void validateInvalidAttributeConversion() {
         val credentials = createCredentialsForTest(false, true);
         final Map<String, String> mappedAttributes = createMappedAttributesForTest();
 
@@ -133,7 +133,7 @@ public class SAML2AuthenticatorTests {
     }
 
     @Test
-    public void validateWithMissingNotOnOrAfterCondition() {
+    void validateWithMissingNotOnOrAfterCondition() {
         val credentials = createCredentialsForTest(true, false);
         final Map<String, String> mappedAttributes = createMappedAttributesForTest();
 
@@ -148,7 +148,7 @@ public class SAML2AuthenticatorTests {
     }
 
     @Test
-    public void validateWithEmptyConditions() {
+    void validateWithEmptyConditions() {
         val credentials = createCredentialsForTest(false, false);
         final Map<String, String> mappedAttributes = createMappedAttributesForTest();
 

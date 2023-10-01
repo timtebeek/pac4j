@@ -1,7 +1,7 @@
 package org.pac4j.saml.metadata;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.saml.config.SAML2Configuration;
 import org.pac4j.saml.util.ConfigurationManager;
 import org.pac4j.saml.util.DefaultConfigurationManager;
@@ -10,7 +10,7 @@ import org.springframework.core.io.FileSystemResource;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * This is {@link DefaultSAML2MetadataSignerTests}.
@@ -18,15 +18,15 @@ import static org.junit.Assert.assertNotNull;
  * @author Misagh Moayyed
  * @since 5.4.4
  */
-public class DefaultSAML2MetadataSignerTests {
+class DefaultSAML2MetadataSignerTests {
     @Test
-    public void verifySigningWithConfigurationDefaults() throws Exception {
+    void verifySigningWithConfigurationDefaults() throws Exception {
         val configuration = new SAML2Configuration();
         verifyMetadataSigning(configuration);
     }
 
     @Test
-    public void verifySigningWithConfigurationOverride() throws Exception {
+    void verifySigningWithConfigurationOverride() throws Exception {
         val configuration = new SAML2Configuration();
         configuration.setSignatureAlgorithms(List.of("http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"));
         configuration.setSignatureReferenceDigestMethods(List.of("http://www.w3.org/2001/04/xmlenc#sha256"));

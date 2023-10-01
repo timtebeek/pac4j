@@ -1,7 +1,7 @@
 package org.pac4j.saml.crypto;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.util.TestsConstants;
 
 import java.security.KeyStore;
@@ -9,7 +9,7 @@ import java.security.KeyStoreSpi;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
  * @author Jerome Leleu
  * @since 3.3.0
  */
-public final class KeyStoreCredentialProviderTests implements TestsConstants {
+final class KeyStoreCredentialProviderTests implements TestsConstants {
 
     private KeyStore prepareKeyStore() throws Exception {
         val keyStoreSpiMock = mock(KeyStoreSpi.class);
@@ -32,13 +32,13 @@ public final class KeyStoreCredentialProviderTests implements TestsConstants {
     }
 
     @Test
-    public void testReturnFirstAliasWhenNoKeystoreAlias() throws Exception {
+    void testReturnFirstAliasWhenNoKeystoreAlias() throws Exception {
         val keyStore = prepareKeyStore();
         assertEquals(VALUE, KeyStoreCredentialProvider.getPrivateKeyAlias(keyStore, null));
     }
 
     @Test
-    public void testReturnMatchingAlias() throws Exception {
+    void testReturnMatchingAlias() throws Exception {
         val keyStore = prepareKeyStore();
         assertEquals(VALUE, KeyStoreCredentialProvider.getPrivateKeyAlias(keyStore, VALUE.toLowerCase()));
     }

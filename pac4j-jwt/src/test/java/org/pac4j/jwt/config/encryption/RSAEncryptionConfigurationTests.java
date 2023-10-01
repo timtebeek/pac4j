@@ -5,7 +5,7 @@ import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWEAlgorithm;
 import com.nimbusds.jwt.*;
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.core.util.TestsHelper;
 import org.pac4j.jwt.config.AbstractKeyEncryptionConfigurationTests;
@@ -14,7 +14,7 @@ import org.pac4j.jwt.config.signature.SignatureConfiguration;
 
 import java.text.ParseException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests {@link RSAEncryptionConfiguration}.
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 1.9.2
  */
-public final class RSAEncryptionConfigurationTests extends AbstractKeyEncryptionConfigurationTests {
+final class RSAEncryptionConfigurationTests extends AbstractKeyEncryptionConfigurationTests {
 
     @Override
     protected String getAlgorithm() {
@@ -34,19 +34,19 @@ public final class RSAEncryptionConfigurationTests extends AbstractKeyEncryption
     }
 
     @Test
-    public void testMissingAlgorithm() {
+    void testMissingAlgorithm() {
         val config = new RSAEncryptionConfiguration(buildKeyPair(), null, EncryptionMethod.A128CBC_HS256);
         TestsHelper.expectException(config::init, TechnicalException.class, "algorithm cannot be null");
     }
 
     @Test
-    public void testMissingMethod() {
+    void testMissingMethod() {
         val config = new RSAEncryptionConfiguration(buildKeyPair(), JWEAlgorithm.RSA1_5, null);
         TestsHelper.expectException(config::init, TechnicalException.class, "method cannot be null");
     }
 
     @Test
-    public void testUnsupportedAlgorithm() {
+    void testUnsupportedAlgorithm() {
         val config =
             new RSAEncryptionConfiguration(buildKeyPair(), JWEAlgorithm.ECDH_ES, EncryptionMethod.A128CBC_HS256);
         TestsHelper.expectException(config::init, TechnicalException.class,
@@ -54,7 +54,7 @@ public final class RSAEncryptionConfigurationTests extends AbstractKeyEncryption
     }
 
     @Test
-    public void testEncryptDecryptSignedJWT() throws ParseException, JOSEException {
+    void testEncryptDecryptSignedJWT() throws ParseException, JOSEException {
         SignatureConfiguration macConfig = new SecretSignatureConfiguration(MAC_SECRET);
         val signedJWT = macConfig.sign(buildClaims());
 
@@ -69,7 +69,7 @@ public final class RSAEncryptionConfigurationTests extends AbstractKeyEncryption
     }
 
     @Test
-    public void testEncryptDecryptPlainJWT() throws ParseException, JOSEException {
+    void testEncryptDecryptPlainJWT() throws ParseException, JOSEException {
         val config = new RSAEncryptionConfiguration(buildKeyPair());
         config.setAlgorithm(JWEAlgorithm.RSA_OAEP);
         config.setMethod(EncryptionMethod.A128GCM);
@@ -83,7 +83,7 @@ public final class RSAEncryptionConfigurationTests extends AbstractKeyEncryption
     }
 
     @Test
-    public void testEncryptMissingKey() {
+    void testEncryptMissingKey() {
         val config = new RSAEncryptionConfiguration();
         config.setAlgorithm(JWEAlgorithm.RSA_OAEP);
         config.setMethod(EncryptionMethod.A128GCM);
@@ -93,7 +93,7 @@ public final class RSAEncryptionConfigurationTests extends AbstractKeyEncryption
     }
 
     @Test
-    public void testDecryptMissingKey() throws ParseException {
+    void testDecryptMissingKey() throws ParseException {
         val config = new RSAEncryptionConfiguration(buildKeyPair());
         config.setAlgorithm(JWEAlgorithm.RSA_OAEP);
         config.setMethod(EncryptionMethod.A128GCM);

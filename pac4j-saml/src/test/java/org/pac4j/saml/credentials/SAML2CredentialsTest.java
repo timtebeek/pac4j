@@ -1,7 +1,7 @@
 package org.pac4j.saml.credentials;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.messaging.context.MessageContext;
 import org.opensaml.saml.common.SAMLVersion;
@@ -30,12 +30,12 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SAML2CredentialsTest {
+class SAML2CredentialsTest {
 
     private static final String RESPONSE_FILE_NAME = "sample_authn_response.xml";
     private static final String RESPONSE_FILE_NAME_FROM_ADFS = "sample_authn_response_from_adfs.xml";
@@ -47,8 +47,8 @@ public class SAML2CredentialsTest {
     private SAML2MessageContext mockSaml2MessageContext;
     private SAML2Configuration saml2Configuration;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         var mockStatus = mock(Status.class);
         var mockStatusCode = mock(StatusCode.class);
         when(mockStatus.getStatusCode()).thenReturn(mockStatusCode);
@@ -85,7 +85,7 @@ public class SAML2CredentialsTest {
     }
 
     @Test
-    public void verifyStandardExtractionWorks() throws Exception {
+    void verifyStandardExtractionWorks() throws Exception {
         var credentials = extractCredentials(RESPONSE_FILE_NAME);
         assertNotNull(credentials);
         var attributes = credentials.getAttributes();
@@ -112,7 +112,7 @@ public class SAML2CredentialsTest {
     }
 
     @Test
-    public void verifyStandardExtractionWorksForAdfs() throws Exception {
+    void verifyStandardExtractionWorksForAdfs() throws Exception {
         var credentials = extractCredentials(RESPONSE_FILE_NAME_FROM_ADFS);
         assertNotNull(credentials);
         var attributes = credentials.getAttributes();
@@ -128,7 +128,7 @@ public class SAML2CredentialsTest {
     }
 
     @Test
-    public void verifyStandardExtractionWorksForUkamf() throws Exception {
+    void verifyStandardExtractionWorksForUkamf() throws Exception {
         var credentials = extractCredentials(RESPONSE_FILE_NAME_FROM_UKAMF);
         assertNotNull(credentials);
         var attributes = credentials.getAttributes();
@@ -145,7 +145,7 @@ public class SAML2CredentialsTest {
     }
 
     @Test
-    public void verifyComplexTypeExtractionWorks() throws Exception {
+    void verifyComplexTypeExtractionWorks() throws Exception {
         try {
             saml2Configuration.setSamlAttributeConverter(new ComplexTypeSAML2AttributeConverter());
 
@@ -171,7 +171,7 @@ public class SAML2CredentialsTest {
     }
 
     @Test
-    public void verifyMultiValuedAttributeExtraction() throws Exception {
+    void verifyMultiValuedAttributeExtraction() throws Exception {
         var credentials = extractCredentials(RESPONSE_FILE_NAME_WITH_MULTIVALUEDATTR);
         assertNotNull(credentials);
         var attributes = credentials.getAttributes();

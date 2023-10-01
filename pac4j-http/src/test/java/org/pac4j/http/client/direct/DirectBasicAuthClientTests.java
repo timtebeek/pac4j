@@ -1,7 +1,7 @@
 package org.pac4j.http.client.direct;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.HttpConstants;
 import org.pac4j.core.context.MockWebContext;
@@ -17,7 +17,7 @@ import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordA
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests the {@link DirectBasicAuthClient} class.
@@ -25,30 +25,30 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class DirectBasicAuthClientTests implements TestsConstants {
+final class DirectBasicAuthClientTests implements TestsConstants {
 
     @Test
-    public void testMissingUsernamePasswordAuthenticator() {
+    void testMissingUsernamePasswordAuthenticator() {
         val basicAuthClient = new DirectBasicAuthClient(null);
         TestsHelper.expectException(() -> basicAuthClient.getCredentials(new CallContext(MockWebContext.create(), new MockSessionStore())),
                 TechnicalException.class, "authenticator cannot be null");
     }
 
     @Test
-    public void testMissingProfileCreator() {
+    void testMissingProfileCreator() {
         val basicAuthClient = new DirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator(), null);
         TestsHelper.expectException(() -> basicAuthClient.getUserProfile(new CallContext(MockWebContext.create(), new MockSessionStore()),
             new UsernamePasswordCredentials(USERNAME, PASSWORD)), TechnicalException.class, "profileCreator cannot be null");
     }
 
     @Test
-    public void testHasDefaultProfileCreator() {
+    void testHasDefaultProfileCreator() {
         val basicAuthClient = new DirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
         basicAuthClient.init();
     }
 
     @Test
-    public void testAuthentication() {
+    void testAuthentication() {
         val client = new DirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
         val context = MockWebContext.create();
         val header = USERNAME + ":" + USERNAME;
@@ -63,7 +63,7 @@ public final class DirectBasicAuthClientTests implements TestsConstants {
     }
 
     @Test
-    public void testAuthenticationLowercase() {
+    void testAuthenticationLowercase() {
         val client = new DirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
         val context = MockWebContext.create();
         val header = USERNAME + ":" + USERNAME;

@@ -1,7 +1,7 @@
 package org.pac4j.http.client.indirect;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.HttpConstants;
 import org.pac4j.core.context.MockWebContext;
@@ -19,8 +19,8 @@ import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordA
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * This class tests the {@link IndirectBasicAuthClient} class.
@@ -28,10 +28,10 @@ import static org.junit.Assert.fail;
  * @author Jerome Leleu
  * @since 1.4.0
  */
-public final class IndirectBasicAuthClientTests implements TestsConstants {
+final class IndirectBasicAuthClientTests implements TestsConstants {
 
     @Test
-    public void testMissingUsernamePasswordAuthenticator() {
+    void testMissingUsernamePasswordAuthenticator() {
         val basicAuthClient = new IndirectBasicAuthClient(NAME, null);
         basicAuthClient.setCallbackUrl(CALLBACK_URL);
         TestsHelper.expectException(() -> basicAuthClient.getCredentials(new CallContext(MockWebContext.create(), new MockSessionStore())),
@@ -39,7 +39,7 @@ public final class IndirectBasicAuthClientTests implements TestsConstants {
     }
 
     @Test
-    public void testMissingProfileCreator() {
+    void testMissingProfileCreator() {
         val basicAuthClient = new IndirectBasicAuthClient(NAME, new SimpleTestUsernamePasswordAuthenticator());
         basicAuthClient.setCallbackUrl(CALLBACK_URL);
         basicAuthClient.setProfileCreator(null);
@@ -48,21 +48,21 @@ public final class IndirectBasicAuthClientTests implements TestsConstants {
     }
 
     @Test
-    public void testMissingRealm() {
+    void testMissingRealm() {
         val basicAuthClient = new IndirectBasicAuthClient(null, new SimpleTestUsernamePasswordAuthenticator());
         basicAuthClient.setCallbackUrl(CALLBACK_URL);
         TestsHelper.initShouldFail(basicAuthClient, "realmName cannot be blank");
     }
 
     @Test
-    public void testHasDefaultProfileCreator() {
+    void testHasDefaultProfileCreator() {
         val basicAuthClient = new IndirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
         basicAuthClient.setCallbackUrl(CALLBACK_URL);
         basicAuthClient.init();
     }
 
     @Test
-    public void testMissingCallbackUrl() {
+    void testMissingCallbackUrl() {
         val basicAuthClient = new IndirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
         TestsHelper.initShouldFail(basicAuthClient,
             "callbackUrl cannot be blank: set it up either on this IndirectClient or on the global Config");
@@ -75,7 +75,7 @@ public final class IndirectBasicAuthClientTests implements TestsConstants {
     }
 
     @Test
-    public void testRedirectionUrl() {
+    void testRedirectionUrl() {
         val basicAuthClient = getBasicAuthClient();
         var context = MockWebContext.create();
         WithLocationAction action = (FoundAction) basicAuthClient.getRedirectionAction(
@@ -85,28 +85,28 @@ public final class IndirectBasicAuthClientTests implements TestsConstants {
     }
 
     @Test
-    public void testGetCredentialsMissingHeader() {
+    void testGetCredentialsMissingHeader() {
         val basicAuthClient = getBasicAuthClient();
         val context = MockWebContext.create();
         verifyGetCredentialsFailsWithAuthenticationRequired(basicAuthClient, context);
     }
 
     @Test
-    public void testGetCredentialsNotABasicHeader() {
+    void testGetCredentialsNotABasicHeader() {
         val basicAuthClient = getBasicAuthClient();
         val context = getContextWithAuthorizationHeader("fakeHeader");
         verifyGetCredentialsFailsWithAuthenticationRequired(basicAuthClient, context);
     }
 
     @Test
-    public void testGetCredentialsBadFormatHeader() {
+    void testGetCredentialsBadFormatHeader() {
         val basicAuthClient = getBasicAuthClient();
         val context = getContextWithAuthorizationHeader("Basic fakeHeader");
         verifyGetCredentialsFailsWithAuthenticationRequired(basicAuthClient, context);
     }
 
     @Test
-    public void testGetCredentialsMissingSemiColon() {
+    void testGetCredentialsMissingSemiColon() {
         val basicAuthClient = getBasicAuthClient();
         val context = getContextWithAuthorizationHeader(
                 "Basic " + Base64.getEncoder().encodeToString("fake".getBytes(StandardCharsets.UTF_8)));
@@ -114,7 +114,7 @@ public final class IndirectBasicAuthClientTests implements TestsConstants {
     }
 
     @Test
-    public void testValidateCredentialsBadCredentials() {
+    void testValidateCredentialsBadCredentials() {
         val basicAuthClient = getBasicAuthClient();
         val context = MockWebContext.create();
         try {
@@ -129,7 +129,7 @@ public final class IndirectBasicAuthClientTests implements TestsConstants {
     }
 
     @Test
-    public void testGetCredentialsGoodCredentials() {
+    void testGetCredentialsGoodCredentials() {
         val basicAuthClient = getBasicAuthClient();
         val header = USERNAME + ":" + USERNAME;
         val credentials = (UsernamePasswordCredentials) basicAuthClient

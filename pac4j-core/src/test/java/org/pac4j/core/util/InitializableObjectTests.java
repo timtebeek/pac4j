@@ -1,10 +1,10 @@
 package org.pac4j.core.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.exception.TechnicalException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class tests the {@link InitializableObject} class.
@@ -13,10 +13,10 @@ import static org.junit.Assert.*;
  * @since 1.4.0
  */
 @Slf4j
-public final class InitializableObjectTests {
+final class InitializableObjectTests {
 
     @Test
-    public void testInitCalledOnlyOnce() {
+    void testInitCalledOnlyOnce() {
         var io = new CustomInitializableObject(false);
         assertEquals(0, io.getCounter());
         assertEquals(0, io.getNbAttempts());
@@ -34,7 +34,7 @@ public final class InitializableObjectTests {
     }
 
     @Test
-    public void testInitCalledOnlyOnceDespiteFailuresButNotEnoughTimeBetweenRetries() {
+    void testInitCalledOnlyOnceDespiteFailuresButNotEnoughTimeBetweenRetries() {
         var io = new CustomInitializableObject(true);
         assertEquals(0, io.getCounter());
         assertEquals(0, io.getNbAttempts());
@@ -60,7 +60,7 @@ public final class InitializableObjectTests {
     }
 
     @Test
-    public void testInitCalledTwiceBecauseOfFailuresAndEnoughTimeBetweenRetries() {
+    void testInitCalledTwiceBecauseOfFailuresAndEnoughTimeBetweenRetries() {
         var io = new CustomInitializableObject(true);
         io.setMinTimeIntervalBetweenAttemptsInMilliseconds(200);
         assertEquals(0, io.getCounter());
@@ -80,7 +80,7 @@ public final class InitializableObjectTests {
     }
 
     @Test
-    public void testInitNotCalledBecauseOfMaxAttempts() {
+    void testInitNotCalledBecauseOfMaxAttempts() {
         var io = new CustomInitializableObject(false);
         io.setMaxAttempts(0);
         assertEquals(0, io.getCounter());

@@ -3,9 +3,9 @@ package org.pac4j.couch.profile.service;
 import lombok.val;
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.ektorp.CouchDbConnector;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.credentials.UsernamePasswordCredentials;
 import org.pac4j.core.credentials.password.PasswordEncoder;
 import org.pac4j.core.credentials.password.ShiroPasswordEncoder;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the {@link CouchProfileService}.
@@ -48,8 +48,8 @@ public final class CouchProfileServiceTests implements TestsConstants {
     private static final CouchDbConnector couchDbConnector = couchServer.start();
 
 
-    @BeforeClass
-    public static void setUp() {
+    @BeforeAll
+    static void setUp() {
         val password = PASSWORD_ENCODER.encode(PASSWORD);
         val couchProfileService = new CouchProfileService(couchDbConnector);
         couchProfileService.setPasswordEncoder(PASSWORD_ENCODER);
@@ -74,28 +74,30 @@ public final class CouchProfileServiceTests implements TestsConstants {
         couchProfileService.create(couchProfile, PASSWORD);
     }
 
-    @AfterClass
-    public static void tearDown() {
+    @AfterAll
+    static void tearDown() {
         //couchServer.stop();
     }
 
     @Test
-    public void testNullConnector() {
+    void testNullConnector() {
         val couchProfileService = new CouchProfileService(null);
         couchProfileService.setPasswordEncoder(PASSWORD_ENCODER);
         TestsHelper.expectException(couchProfileService::init, TechnicalException.class, "couchDbConnector cannot be null");
     }
 
-    @Test(expected = AccountNotFoundException.class)
-    public void authentFailed() {
-        val couchProfileService = new CouchProfileService(couchDbConnector);
-        couchProfileService.setPasswordEncoder(PASSWORD_ENCODER);
-        val credentials = new UsernamePasswordCredentials(BAD_USERNAME, PASSWORD);
-        couchProfileService.validate(null, credentials);
+    @Test
+    void authentFailed() {
+        assertThrows(AccountNotFoundException.class, () -> {
+            val couchProfileService = new CouchProfileService(couchDbConnector);
+            couchProfileService.setPasswordEncoder(PASSWORD_ENCODER);
+            val credentials = new UsernamePasswordCredentials(BAD_USERNAME, PASSWORD);
+            couchProfileService.validate(null, credentials);
+        });
     }
 
     @Test
-    public void authentSuccessSingleAttribute() {
+    void authentSuccessSingleAttribute() {
         val couchProfileService = new CouchProfileService(couchDbConnector);
         couchProfileService.setPasswordEncoder(PASSWORD_ENCODER);
         val credentials = new UsernamePasswordCredentials(GOOD_USERNAME, PASSWORD);
@@ -111,7 +113,7 @@ public final class CouchProfileServiceTests implements TestsConstants {
     }
 
     @Test
-    public void testCreateUpdateFindDelete() {
+    void testCreateUpdateFindDelete() {
         val profile = new CouchProfile();
         profile.setId(COUCH_ID);
         profile.setLinkedId(COUCH_LINKED_ID);

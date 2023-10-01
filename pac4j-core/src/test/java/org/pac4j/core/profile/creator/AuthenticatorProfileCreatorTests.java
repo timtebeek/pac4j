@@ -1,15 +1,15 @@
 package org.pac4j.core.profile.creator;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.credentials.Credentials;
 import org.pac4j.core.credentials.TokenCredentials;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.UserProfile;
 import org.pac4j.core.util.TestsConstants;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * This class tests the {@link AuthenticatorProfileCreator}.
@@ -17,15 +17,15 @@ import static org.junit.Assert.assertFalse;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class AuthenticatorProfileCreatorTests implements TestsConstants {
+final class AuthenticatorProfileCreatorTests implements TestsConstants {
 
     @Test
-    public void testReturnNoProfile() {
+    void testReturnNoProfile() {
         assertFalse(AuthenticatorProfileCreator.INSTANCE.create(null, new TokenCredentials(TOKEN)).isPresent());
     }
 
     @Test
-    public void testReturnProfile() {
+    void testReturnProfile() {
         UserProfile profile = new CommonProfile();
         final Credentials credentials = new TokenCredentials(TOKEN);
         credentials.setUserProfile(profile);

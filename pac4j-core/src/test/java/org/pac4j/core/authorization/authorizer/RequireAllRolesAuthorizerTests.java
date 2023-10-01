@@ -1,8 +1,8 @@
 package org.pac4j.core.authorization.authorizer;
 
 import lombok.val;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
 import org.pac4j.core.profile.CommonProfile;
@@ -13,8 +13,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link RequireAllRolesAuthorizer}.
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class RequireAllRolesAuthorizerTests {
+final class RequireAllRolesAuthorizerTests {
 
     private static final String ROLE1 = "role1";
     private static final String ROLE2 = "role2";
@@ -34,15 +34,15 @@ public final class RequireAllRolesAuthorizerTests {
 
     private CommonProfile profile;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         profile = new CommonProfile();
         profiles = new ArrayList<>();
         profiles.add(profile);
     }
 
     @Test
-    public void testHasAllRolesOkDifferentOrder() {
+    void testHasAllRolesOkDifferentOrder() {
         Authorizer authorizer = new RequireAllRolesAuthorizer(ROLE3, ROLE1);
         profile.addRole(ROLE1);
         profile.addRole(ROLE3);
@@ -50,7 +50,7 @@ public final class RequireAllRolesAuthorizerTests {
     }
 
     @Test
-    public void testHasAllRolesOkDifferentOrder2() {
+    void testHasAllRolesOkDifferentOrder2() {
         Authorizer authorizer = new RequireAllRolesAuthorizer(Arrays.asList(ROLE3, ROLE1));
         profile.addRole(ROLE1);
         profile.addRole(ROLE3);
@@ -58,7 +58,7 @@ public final class RequireAllRolesAuthorizerTests {
     }
 
     @Test
-    public void testHasAllRolesOkDifferentOrder3() {
+    void testHasAllRolesOkDifferentOrder3() {
         val authorizer = new RequireAllRolesAuthorizer();
         authorizer.setElements(ROLE3, ROLE1);
         profile.addRole(ROLE1);
@@ -67,7 +67,7 @@ public final class RequireAllRolesAuthorizerTests {
     }
 
     @Test
-    public void testHasAllRolesOkDifferentOrder4() {
+    void testHasAllRolesOkDifferentOrder4() {
         val authorizer = new RequireAllRolesAuthorizer();
         authorizer.setElements(new HashSet<>(Arrays.asList(ROLE3, ROLE1)));
         profile.addRole(ROLE1);
@@ -76,7 +76,7 @@ public final class RequireAllRolesAuthorizerTests {
     }
 
     @Test
-    public void testHasAllRolesOkDifferentOrder5() {
+    void testHasAllRolesOkDifferentOrder5() {
         val authorizer = new RequireAllRolesAuthorizer();
         authorizer.setElements(Arrays.asList(ROLE3, ROLE1));
         profile.addRole(ROLE1);
@@ -85,7 +85,7 @@ public final class RequireAllRolesAuthorizerTests {
     }
 
     @Test
-    public void testHasAllRolesNull() {
+    void testHasAllRolesNull() {
         Authorizer authorizer = new RequireAllRolesAuthorizer((List<String>) null);
         profile.addRole(ROLE1);
         profile.addRole(ROLE3);
@@ -93,7 +93,7 @@ public final class RequireAllRolesAuthorizerTests {
     }
 
     @Test
-    public void testHasAllRolesEmpty() {
+    void testHasAllRolesEmpty() {
         Authorizer authorizer = new RequireAllRolesAuthorizer(new String[]{});
         profile.addRole(ROLE1);
         profile.addRole(ROLE3);
@@ -101,7 +101,7 @@ public final class RequireAllRolesAuthorizerTests {
     }
 
     @Test
-    public void testHasAllRolesTwoRolesFail() {
+    void testHasAllRolesTwoRolesFail() {
         Authorizer authorizer = new RequireAllRolesAuthorizer(new String[]{ROLE3, ROLE1});
         profile.addRole(ROLE1);
         profile.addRole(ROLE2);
@@ -109,7 +109,7 @@ public final class RequireAllRolesAuthorizerTests {
     }
 
     @Test
-    public void testHasAllRolesTwoRolesFailTwoProfiles() {
+    void testHasAllRolesTwoRolesFailTwoProfiles() {
         Authorizer authorizer = new RequireAllRolesAuthorizer(new String[]{ROLE3, ROLE1});
         profile.addRole(ROLE1);
         profile.addRole(ROLE2);

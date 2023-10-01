@@ -2,8 +2,8 @@ package org.pac4j.saml.metadata;
 
 import net.shibboleth.shared.resolver.CriteriaSet;
 import net.shibboleth.shared.xml.XMLParserException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.saml.config.SAML2Configuration;
@@ -20,10 +20,10 @@ import java.net.Proxy;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("PMD.TooManyStaticImports")
-public class SAML2IdentityProviderMetadataResolverTest {
+class SAML2IdentityProviderMetadataResolverTest {
 
     private SAML2IdentityProviderMetadataResolver metadataResolver;
 
@@ -48,31 +48,31 @@ public class SAML2IdentityProviderMetadataResolverTest {
         return sc;
     }
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         var configuration = new SAML2Configuration();
         configuration.setIdentityProviderMetadataResource(new ClassPathResource("idp-metadata.xml"));
         metadataResolver = new SAML2IdentityProviderMetadataResolver(configuration);
     }
 
     @Test
-    public void resolveMetadataEntityId() throws Exception {
+    void resolveMetadataEntityId() throws Exception {
         var resolver = metadataResolver.resolve();
         var criteria = new CriteriaSet(new EntityIdCriterion("mmoayyed.example.net"));
         var entity = resolver.resolveSingle(criteria);
         assertNotNull(entity);
-        assertEquals(entity.getEntityID(), "mmoayyed.example.net");
+        assertEquals("mmoayyed.example.net", entity.getEntityID());
     }
 
     @Test
-    public void resolveMetadataDocumentAsString() {
+    void resolveMetadataDocumentAsString() {
         metadataResolver.init();
         var metadata = metadataResolver.getMetadata();
         assertNotNull(metadata);
     }
 
     @Test
-    public void resolveMetadataOverUrlWithHostnameVerifierFromConfig() throws Exception {
+    void resolveMetadataOverUrlWithHostnameVerifierFromConfig() throws Exception {
         var configuration = new SAML2Configuration();
         configuration.setIdentityProviderMetadataResource(new UrlResource("https://self-signed.badssl.com"));
         configuration.setHostnameVerifier((s, sslSession) -> true);
@@ -86,7 +86,7 @@ public class SAML2IdentityProviderMetadataResolverTest {
     }
 
     @Test
-    public void resolveMetadataOverUrlWithHostnameVerifier() throws Exception {
+    void resolveMetadataOverUrlWithHostnameVerifier() throws Exception {
         var configuration = new SAML2Configuration();
         configuration.setIdentityProviderMetadataResource(new UrlResource("https://self-signed.badssl.com"));
         metadataResolver = new SAML2IdentityProviderMetadataResolver(configuration);
@@ -106,7 +106,7 @@ public class SAML2IdentityProviderMetadataResolverTest {
     }
 
     @Test
-    public void resolveMetadataOverUrl() throws Exception {
+    void resolveMetadataOverUrl() throws Exception {
         var configuration = new SAML2Configuration();
         configuration.setIdentityProviderMetadataResource(new UrlResource("https://sso.union.edu/idp/shibboleth"));
         metadataResolver = new SAML2IdentityProviderMetadataResolver(configuration);
@@ -125,7 +125,7 @@ public class SAML2IdentityProviderMetadataResolverTest {
     }
 
     @Test
-    public void resolveMetadataFromByteArray() throws Exception {
+    void resolveMetadataFromByteArray() throws Exception {
         var configuration = new SAML2Configuration();
         configuration.setIdentityProviderMetadataResource(
                 new ByteArrayResource(new ClassPathResource("idp-metadata.xml").getInputStream().readAllBytes()));
@@ -139,7 +139,7 @@ public class SAML2IdentityProviderMetadataResolverTest {
     }
 
     @Test
-    public void resolveExpiringMetadata() {
+    void resolveExpiringMetadata() {
         var configuration = new SAML2Configuration();
         configuration.setIdentityProviderMetadataResource(new ClassPathResource("expired-idp-metadata.xml"));
         metadataResolver = new SAML2IdentityProviderMetadataResolver(configuration);

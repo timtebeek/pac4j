@@ -2,8 +2,8 @@ package org.pac4j.http.credentials.authenticator;
 
 import fi.iki.elonen.NanoHTTPD;
 import lombok.val;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
@@ -17,7 +17,7 @@ import org.pac4j.http.profile.RestProfile;
 import org.pac4j.http.test.tools.ServerResponse;
 import org.pac4j.http.test.tools.WebServer;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests {@link RestAuthenticator}.
@@ -25,12 +25,12 @@ import static org.junit.Assert.*;
  * @author Jerome Leleu
  * @since 2.1.0
  */
-public final class RestAuthenticatorIT implements TestsConstants {
+final class RestAuthenticatorIT implements TestsConstants {
 
     private static final int PORT = 8088;
 
-    @BeforeClass
-    public static void setUp() {
+    @BeforeAll
+    static void setUp() {
         val webServer = new WebServer(PORT)
             .defineResponse("ok", new ServerResponse(NanoHTTPD.Response.Status.OK, "application/json",
                 "{ 'id': '" + ID + "', roles: [\"" + ROLE + "\"] }"))
@@ -40,7 +40,7 @@ public final class RestAuthenticatorIT implements TestsConstants {
     }
 
     @Test
-    public void testProfileOk() {
+    void testProfileOk() {
         Authenticator authenticator = new RestAuthenticator("http://localhost:" + PORT + "?r=ok");
         val credentials = new UsernamePasswordCredentials(GOOD_USERNAME, PASSWORD);
         authenticator.validate(new CallContext(MockWebContext.create(), new MockSessionStore()), credentials);
@@ -52,7 +52,7 @@ public final class RestAuthenticatorIT implements TestsConstants {
     }
 
     @Test
-    public void testNotFound() {
+    void testNotFound() {
         Authenticator authenticator = new RestAuthenticator("http://localhost:" + PORT + "?r=notfound");
         val credentials = new UsernamePasswordCredentials(GOOD_USERNAME, PASSWORD);
         authenticator.validate(new CallContext(MockWebContext.create(), new MockSessionStore()), credentials);
@@ -61,7 +61,7 @@ public final class RestAuthenticatorIT implements TestsConstants {
     }
 
     @Test
-    public void testParsingError() {
+    void testParsingError() {
         val authenticator = new RestAuthenticator("http://localhost:" + PORT + "?r=pe");
         val credentials = new UsernamePasswordCredentials(GOOD_USERNAME, PASSWORD);
         TestsHelper.expectException(() -> authenticator.validate(
@@ -71,7 +71,7 @@ public final class RestAuthenticatorIT implements TestsConstants {
     }
 
     @Test
-    public void testHttps() {
+    void testHttps() {
         Authenticator authenticator = new RestAuthenticator("https://www.google.com");
         val credentials = new UsernamePasswordCredentials(GOOD_USERNAME, PASSWORD);
         authenticator.validate(new CallContext(MockWebContext.create(), new MockSessionStore()), credentials);

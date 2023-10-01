@@ -2,7 +2,7 @@ package org.pac4j.saml.sso.impl;
 
 import lombok.val;
 import net.shibboleth.shared.resolver.CriteriaSet;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.saml.common.messaging.context.SAMLPeerEntityContext;
 import org.opensaml.saml.saml2.core.AuthnContext;
@@ -39,10 +39,10 @@ import java.nio.charset.Charset;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class SAML2DefaultResponseValidatorTests {
+class SAML2DefaultResponseValidatorTests {
 
     private static final String SAMPLE_RESPONSE_FILE_NAME = "sample_authn_response.xml";
 
@@ -50,11 +50,9 @@ public class SAML2DefaultResponseValidatorTests {
         val trustEngineProvider = mock(SAML2SignatureTrustEngineProvider.class);
         val engine = mock(SignatureTrustEngine.class);
 
-        try {
+        assertDoesNotThrow(() -> {
             when(engine.validate(any(Signature.class), any(CriteriaSet.class))).thenReturn(true);
-        } catch (final SecurityException ex) {
-            fail();
-        }
+        });
         when(trustEngineProvider.build()).thenReturn(engine);
         val decrypter = mock(Decrypter.class);
         return new SAML2AuthnResponseValidator(
@@ -105,27 +103,27 @@ public class SAML2DefaultResponseValidatorTests {
     }
 
     @Test
-    public void testDoesNotWantAssertionsSignedWithNullSPSSODescriptor() {
+    void testDoesNotWantAssertionsSignedWithNullSPSSODescriptor() {
         var saml2Configuration = getSaml2Configuration(false, false);
         val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
         val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
         context.setSaml2Configuration(saml2Configuration);
-        assertNull("Expected SPSSODescriptor to be null", context.getSPSSODescriptor());
-        assertFalse("Expected wantAssertionsSigned == false", validator.wantsAssertionsSigned(context));
+        assertNull(context.getSPSSODescriptor(), "Expected SPSSODescriptor to be null");
+        assertFalse(validator.wantsAssertionsSigned(context), "Expected wantAssertionsSigned == false");
     }
 
     @Test
-    public void testWantsAssertionsSignedWithNullSPSSODescriptor() {
+    void testWantsAssertionsSignedWithNullSPSSODescriptor() {
         var saml2Configuration = getSaml2Configuration(true, false);
         val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
         val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
         context.setSaml2Configuration(saml2Configuration);
-        assertNull("Expected SPSSODescriptor to be null", context.getSPSSODescriptor());
-        assertTrue("Expected wantAssertionsSigned == true", validator.wantsAssertionsSigned(context));
+        assertNull(context.getSPSSODescriptor(), "Expected SPSSODescriptor to be null");
+        assertTrue(validator.wantsAssertionsSigned(context), "Expected wantAssertionsSigned == true");
     }
 
     @Test
-    public void testDoesNotWantAssertionsSignedWithValidSPSSODescriptor() {
+    void testDoesNotWantAssertionsSignedWithValidSPSSODescriptor() {
         var saml2Configuration = getSaml2Configuration(false, false);
         val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
         val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
@@ -136,12 +134,12 @@ public class SAML2DefaultResponseValidatorTests {
         when(roleDescriptor.getWantAssertionsSigned()).thenReturn(false);
         samlSelfMetadataContext.setRoleDescriptor(roleDescriptor);
 
-        assertNotNull("Expected SPSSODescriptor to not be null", context.getSPSSODescriptor());
-        assertFalse("Expected wantAssertionsSigned == false", validator.wantsAssertionsSigned(context));
+        assertNotNull(context.getSPSSODescriptor(), "Expected SPSSODescriptor to not be null");
+        assertFalse(validator.wantsAssertionsSigned(context), "Expected wantAssertionsSigned == false");
     }
 
     @Test
-    public void testWantsAssertionsSignedWithValidSPSSODescriptor() {
+    void testWantsAssertionsSignedWithValidSPSSODescriptor() {
         var saml2Configuration = getSaml2Configuration(true, false);
         val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
         val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
@@ -152,12 +150,12 @@ public class SAML2DefaultResponseValidatorTests {
         when(roleDescriptor.getWantAssertionsSigned()).thenReturn(true);
         samlSelfMetadataContext.setRoleDescriptor(roleDescriptor);
 
-        assertNotNull("Expected SPSSODescriptor to not be null", context.getSPSSODescriptor());
-        assertTrue("Expected wantAssertionsSigned == true", validator.wantsAssertionsSigned(context));
+        assertNotNull(context.getSPSSODescriptor(), "Expected SPSSODescriptor to not be null");
+        assertTrue(validator.wantsAssertionsSigned(context), "Expected wantAssertionsSigned == true");
     }
 
     @Test
-    public void testNameIdAsAttribute() throws Exception {
+    void testNameIdAsAttribute() throws Exception {
         val saml2Configuration = getSaml2Configuration(false, false);
         saml2Configuration.setUriComparator(new ExcludingParametersURIComparator());
         saml2Configuration.setAllSignatureValidationDisabled(true);
@@ -188,7 +186,7 @@ public class SAML2DefaultResponseValidatorTests {
     }
 
     @Test
-    public void testAuthnContextClassRefValidation() throws Exception {
+    void testAuthnContextClassRefValidation() throws Exception {
         val saml2Configuration = getSaml2Configuration(false, false);
         saml2Configuration.setUriComparator(new ExcludingParametersURIComparator());
         saml2Configuration.setAllSignatureValidationDisabled(true);
@@ -218,55 +216,62 @@ public class SAML2DefaultResponseValidatorTests {
         assertThrows(SAMLAuthnContextClassRefException.class, () -> validator.validate(context));
     }
 
-    @Test(expected = SAMLException.class)
-    public void testAuthenticatedResponseAndAssertionWithoutSignatureThrowsException() {
-        val saml2Configuration = getSaml2Configuration(true, false);
-        val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
-        val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
-        context.setSaml2Configuration(saml2Configuration);
-        val peerEntityContext = new SAMLPeerEntityContext();
-        peerEntityContext.setAuthenticated(true);
-        context.getMessageContext().addSubcontext(peerEntityContext);
-        validator.validateAssertionSignature(null, context, null);
-    }
-
-    @Test(expected = SAMLException.class)
-    public void testResponseWithoutSignatureThrowsException() {
-        val saml2Configuration = getSaml2Configuration(false, false);
-        val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
-        val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
-        context.setSaml2Configuration(saml2Configuration);
-        val peerEntityContext = new SAMLPeerEntityContext();
-        peerEntityContext.setAuthenticated(false);
-        context.getMessageContext().addSubcontext(peerEntityContext);
-        validator.validateAssertionSignature(null, context, null);
-        // expected no exceptions
-    }
-
-    @Test(expected = SAMLSignatureValidationException.class)
-    public void testNotSignedAuthenticatedResponseThrowsException() throws Exception {
-        val file = new File(SAML2DefaultResponseValidatorTests.class.getClassLoader().
-            getResource(SAMPLE_RESPONSE_FILE_NAME).getFile());
-
-        val xmlObject = XMLObjectSupport.unmarshallFromReader(
-            Configuration.getParserPool(),
-            new InputStreamReader(new FileInputStream(file), Charset.defaultCharset()));
-
-        val response = (Response) xmlObject;
-        response.setSignature(null);
-
-        var saml2Configuration = getSaml2Configuration(false, true);
-        val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
-        val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
-        context.setSaml2Configuration(saml2Configuration);
-        val peerEntityContext = new SAMLPeerEntityContext();
-        peerEntityContext.setAuthenticated(true);
-        context.getMessageContext().addSubcontext(peerEntityContext);
-        validator.validateSamlProtocolResponse(response, context, null);
+    @Test
+    void testAuthenticatedResponseAndAssertionWithoutSignatureThrowsException() {
+        assertThrows(SAMLException.class, () -> {
+            val saml2Configuration = getSaml2Configuration(true, false);
+            val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
+            val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
+            context.setSaml2Configuration(saml2Configuration);
+            val peerEntityContext = new SAMLPeerEntityContext();
+            peerEntityContext.setAuthenticated(true);
+            context.getMessageContext().addSubcontext(peerEntityContext);
+            validator.validateAssertionSignature(null, context, null);
+        });
     }
 
     @Test
-    public void testThatInResponseToPropertyCanBeEmpty() throws Exception {
+    void testResponseWithoutSignatureThrowsException() {
+        assertThrows(SAMLException.class, () -> {
+            val saml2Configuration = getSaml2Configuration(false, false);
+            val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
+            val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
+            context.setSaml2Configuration(saml2Configuration);
+            val peerEntityContext = new SAMLPeerEntityContext();
+            peerEntityContext.setAuthenticated(false);
+            context.getMessageContext().addSubcontext(peerEntityContext);
+            validator.validateAssertionSignature(null, context, null);
+            // expected no exceptions
+        });
+        // expected no exceptions
+    }
+
+    @Test
+    void testNotSignedAuthenticatedResponseThrowsException() throws Exception {
+        assertThrows(SAMLSignatureValidationException.class, () -> {
+            val file = new File(SAML2DefaultResponseValidatorTests.class.getClassLoader().
+                getResource(SAMPLE_RESPONSE_FILE_NAME).getFile());
+
+            val xmlObject = XMLObjectSupport.unmarshallFromReader(
+                Configuration.getParserPool(),
+                new InputStreamReader(new FileInputStream(file), Charset.defaultCharset()));
+
+            val response = (Response) xmlObject;
+            response.setSignature(null);
+
+            var saml2Configuration = getSaml2Configuration(false, true);
+            val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
+            val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
+            context.setSaml2Configuration(saml2Configuration);
+            val peerEntityContext = new SAMLPeerEntityContext();
+            peerEntityContext.setAuthenticated(true);
+            context.getMessageContext().addSubcontext(peerEntityContext);
+            validator.validateSamlProtocolResponse(response, context, null);
+        });
+    }
+
+    @Test
+    void testThatInResponseToPropertyCanBeEmpty() throws Exception {
         val saml2Configuration = getSaml2Configuration(false, false);
         saml2Configuration.setAllSignatureValidationDisabled(true);
 
@@ -297,41 +302,43 @@ public class SAML2DefaultResponseValidatorTests {
         assertNotNull(credentials);
     }
 
-    @Test(expected = SAMLEndpointMismatchException.class)
-    public void testThatResponseDestinationThrowsExceptionWhenNull() throws Exception {
-        val saml2Configuration = getSaml2Configuration(false, false);
-        saml2Configuration.setAllSignatureValidationDisabled(true);
+    @Test
+    void testThatResponseDestinationThrowsExceptionWhenNull() throws Exception {
+        assertThrows(SAMLEndpointMismatchException.class, () -> {
+            val saml2Configuration = getSaml2Configuration(false, false);
+            saml2Configuration.setAllSignatureValidationDisabled(true);
 
-        val response = getResponse();
-        response.setSignature(null);
-        response.getAssertions().get(0).setSignature(null);
+            val response = getResponse();
+            response.setSignature(null);
+            response.getAssertions().get(0).setSignature(null);
 
-        // The `Destination` attribute can be omitted.
-        // (See SAML protocol specification, paragraph 3.2.2, line 1554)
-        // But the default SAML configuration forbids this case.
-        response.setDestination(null);
+            // The `Destination` attribute can be omitted.
+            // (See SAML protocol specification, paragraph 3.2.2, line 1554)
+            // But the default SAML configuration forbids this case.
+            response.setDestination(null);
 
-        val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
-        context.setSaml2Configuration(saml2Configuration);
-        context.getMessageContext().setMessage(response);
+            val context = new SAML2MessageContext(new CallContext(MockWebContext.create(), new MockSessionStore()));
+            context.setSaml2Configuration(saml2Configuration);
+            context.getMessageContext().setMessage(response);
 
-        val samlSelfEntityContext = context.getSAMLSelfEntityContext();
-        samlSelfEntityContext.setEntityId("https://auth.izslt.it");
+            val samlSelfEntityContext = context.getSAMLSelfEntityContext();
+            samlSelfEntityContext.setEntityId("https://auth.izslt.it");
 
-        val endpoint = mock(Endpoint.class);
-        when(endpoint.getLocation()).thenReturn("https://auth.izslt.it/cas/login?client_name=idptest");
+            val endpoint = mock(Endpoint.class);
+            when(endpoint.getLocation()).thenReturn("https://auth.izslt.it/cas/login?client_name=idptest");
 
-        val samlEndpointContext = context.getSAMLEndpointContext();
-        samlEndpointContext.setEndpoint(endpoint);
+            val samlEndpointContext = context.getSAMLEndpointContext();
+            samlEndpointContext.setEndpoint(endpoint);
 
-        val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
-        var credentials = validator.validate(context);
+            val validator = createResponseValidatorWithSigningValidationOf(saml2Configuration);
+            var credentials = validator.validate(context);
 
-        assertNotNull(credentials);
+            assertNotNull(credentials);
+        });
     }
 
     @Test
-    public void testThatResponseDestinationCanBeNull() throws Exception {
+    void testThatResponseDestinationCanBeNull() throws Exception {
         val saml2Configuration = getSaml2Configuration(false, false);
         saml2Configuration.setAllSignatureValidationDisabled(true);
         saml2Configuration.setResponseDestinationAttributeMandatory(false);

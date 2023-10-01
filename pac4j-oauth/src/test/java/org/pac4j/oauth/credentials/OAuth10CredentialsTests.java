@@ -2,11 +2,11 @@ package org.pac4j.oauth.credentials;
 
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.util.TestsConstants;
 import org.pac4j.core.util.serializer.JavaSerializer;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests the {@link OAuth10Credentials} class.
@@ -14,12 +14,12 @@ import static org.junit.Assert.assertEquals;
  * @author Jerome Leleu
  * @since 1.0.0
  */
-public final class OAuth10CredentialsTests implements TestsConstants {
+final class OAuth10CredentialsTests implements TestsConstants {
 
     private final static OAuth1RequestToken REQUEST_TOKEN = new OAuth1RequestToken(TOKEN, SECRET);
 
     @Test
-    public void testOAuth10Credentials() {
+    void testOAuth10Credentials() {
         val credentials = new OAuth10Credentials(REQUEST_TOKEN, TOKEN, VERIFIER);
         assertEquals(TOKEN, credentials.getToken());
         assertEquals(VERIFIER, credentials.getVerifier());

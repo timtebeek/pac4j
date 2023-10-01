@@ -1,7 +1,7 @@
 package org.pac4j.http.credentials.extractor;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
@@ -10,8 +10,7 @@ import org.pac4j.core.credentials.extractor.CredentialsExtractor;
 import org.pac4j.core.exception.TechnicalException;
 import org.pac4j.core.util.TestsConstants;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * This class tests the {@link IpExtractor}.
@@ -19,7 +18,7 @@ import static org.junit.Assert.assertFalse;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-public final class IpExtractorTests implements TestsConstants {
+final class IpExtractorTests implements TestsConstants {
 
     private final static String GOOD_IP = "goodIp";
     @SuppressWarnings("PMD")
@@ -28,14 +27,14 @@ public final class IpExtractorTests implements TestsConstants {
     private static final CredentialsExtractor extractor = new IpExtractor();
 
     @Test
-    public void testRetrieveIpOk() {
+    void testRetrieveIpOk() {
         val context = MockWebContext.create().setRemoteAddress(GOOD_IP);
         val credentials = (TokenCredentials) extractor.extract(new CallContext(context, new MockSessionStore())).get();
         assertEquals(GOOD_IP, credentials.getToken());
     }
 
     @Test
-    public void testRetrieveIpFromHeaderWithProxyIpCheck() {
+    void testRetrieveIpFromHeaderWithProxyIpCheck() {
         val context = MockWebContext.create().addRequestHeader(HEADER_NAME, GOOD_IP).setRemoteAddress(LOCALHOST);
         val ipExtractor = new IpExtractor();
         ipExtractor.setProxyIp(LOCALHOST);
@@ -50,7 +49,7 @@ public final class IpExtractorTests implements TestsConstants {
     }
 
     @Test
-    public void testRetrieveIpFromHeaderUsingConstructor() {
+    void testRetrieveIpFromHeaderUsingConstructor() {
         val context = MockWebContext.create().addRequestHeader(HEADER_NAME, GOOD_IP).setRemoteAddress(LOCALHOST);
         // test for varargs
         CredentialsExtractor ipExtractor = new IpExtractor("fooBar", HEADER_NAME, "barFoo");
@@ -62,14 +61,16 @@ public final class IpExtractorTests implements TestsConstants {
         assertEquals(GOOD_IP, credentials2.getToken());
     }
 
-    @Test(expected = TechnicalException.class)
-    public void testSetNullIpHeaderChain() {
-        val ipExtractor = new IpExtractor();
-        ipExtractor.setAlternateIpHeaders((String[]) null);
+    @Test
+    void testSetNullIpHeaderChain() {
+        assertThrows(TechnicalException.class, () -> {
+            val ipExtractor = new IpExtractor();
+            ipExtractor.setAlternateIpHeaders((String[]) null);
+        });
     }
 
     @Test
-    public void testNoIp() {
+    void testNoIp() {
         val context = MockWebContext.create();
         val credentials = extractor.extract(new CallContext(context, new MockSessionStore()));
         assertFalse(credentials.isPresent());

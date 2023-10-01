@@ -1,8 +1,8 @@
 package org.pac4j.core.engine;
 
 import lombok.val;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.adapter.FrameworkAdapter;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.client.MockIndirectClient;
@@ -22,7 +22,7 @@ import org.pac4j.core.util.TestsHelper;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.mock;
  * @author Jerome Leleu
  * @since 1.9.0
  */
-public final class DefaultLogoutLogicTests implements TestsConstants {
+final class DefaultLogoutLogicTests implements TestsConstants {
 
     private LogoutLogic logic;
 
@@ -53,8 +53,8 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
 
     private HttpAction action;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         logic = new DefaultLogoutLogic();
         config = new Config();
         context = MockWebContext.create();
@@ -77,25 +77,25 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testNullConfig() {
+    void testNullConfig() {
         config = null;
         TestsHelper.expectException(this::call, TechnicalException.class, "config cannot be null");
     }
 
     @Test
-    public void testNullContext() {
+    void testNullContext() {
         context = null;
         TestsHelper.expectException(this::call, TechnicalException.class, "context cannot be null");
     }
 
     @Test
-    public void testNullHttpActionAdapter() {
+    void testNullHttpActionAdapter() {
         config.setHttpActionAdapter(null);
         TestsHelper.expectException(this::call, TechnicalException.class, "httpActionAdapter cannot be null");
     }
 
     @Test
-    public void testBlankLogoutUrlPattern() {
+    void testBlankLogoutUrlPattern() {
         logoutUrlPattern = Pac4jConstants.EMPTY_STRING;
         TestsHelper.expectException(this::call, TechnicalException.class, "logoutUrlPattern cannot be blank");
     }
@@ -119,7 +119,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testLogoutPerformed() {
+    void testLogoutPerformed() {
         profiles.put(NAME, new CommonProfile());
         addProfilesToContext();
         call();
@@ -128,7 +128,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testLogoutNotPerformedBecauseLocalLogoutIsFalse() {
+    void testLogoutNotPerformedBecauseLocalLogoutIsFalse() {
         profiles.put(NAME, new CommonProfile());
         addProfilesToContext();
         localLogout = false;
@@ -138,7 +138,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testLogoutPerformedBecauseLocalLogoutIsFalseButMultipleProfiles() {
+    void testLogoutPerformedBecauseLocalLogoutIsFalseButMultipleProfiles() {
         profiles.put(NAME, new CommonProfile());
         profiles.put(VALUE, new CommonProfile());
         addProfilesToContext();
@@ -149,7 +149,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testCentralLogout() {
+    void testCentralLogout() {
         val profile = new CommonProfile();
         profile.setClientName(NAME);
         val client = new MockIndirectClient(NAME);
@@ -168,7 +168,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testCentralLogoutWithRelativeUrl() {
+    void testCentralLogoutWithRelativeUrl() {
         val profile = new CommonProfile();
         profile.setClientName(NAME);
         val client = new MockIndirectClient(NAME);
@@ -186,7 +186,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testLogoutWithDefaultUrl() {
+    void testLogoutWithDefaultUrl() {
         defaultUrl = CALLBACK_URL;
         call();
         assertEquals(302, action.getCode());
@@ -194,7 +194,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testLogoutWithGoodUrl() {
+    void testLogoutWithGoodUrl() {
         context.addRequestParameter(Pac4jConstants.URL, PATH);
         call();
         assertEquals(302, action.getCode());
@@ -202,7 +202,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testLogoutWithSlashUrl() {
+    void testLogoutWithSlashUrl() {
         context.addRequestParameter(Pac4jConstants.URL, "/");
         call();
         assertEquals(302, action.getCode());
@@ -210,7 +210,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testLogoutWithDoubleSlashUrlNoDefaultUrl() {
+    void testLogoutWithDoubleSlashUrlNoDefaultUrl() {
         context.addRequestParameter(Pac4jConstants.URL, "//evil.example.org/download.exe");
         call();
         assertEquals(204, action.getCode());
@@ -218,7 +218,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testLogoutWithDoubleSlashUrlDefaultUrl() {
+    void testLogoutWithDoubleSlashUrlDefaultUrl() {
         context.addRequestParameter(Pac4jConstants.URL, "//evil.example.org/download.exe");
         defaultUrl = CALLBACK_URL;
         call();
@@ -227,7 +227,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testLogoutWithBadUrlNoDefaultUrl() {
+    void testLogoutWithBadUrlNoDefaultUrl() {
         context.addRequestParameter(Pac4jConstants.URL, PATH);
         logoutUrlPattern = VALUE;
         call();
@@ -236,7 +236,7 @@ public final class DefaultLogoutLogicTests implements TestsConstants {
     }
 
     @Test
-    public void testLogoutWithBadUrlButDefaultUrl() {
+    void testLogoutWithBadUrlButDefaultUrl() {
         context.addRequestParameter(Pac4jConstants.URL, PATH);
         defaultUrl = CALLBACK_URL;
         logoutUrlPattern = VALUE;

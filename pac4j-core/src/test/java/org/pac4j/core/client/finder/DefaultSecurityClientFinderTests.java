@@ -1,10 +1,9 @@
 package org.pac4j.core.client.finder;
 
 import lombok.val;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.client.MockIndirectClient;
 import org.pac4j.core.context.MockWebContext;
@@ -17,8 +16,8 @@ import org.pac4j.core.util.TestsConstants;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link DefaultSecurityClientFinder}.
@@ -26,40 +25,42 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome Leleu
  * @since 1.8.0
  */
-@RunWith(Parameterized.class)
 public final class DefaultSecurityClientFinderTests implements TestsConstants, Pac4jConstants {
 
     private DefaultSecurityClientFinder finder;
-
-    @Parameterized.Parameter
     public String clientNameParameter;
 
-    @Parameterized.Parameters
     public static Object[] data() {
         return new Object[] {null, "custom"};
     }
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         finder = new DefaultSecurityClientFinder();
         if (clientNameParameter != null) {
             finder.setClientNameParameter(clientNameParameter);
         }
     }
 
-    @Test
-    public void testBlankClientName() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testBlankClientName(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         val currentClients = finder.find(new Clients(), MockWebContext.create(), "  ");
         assertEquals(0, currentClients.size());
     }
 
-    @Test
-    public void testClientOnRequestAllowed() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testClientOnRequestAllowed(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         internalTestClientOnRequestAllowedList(NAME, NAME);
     }
 
-    @Test
-    public void testBadClientOnRequest() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testBadClientOnRequest(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         val client =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val clients = new Clients(client);
@@ -71,13 +72,17 @@ public final class DefaultSecurityClientFinderTests implements TestsConstants, P
         return Objects.requireNonNullElse(clientNameParameter, DEFAULT_FORCE_CLIENT_PARAMETER);
     }
 
-    @Test
-    public void testClientOnRequestAllowedList() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testClientOnRequestAllowedList(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         internalTestClientOnRequestAllowedList(NAME, FAKE_VALUE + "," + NAME);
     }
 
-    @Test
-    public void testClientOnRequestAllowedListCaseTrim() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testClientOnRequestAllowedListCaseTrim(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         internalTestClientOnRequestAllowedList("NaMe  ", FAKE_VALUE.toUpperCase() + "  ,       nAmE");
     }
 
@@ -91,8 +96,10 @@ public final class DefaultSecurityClientFinderTests implements TestsConstants, P
         assertEquals(client, currentClients.get(0));
     }
 
-    @Test
-    public void testClientOnRequestNotAllowed() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testClientOnRequestNotAllowed(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         val client1 =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val client2 =
@@ -102,8 +109,10 @@ public final class DefaultSecurityClientFinderTests implements TestsConstants, P
         assertTrue(finder.find(clients, context, MY_CLIENT_NAME).isEmpty());
     }
 
-    @Test
-    public void testClientOnRequestNotAllowedList() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testClientOnRequestNotAllowedList(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         val client1 =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val client2 =
@@ -113,8 +122,10 @@ public final class DefaultSecurityClientFinderTests implements TestsConstants, P
         assertTrue(finder.find(clients, context, MY_CLIENT_NAME + "," + FAKE_VALUE).isEmpty());
     }
 
-    @Test
-    public void testNoClientOnRequest() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testNoClientOnRequest(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         val client1 =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val client2 =
@@ -126,8 +137,10 @@ public final class DefaultSecurityClientFinderTests implements TestsConstants, P
         assertEquals(client2, currentClients.get(0));
     }
 
-    @Test
-    public void testNoClientOnRequestBadDefaultClient() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testNoClientOnRequestBadDefaultClient(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         val client1 =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val client2 =
@@ -137,23 +150,31 @@ public final class DefaultSecurityClientFinderTests implements TestsConstants, P
         assertTrue(finder.find(clients, context, FAKE_VALUE).isEmpty());
     }
 
-    @Test
-    public void testNoClientOnRequestList() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testNoClientOnRequestList(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         internalTestNoClientOnRequestList(MY_CLIENT_NAME + "," + NAME);
     }
 
-    @Test
-    public void testNoClientOnRequestListBlankSpaces() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testNoClientOnRequestListBlankSpaces(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         internalTestNoClientOnRequestList(MY_CLIENT_NAME + " ," + NAME);
     }
 
-    @Test
-    public void testNoClientOnRequestListDifferentCase() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testNoClientOnRequestListDifferentCase(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         internalTestNoClientOnRequestList(MY_CLIENT_NAME.toUpperCase() + "," + NAME);
     }
 
-    @Test
-    public void testNoClientOnRequestListUppercase() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testNoClientOnRequestListUppercase(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         internalTestNoClientOnRequestList(MY_CLIENT_NAME.toUpperCase() + "," + NAME);
     }
 
@@ -170,8 +191,10 @@ public final class DefaultSecurityClientFinderTests implements TestsConstants, P
         assertEquals(client1, currentClients.get(1));
     }
 
-    @Test
-    public void testDefaultSecurityClients() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testDefaultSecurityClients(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         val client1 =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val client2 =
@@ -183,8 +206,10 @@ public final class DefaultSecurityClientFinderTests implements TestsConstants, P
         assertEquals(client2, result.get(0));
     }
 
-    @Test
-    public void testOneClientAsDefault() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testOneClientAsDefault(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         val client1 =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val clients = new Clients(client1);
@@ -193,12 +218,18 @@ public final class DefaultSecurityClientFinderTests implements TestsConstants, P
         assertEquals(client1, result.get(0));
     }
 
-    @Test
-    public void testBlankClientRequested() {
+    @MethodSource("data")
+    @ParameterizedTest
+    void testBlankClientRequested(String clientNameParameter) {
+        initDefaultSecurityClientFinderTests(clientNameParameter);
         val client1 =
             new MockIndirectClient(NAME, new FoundAction(LOGIN_URL), Optional.empty(), new CommonProfile());
         val clients = new Clients(client1);
         val result = finder.find(clients, MockWebContext.create(), Pac4jConstants.EMPTY_STRING);
         assertEquals(0, result.size());
+    }
+
+    public void initDefaultSecurityClientFinderTests(String clientNameParameter) {
+        this.clientNameParameter = clientNameParameter;
     }
 }

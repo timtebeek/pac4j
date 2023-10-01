@@ -1,7 +1,7 @@
 package org.pac4j.http.client.indirect;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.pac4j.core.context.CallContext;
 import org.pac4j.core.context.MockWebContext;
 import org.pac4j.core.context.session.MockSessionStore;
@@ -20,8 +20,7 @@ import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordA
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class tests the {@link FormClient} class.
@@ -29,10 +28,10 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome Leleu
  * @since 1.4.0
  */
-public final class FormClientTests implements TestsConstants {
+final class FormClientTests implements TestsConstants {
 
     @Test
-    public void testMissingUsernamePasswordAuthenticator() {
+    void testMissingUsernamePasswordAuthenticator() {
         val formClient = new FormClient(LOGIN_URL, null);
         formClient.setCallbackUrl(CALLBACK_URL);
         TestsHelper.expectException(() -> formClient.getCredentials(new CallContext(MockWebContext.create(), new MockSessionStore())),
@@ -40,7 +39,7 @@ public final class FormClientTests implements TestsConstants {
     }
 
     @Test
-    public void testMissingProfileCreator() {
+    void testMissingProfileCreator() {
         val formClient = new FormClient(LOGIN_URL, new SimpleTestUsernamePasswordAuthenticator());
         formClient.setCallbackUrl(CALLBACK_URL);
         formClient.setProfileCreator(null);
@@ -49,14 +48,14 @@ public final class FormClientTests implements TestsConstants {
     }
 
     @Test
-    public void testHasDefaultProfileCreator() {
+    void testHasDefaultProfileCreator() {
         val formClient = new FormClient(LOGIN_URL, new SimpleTestUsernamePasswordAuthenticator());
         formClient.setCallbackUrl(CALLBACK_URL);
         formClient.init();
     }
 
     @Test
-    public void testMissingLoginUrl() {
+    void testMissingLoginUrl() {
         val formClient = new FormClient(null, new SimpleTestUsernamePasswordAuthenticator());
         formClient.setCallbackUrl(CALLBACK_URL);
         TestsHelper.initShouldFail(formClient, "loginUrl cannot be blank");
@@ -69,7 +68,7 @@ public final class FormClientTests implements TestsConstants {
     }
 
     @Test
-    public void testRedirectionUrl() {
+    void testRedirectionUrl() {
         val formClient = getFormClient();
         var context = MockWebContext.create();
         WithLocationAction action = (FoundAction) formClient.getRedirectionAction(new CallContext(context, new MockSessionStore())).get();
@@ -77,7 +76,7 @@ public final class FormClientTests implements TestsConstants {
     }
 
     @Test
-    public void testGetCredentialsMissingUsername() {
+    void testGetCredentialsMissingUsername() {
         val formClient = getFormClient();
         val context = MockWebContext.create();
         val action = (FoundAction) TestsHelper.expectException(
@@ -89,7 +88,7 @@ public final class FormClientTests implements TestsConstants {
     }
 
     @Test
-    public void testGetCredentialsMissingPassword() {
+    void testGetCredentialsMissingPassword() {
         val formClient = getFormClient();
         val context = MockWebContext.create().addRequestParameter(formClient.getPasswordParameter(), PASSWORD);
         val action = (FoundAction) TestsHelper.expectException(
@@ -100,7 +99,7 @@ public final class FormClientTests implements TestsConstants {
     }
 
     @Test
-    public void testValidateCredentials() {
+    void testValidateCredentials() {
         val formClient = getFormClient();
         val context = MockWebContext.create();
         val action = (FoundAction) TestsHelper.expectException(
@@ -112,7 +111,7 @@ public final class FormClientTests implements TestsConstants {
     }
 
     @Test
-    public void testGetRightCredentials() {
+    void testGetRightCredentials() {
         val formClient = getFormClient();
         val credentials = (UsernamePasswordCredentials) formClient.getCredentials(new CallContext(MockWebContext.create()
                 .addRequestParameter(formClient.getUsernameParameter(), USERNAME)
@@ -122,7 +121,7 @@ public final class FormClientTests implements TestsConstants {
     }
 
     @Test
-    public void testGetUserProfile() {
+    void testGetUserProfile() {
         val formClient = getFormClient();
         formClient.setProfileCreator((ctx, credentials) -> {
             var username = ((UsernamePasswordCredentials) credentials).getUsername();

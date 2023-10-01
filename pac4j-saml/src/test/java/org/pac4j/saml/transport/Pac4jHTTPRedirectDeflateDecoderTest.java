@@ -1,7 +1,7 @@
 package org.pac4j.saml.transport;
 
 import lombok.val;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opensaml.core.xml.util.XMLObjectSupport;
 import org.opensaml.messaging.context.MessageContext;
 import org.opensaml.saml.common.SAMLObject;
@@ -13,8 +13,7 @@ import org.pac4j.saml.util.Configuration;
 
 import java.io.StringReader;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests {@link Pac4jHTTPRedirectDeflateDecoder}.
@@ -22,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  * @author Jerome Leleu
  * @since 3.4.0
  */
-public class Pac4jHTTPRedirectDeflateDecoderTest {
+class Pac4jHTTPRedirectDeflateDecoderTest {
 
     private static final String AUTHN_REQUEST = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><saml2p:AuthnRequest "
         + "xmlns:saml2p=\"urn:oasis:names:tc:SAML:2.0:protocol\" AssertionConsumerServiceURL=\"http://localhost:8081/callback"
@@ -39,7 +38,7 @@ public class Pac4jHTTPRedirectDeflateDecoderTest {
         "Signature=SignatureShouldBeRemoved";
 
     @Test
-    public void testEncodeDecode() throws Exception {
+    void testEncodeDecode() throws Exception {
         val webContext = MockWebContext.create();
 
         val xmlObject = XMLObjectSupport.unmarshallFromReader(Configuration.getParserPool(), new StringReader(AUTHN_REQUEST));
@@ -58,7 +57,7 @@ public class Pac4jHTTPRedirectDeflateDecoderTest {
     }
 
     @Test
-    public void testBuildRedirectUrlWithExistingQueryParameters() throws Exception {
+    void testBuildRedirectUrlWithExistingQueryParameters() throws Exception {
         val webContext = MockWebContext.create();
 
         val xmlObject = XMLObjectSupport.unmarshallFromReader(Configuration.getParserPool(), new StringReader(AUTHN_REQUEST));
